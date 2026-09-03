@@ -3,10 +3,12 @@ import { renderResumeHtml } from './resume-template.js';
 import { mountResumeAuthToolbar } from './resume-auth-ui.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
 import { bindResumePdfDownload } from './resume-pdf.js';
+import { mountAppearanceToggle } from './appearance.js';
 import './theme-init.js';
 
 const root = document.getElementById('resume-root');
 const toolbarActions = document.querySelector('.resume-toolbar-actions');
+mountAppearanceToggle(document.getElementById('appearance-tools'));
 const profile = await loadProfile({ preferDraft: true });
 
 document.title = `${profile.name} — Resume`;
