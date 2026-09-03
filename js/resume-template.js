@@ -64,49 +64,37 @@ function renderLanguages(languages) {
     .join('');
 }
 
-function renderRoleIcon(id) {
-  const icon = companyIconMarkup(id, '', {
-    className: 'resume-role-icon',
-    width: 32,
-    height: 32,
+function renderWorkCompanyMeta(item) {
+  const logo = companyIconMarkup(item.id, '', {
+    className: 'resume-company-logo',
+    width: 18,
+    height: 18,
   });
-  if (!icon) return '';
-  return `<span class="resume-role-icon-wrap" aria-hidden="true">${icon}</span>`;
-}
+  const suffixParts = [];
+  if (item.team) suffixParts.push(item.team);
+  suffixParts.push(item.dates);
+  const suffix = suffixParts.map((part) => `| ${part}`).join(' ');
 
-function renderRoleHead(item, companyLine) {
-  const icon = renderRoleIcon(item.id);
   return `
-    <div class="resume-role-head">
-      ${icon}
-      <div class="resume-role-copy">
-        <h3 class="resume-role-title">${escapeHtml(item.title)}</h3>
-        <p class="resume-role-meta">${escapeHtml(companyLine)}</p>
-      </div>
-    </div>
+    <p class="resume-role-meta">
+      <strong class="resume-company-name">${escapeHtml(item.company)}</strong>${logo}<span class="resume-company-suffix">${escapeHtml(suffix)}</span>
+    </p>
   `;
 }
 
 function renderWorkRoles(experience) {
   return (experience || [])
     .filter((item) => !item.webOnly && !item.resumeOnly && !item.armyService)
-    .map((item) => {
-      const companyLine = [
-        item.company,
-        item.team ? `| ${item.team}` : '',
-        `| ${item.dates}`,
-      ].filter(Boolean).join(' ');
-
-      return `
-        <article class="resume-role">
-          ${renderRoleHead(item, companyLine)}
-          ${item.stack?.length ? `<p class="resume-role-stack">${item.stack.map(escapeHtml).join(', ')}</p>` : ''}
-          ${item.summary ? `<p class="resume-role-summary">${escapeHtml(item.summary)}</p>` : ''}
-          ${item.bullets?.length ? `<ul class="resume-role-list">${item.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
-          ${item.highlights?.length ? `<p class="resume-role-features"><strong>Key Features:</strong> ${item.highlights.map(escapeHtml).join(', ')}.</p>` : ''}
-        </article>
-      `;
-    })
+    .map((item) => `
+      <article class="resume-role">
+        <h3 class="resume-role-title">${escapeHtml(item.title)}</h3>
+        ${renderWorkCompanyMeta(item)}
+        ${item.stack?.length ? `<p class="resume-role-stack">${item.stack.map(escapeHtml).join(', ')}</p>` : ''}
+        ${item.summary ? `<p class="resume-role-summary">${escapeHtml(item.summary)}</p>` : ''}
+        ${item.bullets?.length ? `<ul class="resume-role-list">${item.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
+        ${item.highlights?.length ? `<p class="resume-role-features"><strong>Key Features:</strong> ${item.highlights.map(escapeHtml).join(', ')}.</p>` : ''}
+      </article>
+    `)
     .join('');
 }
 
@@ -114,13 +102,12 @@ function renderArmyService(experience) {
   const item = (experience || []).find((entry) => entry.armyService);
   if (!item) return '';
 
-  const companyLine = `${item.company} | ${item.dates}`;
-
   return `
-    <section class="resume-section resume-section--main">
+    <section class="resume-section resume-section--main resume-section--timeline">
       <h2 class="resume-section-title">Army Service</h2>
       <article class="resume-role">
-        ${renderRoleHead(item, companyLine)}
+        <p class="resume-role-meta">${escapeHtml(item.company)} | ${escapeHtml(item.dates)}</p>
+        <h3 class="resume-role-title">${escapeHtml(item.title)}</h3>
         ${item.bullets?.length ? `<ul class="resume-role-list">${item.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
       </article>
     </section>
@@ -129,21 +116,13 @@ function renderArmyService(experience) {
 
 function renderEducation(education) {
   return (education || [])
-    .map((item) => {
-      const icon = renderRoleIcon(item.id || 'colman');
-      return `
-        <article class="resume-edu-item">
-          <div class="resume-role-head">
-            ${icon}
-            <div class="resume-role-copy">
-              <h3>${escapeHtml(item.degree)}</h3>
-              <p class="resume-edu-school">${escapeHtml(item.school)} | ${escapeHtml(item.dates)}</p>
-              <p class="resume-edu-field">${escapeHtml(item.field)}</p>
-            </div>
-          </div>
-        </article>
-      `;
-    })
+    .map((item) => `
+      <article class="resume-edu-item">
+        <h3 class="resume-edu-degree">${escapeHtml(item.degree)}</h3>
+        <p class="resume-edu-school">${escapeHtml(item.school)} | ${escapeHtml(item.dates)}</p>
+        <p class="resume-edu-field">${escapeHtml(item.field)}</p>
+      </article>
+    `)
     .join('');
 }
 
@@ -212,12 +191,12 @@ export function renderResumeHtml(profile) {
             <div class="resume-overview">${overview}</div>
           </section>
 
-          <section class="resume-section resume-section--main">
+          <section class="resume-section resume-section--main resume-section--timeline">
             <h2 class="resume-section-title">Work Experience</h2>
             ${renderWorkRoles(profile.experience)}
           </section>
 
-          <section class="resume-section resume-section--main">
+          <section class="resume-section resume-section--main resume-section--timeline">
             <h2 class="resume-section-title">Education</h2>
             ${renderEducation(profile.education)}
           </section>
