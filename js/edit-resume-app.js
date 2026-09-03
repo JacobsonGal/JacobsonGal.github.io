@@ -35,26 +35,25 @@ function initEditor() {
   }
 
   function profileToForm(p) {
+    const resume = p.resume || {};
     form.name.value = p.name || '';
-    form.headline.value = p.headline || '';
+    form.headline.value = resume.headline || p.headline || '';
     form.email.value = p.email || '';
-    form.phone.value = p.resume?.phone || '';
-    form.location.value = p.location || '';
-    form.about.value = (p.about || []).join('\n');
+    form.phone.value = resume.phone || '';
+    form.location.value = resume.location || p.location || '';
+    form.about.value = (resume.overview || p.about || []).join('\n');
     form.portfolio.value = p.urls?.portfolio || '';
     form.linkedin.value = p.urls?.linkedin || '';
     form.github.value = p.urls?.github || '';
   }
 
   function formToProfile(base) {
+    const overview = form.about.value.split('\n').map((l) => l.trim()).filter(Boolean);
     return {
       ...base,
       updatedAt: new Date().toISOString(),
       name: form.name.value.trim(),
-      headline: form.headline.value.trim(),
       email: form.email.value.trim(),
-      location: form.location.value.trim(),
-      about: form.about.value.split('\n').map((l) => l.trim()).filter(Boolean),
       urls: {
         ...base.urls,
         portfolio: form.portfolio.value.trim(),
@@ -63,7 +62,10 @@ function initEditor() {
       },
       resume: {
         ...base.resume,
+        headline: form.headline.value.trim(),
         phone: form.phone.value.trim(),
+        location: form.location.value.trim(),
+        overview,
       },
     };
   }
