@@ -164,7 +164,6 @@ body.resume-page {
 }
 
 body.resume-page--a4 .resume-stage {
-  padding: 1.5rem 1rem 2rem;
   background: hsl(var(--foreground) / 0.03);
 }
 
@@ -644,13 +643,21 @@ body.resume-page--preview {
   background: hsl(var(--background));
 }
 
-body.resume-page--preview .resume-stage,
-body.resume-page--a4 .resume-stage {
+body.resume-page--preview .resume-stage {
   width: 210mm;
   max-width: 100%;
   min-height: 297mm;
   margin: 0 auto;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body.resume-page--a4 .resume-stage {
+  width: 100%;
+  max-width: none;
+  min-height: auto;
+  margin: 0;
+  padding: 3.5rem 1.5rem 3rem;
   box-sizing: border-box;
 }
 
