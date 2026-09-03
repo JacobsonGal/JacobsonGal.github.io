@@ -1,4 +1,5 @@
 import { companyIconMarkup } from './experience-icons.js';
+import { iconMarkup } from './icons.js';
 
 function escapeHtml(text) {
   return String(text)
@@ -17,13 +18,34 @@ function splitName(name) {
   };
 }
 
+function renderSidebarIcon(name) {
+  const icon = iconMarkup(name);
+  if (!icon) return '';
+  return `<span class="resume-sidebar-icon" aria-hidden="true">${icon}</span>`;
+}
+
+function renderSidebarItem(iconName, text, href) {
+  const label = href
+    ? `<a href="${escapeHtml(href)}">${escapeHtml(text)}</a>`
+    : escapeHtml(text);
+
+  return `
+    <li class="resume-sidebar-item">
+      ${renderSidebarIcon(iconName)}
+      <span class="resume-sidebar-item-text">${label}</span>
+    </li>
+  `;
+}
+
 function renderSkillGroups(resume) {
   if (!resume?.skills) return '';
   return Object.entries(resume.skills)
     .map(([group, items]) => `
       <div class="resume-skill-group">
         <h4>${escapeHtml(group)}</h4>
-        <p>${items.map(escapeHtml).join(', ')}</p>
+        <ul class="resume-sidebar-bullets resume-skill-list">
+          ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
+        </ul>
       </div>
     `)
     .join('');
@@ -147,18 +169,18 @@ export function renderResumeHtml(profile) {
           <section class="resume-sidebar-section">
             <h2 class="resume-sidebar-heading">Contact</h2>
             <ul class="resume-sidebar-list">
-              <li><a href="mailto:${escapeHtml(profile.email)}">${escapeHtml(profile.email)}</a></li>
-              ${resume.phone ? `<li>${escapeHtml(resume.phone)}</li>` : ''}
-              ${resumeLocation ? `<li>${escapeHtml(resumeLocation)}</li>` : ''}
+              ${renderSidebarItem('mail', profile.email, `mailto:${profile.email}`)}
+              ${resume.phone ? renderSidebarItem('phone', resume.phone) : ''}
+              ${resumeLocation ? renderSidebarItem('location', resumeLocation) : ''}
             </ul>
           </section>
 
           <section class="resume-sidebar-section">
             <h2 class="resume-sidebar-heading">Connect</h2>
             <ul class="resume-sidebar-list">
-              ${profile.urls?.portfolio ? `<li><a href="${escapeHtml(profile.urls.portfolio)}">Portfolio</a></li>` : ''}
-              ${profile.urls?.linkedin ? `<li><a href="${escapeHtml(profile.urls.linkedin)}">Gal Jacobson</a></li>` : ''}
-              ${profile.urls?.github ? `<li><a href="${escapeHtml(profile.urls.github)}">JacobsonGal</a></li>` : ''}
+              ${profile.urls?.portfolio ? renderSidebarItem('globe', 'Portfolio', profile.urls.portfolio) : ''}
+              ${profile.urls?.linkedin ? renderSidebarItem('linkedin', 'Gal Jacobson', profile.urls.linkedin) : ''}
+              ${profile.urls?.github ? renderSidebarItem('github', 'JacobsonGal', profile.urls.github) : ''}
             </ul>
           </section>
 

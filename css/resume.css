@@ -227,6 +227,30 @@ body.resume-page {
   margin-top: 0.35rem;
 }
 
+.resume-sidebar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.resume-sidebar-icon {
+  flex-shrink: 0;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-top: 0.12rem;
+  color: hsl(var(--accent));
+}
+
+.resume-sidebar-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.resume-sidebar-item-text {
+  min-width: 0;
+}
+
 .resume-sidebar-list a {
   color: inherit;
   text-decoration: none;
@@ -251,19 +275,22 @@ body.resume-page {
   color: hsl(var(--background) / 0.92);
 }
 
-.resume-skill-group p {
-  margin: 0;
-  font-size: 0.72rem;
-  line-height: 1.4;
-  color: hsl(var(--background) / 0.78);
-}
-
 .resume-sidebar-bullets {
   margin: 0;
   padding-left: 1rem;
   font-size: 0.72rem;
   line-height: 1.45;
   color: hsl(var(--background) / 0.82);
+  list-style-type: disc;
+}
+
+.resume-skill-list {
+  margin-top: 0.1rem;
+  padding-left: 0.95rem;
+}
+
+.resume-skill-list li + li {
+  margin-top: 0.1rem;
 }
 
 .resume-lang-grid {
@@ -387,6 +414,7 @@ body.resume-page {
 
 .resume-role-list {
   margin: 0.25rem 0 0.35rem;
+  margin-left: calc(2rem + 0.65rem);
   padding-left: 1rem;
   font-size: 0.78rem;
   line-height: 1.45;
