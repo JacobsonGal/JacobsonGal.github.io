@@ -11,17 +11,20 @@
 
   root.dataset.theme = theme;
 
-  let appearance = null;
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  let appearance = prefersDark ? 'dark' : 'light';
+
   try {
-    const storedAppearance = localStorage.getItem('gal-portfolio-appearance');
-    if (storedAppearance === 'light' || storedAppearance === 'dark') appearance = storedAppearance;
+    if (sessionStorage.getItem('gal-portfolio-appearance-override') === 'true') {
+      const storedAppearance = sessionStorage.getItem('gal-portfolio-appearance');
+      if (storedAppearance === 'light' || storedAppearance === 'dark') {
+        appearance = storedAppearance;
+      }
+    }
+
+    localStorage.removeItem('gal-portfolio-appearance');
   } catch {
     // ignore storage errors
-  }
-
-  if (!appearance) {
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    appearance = prefersDark ? 'dark' : 'light';
   }
 
   root.dataset.appearance = appearance;

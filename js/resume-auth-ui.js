@@ -6,7 +6,6 @@ import {
   startDeviceFlow,
 } from './github-auth.js';
 import { isOwnerAuthConfigured, unlockWithOwnerCode } from './owner-auth.js';
-import { mountThemePicker } from './theme-picker.js';
 
 function el(tag, className, text) {
   const node = document.createElement(tag);
@@ -32,7 +31,6 @@ function mountOwnerActions(container, { onSignOut } = {}) {
   });
 
   container.prepend(editLink, signOutBtn);
-  mountThemePicker(container);
 }
 
 export async function mountOwnerToolbar(container) {

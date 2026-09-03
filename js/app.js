@@ -29,36 +29,38 @@ function getNested(obj, path) {
 function renderExperienceItem(item, index) {
   const stackTags = (item.stack || []).map((s) => `<span class="tag">${s}</span>`).join('');
   const highlightTags = (item.highlights || []).map((h) => `<span class="tag">${h}</span>`).join('');
-  const bullets = (item.bullets || []).map((b) => `<li><span class="mono-label">—</span><span>${b}</span></li>`).join('');
+  const bullets = (item.bullets || []).map((b) => `<li>${b}</li>`).join('');
   const icon = companyIconMarkup(item.id, BASE_PATH) || `<span class="mono-label exp-letter">${item.letter}</span>`;
+
+  const tagSections = [
+    highlightTags ? `<div class="exp-panel-group"><p class="mono-label panel-label">Key features</p><div class="tag-row">${highlightTags}</div></div>` : '',
+    stackTags ? `<div class="exp-panel-group"><p class="mono-label panel-label">Skills</p><div class="tag-row">${stackTags}</div></div>` : '',
+  ].filter(Boolean).join('');
 
   return `
     <article class="experience-item" data-id="${item.id}" data-reveal data-reveal-delay="${index * 80}">
       <button class="experience-toggle" type="button" aria-expanded="false">
         <span class="exp-icon-wrap" aria-hidden="true">${icon}</span>
-        <div>
+        <div class="exp-header">
           <h3 class="exp-title">${item.title}</h3>
-          <div class="exp-meta">
-            <span class="mono-label">${item.company}</span>
-            <span class="mono-label exp-meta-mobile">${item.location}</span>
-            <span class="mono-label exp-meta-mobile">${item.dates}</span>
-          </div>
+          <p class="exp-meta-line">
+            <span class="exp-company">${item.company}</span>
+            <span class="exp-meta-sep" aria-hidden="true">·</span>
+            <span class="exp-location">${item.location}</span>
+            <span class="exp-meta-sep exp-meta-sep--dates" aria-hidden="true">·</span>
+            <span class="exp-dates">${item.dates}</span>
+          </p>
         </div>
-        <span class="mono-label exp-meta-inline">${item.location}</span>
-        <span class="mono-label exp-meta-inline">${item.dates}</span>
         ${CHEVRON}
       </button>
       <div class="experience-panel-wrap">
         <div class="experience-panel">
           <div class="experience-panel-inner">
-            <div>
-              <p>${item.summary}</p>
-              ${bullets ? `<ul>${bullets}</ul>` : ''}
+            <div class="exp-panel-copy">
+              ${item.summary ? `<p class="exp-summary">${item.summary}</p>` : ''}
+              ${bullets ? `<ul class="exp-bullets">${bullets}</ul>` : ''}
             </div>
-            <div>
-              ${highlightTags ? `<p class="mono-label panel-label">Key Features</p><div class="tag-row">${highlightTags}</div>` : ''}
-              ${stackTags ? `<p class="mono-label panel-label">Skills</p><div class="tag-row">${stackTags}</div>` : ''}
-            </div>
+            ${tagSections ? `<div class="exp-panel-tags">${tagSections}</div>` : ''}
           </div>
         </div>
       </div>
@@ -69,8 +71,8 @@ function renderExperienceItem(item, index) {
 function renderEducationItem(item, index) {
   const schoolLogo = companyIconMarkup(item.id, BASE_PATH, {
     className: 'education-school-logo',
-    width: 28,
-    height: 28,
+    width: 48,
+    height: 48,
   });
   const schoolLine = schoolLogo
     ? `<p class="education-school">${schoolLogo}<span>${item.school}</span></p>`
@@ -128,6 +130,13 @@ function applyProfile(profile) {
   const eduSummary = document.querySelector('[data-list="educationSummary"]');
   if (eduSummary && profile.educationSummary) {
     eduSummary.innerHTML = profile.educationSummary.map((e) => `<span>${e}</span>`).join('');
+  }
+
+  const heroEducation = document.querySelector('[data-list="heroEducation"]');
+  if (heroEducation && profile.educationSummary) {
+    heroEducation.innerHTML = profile.educationSummary
+      .map((line) => `<p class="hero-fact-line">${line}</p>`)
+      .join('');
   }
 
   const experienceList = document.querySelector('[data-list="experience"]');

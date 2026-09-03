@@ -15,7 +15,30 @@
   background: hsl(var(--background, 215 58% 10%) / 0.45);
   color: inherit;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  view-transition-name: appearance-toggle;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.appearance-toggle-btn.is-toggling .appearance-toggle-icon {
+  animation: appearance-icon-spin 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appearance-toggle-btn.is-toggling .appearance-toggle-icon {
+    animation: none;
+  }
+}
+
+@keyframes appearance-icon-spin {
+  from {
+    transform: rotate(-35deg) scale(0.85);
+    opacity: 0.35;
+  }
+
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
 }
 
 .app--continuous-hero .appearance-toggle-btn {

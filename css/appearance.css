@@ -2,9 +2,116 @@ html {
   color-scheme: light dark;
 }
 
+/* Appearance switch — view transition (modern browsers) */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: appearance-exit 0.65s cubic-bezier(0.4, 0, 0.2, 1) both;
+    z-index: 1;
+  }
+
+  ::view-transition-new(root) {
+    animation: appearance-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    z-index: 2;
+  }
+
+  ::view-transition-group(appearance-toggle) {
+    animation-duration: 0.65s;
+    z-index: 3;
+  }
+
+  @keyframes appearance-exit {
+    from {
+      opacity: 1;
+      filter: brightness(1) blur(0);
+    }
+
+    to {
+      opacity: 0;
+      filter: brightness(1.06) blur(3px);
+    }
+  }
+
+  @keyframes appearance-enter {
+    from {
+      opacity: 0;
+      filter: brightness(0.94) blur(4px);
+      transform: scale(1.008);
+    }
+
+    to {
+      opacity: 1;
+      filter: brightness(1) blur(0);
+      transform: scale(1);
+    }
+  }
+}
+
+/* Fallback when View Transitions API is unavailable */
+html.appearance-animate {
+  --appearance-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --appearance-duration: 0.65s;
+}
+
+html.appearance-animate body,
+html.appearance-animate .page-backdrop,
+html.appearance-animate .site-header,
+html.appearance-animate .hero,
+html.appearance-animate .hero-fact-line,
+html.appearance-animate .hero-fact-title,
+html.appearance-animate .hero-fact-sub,
+html.appearance-animate .hero-rail,
+html.appearance-animate .hero-badge,
+html.appearance-animate .hero-title,
+html.appearance-animate .hero-kicker,
+html.appearance-animate .hero-lead p,
+html.appearance-animate .hero-rail-track,
+html.appearance-animate .scroll-cue,
+html.appearance-animate .floating-link,
+html.appearance-animate .floating-trigger,
+html.appearance-animate .portrait-frame,
+html.appearance-animate .exp-icon,
+html.appearance-animate .tag,
+html.appearance-animate .experience-item,
+html.appearance-animate .education-item,
+html.appearance-animate .appearance-toggle-btn,
+html.appearance-animate .mono-label {
+  transition:
+    background-color var(--appearance-duration) var(--appearance-ease),
+    background var(--appearance-duration) var(--appearance-ease),
+    color var(--appearance-duration) var(--appearance-ease),
+    border-color var(--appearance-duration) var(--appearance-ease),
+    box-shadow var(--appearance-duration) var(--appearance-ease),
+    opacity var(--appearance-duration) var(--appearance-ease),
+    filter var(--appearance-duration) var(--appearance-ease);
+}
+
+.page-backdrop .hero-image,
+.page-backdrop .hero-canvas,
+.page-backdrop .hero-scanlines,
+.page-backdrop .hero-noise,
+.hero-frame,
+.hero-chrome,
+.hero-hud--bl,
+.hero-gradient,
+.hero-grid,
+.app--continuous-hero .section-grid,
+.app--continuous-hero .experience::before {
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-frame,
+.hero-chrome,
+.hero-hud--bl {
+  opacity: 1;
+  visibility: visible;
+}
+
 [data-appearance="dark"] body,
 [data-appearance="dark"] .page-backdrop {
-  background: #061018;
+  background: hsl(215 58% 6%);
 }
 
 /* Dark appearance — invert palette tokens for resume / editor pages */
@@ -98,7 +205,9 @@ html {
 [data-appearance="light"] .hero-frame,
 [data-appearance="light"] .hero-chrome,
 [data-appearance="light"] .hero-hud--bl {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 [data-appearance="light"] .hero-kicker {
@@ -128,15 +237,17 @@ html {
   box-shadow: none;
 }
 
-[data-appearance="light"] .hero-metric {
-  background: hsl(var(--card));
-  border-color: hsl(var(--border));
-  backdrop-filter: none;
-  box-shadow: 0 1px 0 hsl(var(--foreground) / 0.04);
+[data-appearance="light"] .hero-fact-label {
+  color: hsl(var(--muted));
 }
 
-[data-appearance="light"] .hero-metric strong {
+[data-appearance="light"] .hero-fact-line,
+[data-appearance="light"] .hero-fact-title {
   color: hsl(var(--foreground));
+}
+
+[data-appearance="light"] .hero-fact-sub {
+  color: hsl(var(--muted));
 }
 
 [data-appearance="light"] .hero-line {
@@ -215,7 +326,7 @@ html {
 }
 
 [data-appearance="light"] .app--continuous-hero .experience::before {
-  display: none;
+  opacity: 0;
 }
 
 [data-appearance="light"] .owner-tool-link {

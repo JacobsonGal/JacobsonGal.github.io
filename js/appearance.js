@@ -1,16 +1,54 @@
 const STORAGE_KEY = 'gal-portfolio-appearance';
+const OVERRIDE_KEY = 'gal-portfolio-appearance-override';
+const APPEARANCE_TRANSITION_MS = 650;
 
 const SUN_ICON = '<svg class="appearance-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
 
 const MOON_ICON = '<svg class="appearance-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>';
 
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function runAppearanceChange(update, { animate = false } = {}) {
+  if (!animate || prefersReducedMotion()) {
+    update();
+    return;
+  }
+
+  const root = document.documentElement;
+
+  if (typeof document.startViewTransition === 'function') {
+    document.startViewTransition(() => {
+      update();
+    });
+    return;
+  }
+
+  root.classList.add('appearance-animate');
+  update();
+  window.setTimeout(() => {
+    root.classList.remove('appearance-animate');
+  }, APPEARANCE_TRANSITION_MS);
+}
+
 function systemAppearance() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+function clearLegacyAppearanceStorage() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // ignore storage errors
+  }
+}
+
 export function getAppearancePreference() {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    if (sessionStorage.getItem(OVERRIDE_KEY) !== 'true') return null;
+
+    const stored = sessionStorage.getItem(STORAGE_KEY);
     if (stored === 'light' || stored === 'dark') return stored;
   } catch {
     // ignore storage errors
@@ -32,16 +70,18 @@ export function applyAppearance() {
   document.dispatchEvent(new CustomEvent('appearancechange', { detail: { appearance } }));
 }
 
-export function setAppearance(mode) {
+export function setAppearance(mode, { animate = true } = {}) {
   if (mode !== 'light' && mode !== 'dark') return;
 
   try {
-    localStorage.setItem(STORAGE_KEY, mode);
+    sessionStorage.setItem(STORAGE_KEY, mode);
+    sessionStorage.setItem(OVERRIDE_KEY, 'true');
+    clearLegacyAppearanceStorage();
   } catch {
     // ignore storage errors
   }
 
-  applyAppearance();
+  runAppearanceChange(applyAppearance, { animate });
 }
 
 export function mountAppearanceToggle(container) {
@@ -63,7 +103,11 @@ export function mountAppearanceToggle(container) {
   }
 
   btn.addEventListener('click', () => {
+    btn.classList.add('is-toggling');
     setAppearance(resolveAppearance() === 'dark' ? 'light' : 'dark');
+    window.setTimeout(() => {
+      btn.classList.remove('is-toggling');
+    }, APPEARANCE_TRANSITION_MS);
   });
 
   syncActiveState();
@@ -72,6 +116,7 @@ export function mountAppearanceToggle(container) {
 }
 
 export function initAppearance() {
+  clearLegacyAppearanceStorage();
   applyAppearance();
 
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {

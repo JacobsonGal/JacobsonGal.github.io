@@ -1,11 +1,12 @@
 const COMPANY_ICONS = {
   houzz: 'assets/images/companies/houzz.png',
   colman: 'assets/images/companies/colman.png',
-  yavo: 'assets/images/companies/yavo.png',
+  yavo: 'assets/images/companies/yavo-logo.png',
   idf: 'assets/images/companies/idf.svg',
 };
 
 const CONTAIN_LOGO_IDS = new Set(['colman', 'yavo', 'idf']);
+const ICON_CACHE_VERSION = '20260903d';
 
 export function companyIconPath(id) {
   return COMPANY_ICONS[id] || null;
@@ -19,8 +20,9 @@ export function companyIconMarkup(id, basePath = '', options = {}) {
   } = options;
   const path = companyIconPath(id);
   if (!path) return '';
-  const src = `${basePath}${path}`;
+  const src = `${basePath}${path}?v=${ICON_CACHE_VERSION}`;
   const containClass = CONTAIN_LOGO_IDS.has(id) ? ' exp-icon--contain' : '';
-  const classes = `${className}${containClass}`;
+  const logoClass = id ? ` exp-icon--logo-${id}` : '';
+  const classes = `${className}${containClass}${logoClass}`;
   return `<img class="${classes}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
 }
