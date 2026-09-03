@@ -81,10 +81,10 @@ function renderFloatingLinks(profile) {
   const resumeHref = asset(profile.urls.cv || 'resume.html');
   const links = [
     { label: 'LinkedIn', href: profile.urls.linkedin, icon: iconMarkup('linkedin'), external: true },
-    { label: 'Resume', href: resumeHref, icon: brandLogoMarkup(asset('assets/images/logo.png'), 'brand-logo brand-logo--sm', 16), external: false },
     { label: 'GitHub', href: profile.urls.github, icon: iconMarkup('github'), external: true },
     { label: 'Instagram', href: profile.urls.instagram, icon: iconMarkup('instagram'), external: true },
     { label: 'Email', href: `mailto:${profile.email}`, icon: iconMarkup('mail'), external: true },
+    { label: 'Resume', href: resumeHref, icon: brandLogoMarkup(asset('assets/images/logo.png'), 'brand-logo brand-logo--sm', 16), external: false },
   ];
 
   return links.map((link) => `
