@@ -199,6 +199,12 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: auto;
+}
 .nav-desktop { display: none; gap: 2rem; }
 .nav-desktop a { transition: color 0.3s ease; }
 .nav-desktop a:hover { color: hsl(var(--accent)); }

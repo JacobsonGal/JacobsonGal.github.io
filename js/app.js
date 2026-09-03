@@ -1,8 +1,9 @@
 import { iconMarkup, brandLogoMarkup } from './icons.js';
 import { companyIconMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
-import { mountOwnerToolbar } from './resume-auth-ui.js';
+import { getAuthorizedUser } from './github-auth.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
+import { mountThemePicker } from './theme-picker.js';
 import './theme-init.js';
 
 const CHEVRON = '<svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -228,8 +229,15 @@ function ensureMobileEditLink() {
 }
 
 async function refreshOwnerUi() {
-  const user = await mountOwnerToolbar(document.getElementById('owner-tools'));
-  if (user) ensureMobileEditLink();
+  const ownerTools = document.getElementById('owner-tools');
+  ownerTools?.replaceChildren();
+
+  const user = await getAuthorizedUser();
+  if (user && ownerTools) {
+    mountThemePicker(ownerTools);
+    ensureMobileEditLink();
+  }
+
   return user;
 }
 
