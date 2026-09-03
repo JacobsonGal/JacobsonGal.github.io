@@ -59,6 +59,23 @@ button.owner-tool-link {
   cursor: pointer;
 }
 
+.owner-secret-hit {
+  position: fixed;
+  width: 2.25rem;
+  height: 2.25rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  cursor: default;
+  z-index: 60;
+}
+.owner-secret-hit--tr { top: 0; right: 0; }
+.owner-secret-hit--tl { top: 0; left: 0; }
+.owner-secret-hit--br { bottom: 0; right: 0; }
+.owner-secret-hit--bl { bottom: 0; left: 0; }
+
 .resume-toolbar-actions .theme-picker {
   margin-right: 0.25rem;
 }

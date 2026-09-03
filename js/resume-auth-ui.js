@@ -89,7 +89,7 @@ export async function requireResumeEditorAuth(root) {
   const signInBtn = el('button', 'resume-btn resume-btn--primary', 'Sign in with GitHub');
   signInBtn.type = 'button';
   signInBtn.addEventListener('click', () => {
-    showDeviceFlowDialog(async () => {
+    promptGitHubSignIn(async () => {
       const authed = await getAuthorizedUser({ forceRefresh: true });
       if (authed) window.location.reload();
     });
@@ -103,7 +103,31 @@ export async function requireResumeEditorAuth(root) {
   return null;
 }
 
-function showDeviceFlowDialog(onSuccess) {
+export async function openResumeEditorFlow({ redirectTo = 'edit-resume.html', onAuthed } = {}) {
+  const user = await getAuthorizedUser();
+  if (user) {
+    if (onAuthed) await onAuthed(user);
+    if (redirectTo) window.location.href = redirectTo;
+    return user;
+  }
+
+  if (!isAuthConfigured()) return null;
+
+  return new Promise((resolve) => {
+    promptGitHubSignIn(async () => {
+      const authed = await getAuthorizedUser({ forceRefresh: true });
+      if (!authed) {
+        resolve(null);
+        return;
+      }
+      if (onAuthed) await onAuthed(authed);
+      if (redirectTo) window.location.href = redirectTo;
+      resolve(authed);
+    });
+  });
+}
+
+export function promptGitHubSignIn(onSuccess) {
   const overlay = el('div', 'auth-overlay');
   const dialog = el('div', 'auth-dialog');
   const title = el('h2', 'auth-dialog-title', 'Sign in with GitHub');

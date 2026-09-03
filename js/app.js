@@ -2,6 +2,7 @@ import { iconMarkup, brandLogoMarkup } from './icons.js';
 import { companyIconMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 import { mountOwnerToolbar } from './resume-auth-ui.js';
+import { mountOwnerSecretEntry } from './owner-secret-entry.js';
 import './theme-init.js';
 
 const CHEVRON = '<svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -215,6 +216,23 @@ async function refreshLinkedInOverlay(profile) {
   }
 }
 
+function ensureMobileEditLink() {
+  const mobileNav = document.querySelector('.mobile-nav');
+  if (!mobileNav || mobileNav.querySelector('[data-owner-edit]')) return;
+
+  const editLink = document.createElement('a');
+  editLink.href = 'edit-resume.html';
+  editLink.dataset.ownerEdit = 'true';
+  editLink.innerHTML = '<span>Edit resume</span><span class="mono-label">05</span>';
+  mobileNav.append(editLink);
+}
+
+async function refreshOwnerUi() {
+  const user = await mountOwnerToolbar(document.getElementById('owner-tools'));
+  if (user) ensureMobileEditLink();
+  return user;
+}
+
 async function init() {
   bindUi();
   initMotion();
@@ -222,17 +240,19 @@ async function init() {
   applyProfile(profile);
   refreshLinkedInOverlay(profile);
 
-  const user = await mountOwnerToolbar(document.getElementById('owner-tools'));
-  if (user) {
-    const mobileNav = document.querySelector('.mobile-nav');
-    if (mobileNav && !mobileNav.querySelector('[data-owner-edit]')) {
-      const editLink = document.createElement('a');
-      editLink.href = 'edit-resume.html';
-      editLink.dataset.ownerEdit = 'true';
-      editLink.innerHTML = '<span>Edit resume</span><span class="mono-label">05</span>';
-      mobileNav.append(editLink);
-    }
-  }
+  await refreshOwnerUi();
+
+  mountOwnerSecretEntry({
+    selectors: [
+      '.brand .accent',
+      '.hero-hud-dot',
+      '.portrait-mark',
+      '#sync-status',
+      '.hero-title-line--accent .accent',
+    ],
+    corners: ['tr'],
+    onAuthed: refreshOwnerUi,
+  });
 }
 
 init();
