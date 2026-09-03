@@ -144,12 +144,19 @@ async function savePdfDocument(pdf, filename) {
 }
 
 async function printResumeFallback() {
+  window.scrollTo(0, 0);
   document.body.classList.add('resume-printing');
   await waitForLayout();
+  await document.fonts.ready;
   window.print();
   window.setTimeout(() => {
     document.body.classList.remove('resume-printing');
   }, 500);
+}
+
+async function saveResumeOnMobile() {
+  await printResumeFallback();
+  return 'print';
 }
 
 function waitForLayout() {
@@ -267,8 +274,10 @@ export async function downloadResumePdf({ element, filename }) {
 export function bindResumePdfDownload({ button, getResumeElement, refreshResume }) {
   if (!button) return;
 
-  const generatingLabel = isMobileDevice() ? 'Preparing…' : 'Generating…';
-  const defaultLabel = button.textContent?.trim() || (isMobileDevice() ? 'Save PDF' : 'Download PDF');
+  const mobile = isMobileDevice();
+  const defaultLabel = mobile ? 'Save PDF' : (button.textContent?.trim() || 'Download PDF');
+  const generatingLabel = mobile ? 'Opening…' : 'Generating…';
+  button.textContent = defaultLabel;
   button.removeAttribute('href');
   button.removeAttribute('download');
 
@@ -281,6 +290,15 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
 
     try {
       const profile = await refreshResume?.();
+
+      if (mobile) {
+        await saveResumeOnMobile();
+        window.setTimeout(() => {
+          window.alert('In the print preview, tap Share (top right), then choose Save to Files to save your CV as a PDF.');
+        }, 500);
+        return;
+      }
+
       const resumeElement = getResumeElement?.();
       const filename = getResumePdfFilename(profile);
       const result = await downloadResumePdf({ element: resumeElement, filename });
@@ -293,19 +311,18 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
         window.setTimeout(() => {
           window.alert('Your CV opened below. Tap the share icon in the PDF viewer, then choose "Save to Files".');
         }, 300);
-        return;
       }
     } catch (error) {
       console.error(error);
-      if (isMobileDevice()) {
-        try {
-          await printResumeFallback();
-          return;
-        } catch (printError) {
-          console.error(printError);
-        }
+      try {
+        await printResumeFallback();
+        window.setTimeout(() => {
+          window.alert('Use the print preview Share button, then Save to Files.');
+        }, 500);
+      } catch (printError) {
+        console.error(printError);
+        window.alert('Could not save the CV PDF. Please try again in a moment.');
       }
-      window.alert('Could not generate the CV PDF. Please try again in a moment.');
     } finally {
       button.disabled = false;
       button.textContent = defaultLabel;
