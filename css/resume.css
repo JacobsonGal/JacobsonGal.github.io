@@ -639,6 +639,10 @@ body.resume-printing .resume-toolbar {
   visibility: hidden;
 }
 
+body.resume-pdf-capture .resume-sheet {
+  box-shadow: none !important;
+}
+
 body.resume-page--preview {
   margin: 0;
   width: 210mm;

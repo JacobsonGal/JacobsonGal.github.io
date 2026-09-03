@@ -21,6 +21,7 @@ async function refreshResumeForPdf() {
 
 bindResumePdfDownload({
   button: document.getElementById('download-resume-pdf'),
+  getResumeElement: () => document.querySelector('.resume-sheet'),
   refreshResume: refreshResumeForPdf,
 });
 
