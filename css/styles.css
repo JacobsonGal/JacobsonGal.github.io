@@ -7,8 +7,139 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: hsl(var(--foreground));
-  background: hsl(var(--background));
+  background: #061018;
   line-height: 1.6;
+}
+
+.app {
+  position: relative;
+}
+
+.page-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #061018;
+}
+
+.app > :not(.page-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.app--continuous-hero {
+  --surface-text: 210 40% 97%;
+  --surface-muted: 210 30% 72%;
+  --surface-label: 205 68% 62%;
+  --surface-border: 205 68% 42% / 0.22;
+  --surface-card: 215 58% 12% / 0.45;
+  color: hsl(var(--surface-text));
+}
+
+.app--continuous-hero .mono-label {
+  color: hsl(var(--surface-label) / 0.85);
+}
+
+.app--continuous-hero .text-muted {
+  color: hsl(var(--surface-muted));
+}
+
+.app--continuous-hero .datum-line {
+  background: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .site-header.scrolled {
+  color: hsl(var(--surface-text));
+  background: hsl(215 58% 8% / 0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid hsl(var(--surface-border));
+}
+
+.app--continuous-hero .section,
+.app--continuous-hero .site-footer {
+  background: transparent;
+}
+
+.app--continuous-hero .section-intro,
+.app--continuous-hero .numbered-item p,
+.app--continuous-hero .experience-panel p,
+.app--continuous-hero .experience-panel li {
+  color: hsl(var(--surface-muted));
+}
+
+.app--continuous-hero .current-company {
+  color: hsl(var(--surface-muted));
+}
+
+.app--continuous-hero .experience-list {
+  border-top-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .experience-item {
+  border-bottom-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .experience-item.open {
+  background: hsl(var(--surface-card));
+  border-left-color: hsl(var(--accent));
+  box-shadow: none;
+}
+
+.app--continuous-hero .exp-icon {
+  background: hsl(215 58% 10% / 0.65);
+  border-color: hsl(var(--surface-border));
+  box-shadow: 0 4px 14px hsl(215 58% 6% / 0.35);
+}
+
+.app--continuous-hero .tag {
+  border-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .education-item {
+  border-top-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .site-footer {
+  border-top-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .sync-status {
+  color: hsl(var(--surface-muted));
+}
+
+.app--continuous-hero .section-grid {
+  opacity: 0.06;
+  background-image:
+    linear-gradient(hsl(205 68% 62% / 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(205 68% 62% / 0.35) 1px, transparent 1px);
+}
+
+.app--continuous-hero .experience::before {
+  background: radial-gradient(ellipse 60% 40% at 100% 0%, hsl(var(--accent) / 0.12), transparent 60%);
+}
+
+.app--continuous-hero .floating-link {
+  background: hsl(215 58% 12% / 0.92);
+  color: hsl(var(--surface-text));
+  border: 1px solid hsl(var(--surface-border));
+}
+
+.app--continuous-hero .floating-trigger {
+  background: hsl(215 58% 10% / 0.92);
+  border-color: hsl(var(--surface-border));
+  box-shadow: 0 12px 32px hsl(215 58% 6% / 0.45);
+}
+
+.app--continuous-hero .portrait-frame {
+  background: hsl(215 58% 10% / 0.5);
+  border-color: hsl(var(--accent) / 0.4);
+  box-shadow: 0 10px 32px hsl(215 58% 6% / 0.45);
+}
+
+.app--continuous-hero .experience-toggle:hover .exp-chevron {
+  color: hsl(var(--surface-text));
 }
 
 img { display: block; max-width: 100%; }
@@ -104,18 +235,19 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   position: relative;
   min-height: 100svh;
   overflow: hidden;
-  background: #061018;
+  background: transparent;
   color: hsl(210 40% 97%);
   isolation: isolate;
 }
-.hero--tech .hero-image {
+.hero--tech .hero-image,
+.page-backdrop .hero-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 1;
   filter: saturate(1.15) contrast(1.05);
 }
-.hero-canvas {
+.page-backdrop .hero-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -157,6 +289,9 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
     linear-gradient(90deg, hsl(205 68% 62% / 0.35) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 20%, transparent 75%);
+}
+.page-backdrop .hero-grid {
+  mask-image: radial-gradient(ellipse 140% 120% at 50% 20%, black 12%, transparent 88%);
 }
 .hero-frame {
   position: absolute;
@@ -280,7 +415,13 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   justify-content: flex-end;
   padding-bottom: clamp(7rem, 14vh, 9rem);
 }
-.hero-media, .hero-image, .hero-gradient, .hero-grid, .hero-noise, .hero-scanlines {
+.page-backdrop .hero-media {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.hero-media, .page-backdrop .hero-image, .hero-gradient, .page-backdrop .hero-grid, .page-backdrop .hero-noise, .page-backdrop .hero-scanlines {
   position: absolute;
   inset: 0;
 }
@@ -382,9 +523,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 }
 
 .about-container { position: relative; }
-.about {
-  background: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--card)) 100%);
-}
+.about { background: transparent; }
 .experience { position: relative; }
 .experience::before {
   content: "";
@@ -453,7 +592,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   font-size: 1.1rem;
   margin: 0;
 }
-.current-post { margin: 0; }
+.current-position { margin: 0; }
 .current-company { margin: 0.25rem 0 0; color: hsl(var(--muted)); }
 
 .portrait-wrap {
@@ -498,7 +637,6 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   width: 2.25rem;
   height: 2.25rem;
   flex-shrink: 0;
-  object-fit: contain;
   display: block;
 }
 
@@ -506,18 +644,26 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   border-top: 1px solid hsl(var(--border));
 }
 .experience-item {
+  --exp-icon-col: 2.75rem;
+  --exp-gap: 1.5rem;
+  display: grid;
+  grid-template-columns: var(--exp-icon-col) minmax(0, 1fr);
+  column-gap: var(--exp-gap);
+  padding-left: 0.5rem;
   border-bottom: 1px solid hsl(var(--border));
-  transition: background-color 0.5s ease;
+  border-left: 3px solid transparent;
+  transition: background-color 0.5s ease, border-color 0.5s ease;
 }
 .experience-item.open {
   background: hsl(var(--card));
-  box-shadow: inset 3px 0 0 hsl(var(--accent));
+  border-left-color: hsl(var(--accent));
 }
 .experience-toggle {
+  grid-column: 1 / -1;
   width: 100%;
   display: grid;
-  grid-template-columns: 3rem 1fr auto;
-  gap: 1rem 1.5rem;
+  grid-template-columns: var(--exp-icon-col) minmax(0, 1fr) auto;
+  gap: 0 var(--exp-gap);
   align-items: center;
   padding: 2rem 0;
   text-align: left;
@@ -527,15 +673,13 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: var(--exp-icon-col);
+  height: var(--exp-icon-col);
   flex-shrink: 0;
 }
 .exp-icon {
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: 0.65rem;
-  object-fit: contain;
   display: block;
   background: hsl(var(--background));
   box-shadow: 0 4px 14px hsl(var(--foreground) / 0.08);
@@ -567,6 +711,8 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .exp-chevron {
   width: 1.25rem;
   height: 1.25rem;
+  justify-self: end;
+  align-self: center;
   color: hsl(var(--muted));
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
 }
@@ -578,6 +724,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   color: hsl(var(--foreground));
 }
 .experience-panel-wrap {
+  grid-column: 2 / -1;
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
@@ -595,7 +742,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .experience-panel-inner {
   display: grid;
   gap: 2rem;
-  padding: 0 0 2rem 2.5rem;
+  padding: 0 0 2rem;
 }
 .experience-panel p { color: hsl(var(--foreground) / 0.8); line-height: 1.65; }
 .experience-panel ul {
@@ -736,7 +883,6 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .brand-logo {
   width: 100%;
   height: 100%;
-  object-fit: contain;
   display: block;
 }
 .brand-logo--sm {
@@ -763,7 +909,6 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .floating-trigger-logo {
   width: 100%;
   height: 100%;
-  object-fit: contain;
   display: block;
 }
 .floating-cta.open .floating-trigger {
@@ -786,14 +931,14 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
     gap: clamp(2rem, 4vw, 3.5rem);
   }
   .experience-toggle {
-    grid-template-columns: 3rem 4fr 3fr 3fr auto;
+    grid-template-columns: var(--exp-icon-col) minmax(0, 4fr) 3fr 3fr auto;
   }
   .exp-meta-inline {
     display: block;
+    align-self: center;
   }
   .experience-panel-inner {
     grid-template-columns: 1fr 1fr;
-    padding-left: calc(3rem + 1.5rem);
   }
   .education-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));

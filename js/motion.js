@@ -1,7 +1,6 @@
 export function initHeroParallax() {
-  const hero = document.getElementById('top');
-  const media = hero?.querySelector('.hero-media');
-  if (!hero || !media || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const media = document.querySelector('.page-backdrop .hero-media');
+  if (!media || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   let targetX = 0;
   let targetY = 0;
@@ -15,13 +14,12 @@ export function initHeroParallax() {
     requestAnimationFrame(tick);
   };
 
-  hero.addEventListener('mousemove', (event) => {
-    const rect = hero.getBoundingClientRect();
-    targetX = (event.clientX - rect.left) / rect.width - 0.5;
-    targetY = (event.clientY - rect.top) / rect.height - 0.5;
+  window.addEventListener('mousemove', (event) => {
+    targetX = (event.clientX / window.innerWidth) - 0.5;
+    targetY = (event.clientY / window.innerHeight) - 0.5;
   });
 
-  hero.addEventListener('mouseleave', () => {
+  window.addEventListener('blur', () => {
     targetX = 0;
     targetY = 0;
   });

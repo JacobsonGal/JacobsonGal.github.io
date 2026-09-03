@@ -8,8 +8,8 @@ function hsla(h, s, l, a) {
 
 export function initHeroCanvas() {
   const canvas = document.getElementById('hero-canvas');
-  const hero = document.getElementById('top');
-  if (!canvas || !hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const backdrop = document.querySelector('.page-backdrop');
+  if (!canvas || !backdrop || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const ctx = canvas.getContext('2d');
   let width = 0;
@@ -20,9 +20,8 @@ export function initHeroCanvas() {
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const rect = hero.getBoundingClientRect();
-    width = rect.width;
-    height = rect.height;
+    width = window.innerWidth;
+    height = window.innerHeight;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     canvas.style.width = `${width}px`;
@@ -101,14 +100,13 @@ export function initHeroCanvas() {
     requestAnimationFrame(draw);
   }
 
-  hero.addEventListener('mousemove', (event) => {
-    const rect = hero.getBoundingClientRect();
-    mouse.x = (event.clientX - rect.left) / rect.width;
-    mouse.y = (event.clientY - rect.top) / rect.height;
+  window.addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX / window.innerWidth;
+    mouse.y = event.clientY / window.innerHeight;
     mouse.active = true;
   });
 
-  hero.addEventListener('mouseleave', () => {
+  window.addEventListener('blur', () => {
     mouse.active = false;
   });
 

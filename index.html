@@ -19,13 +19,23 @@
   <link rel="stylesheet" href="css/animations.css" />
 </head>
 <body>
-  <div id="app" class="app" aria-live="polite">
+  <div id="app" class="app app--continuous-hero" aria-live="polite">
+    <div class="page-backdrop" aria-hidden="true">
+      <div class="hero-media">
+        <img src="assets/images/hero-arctic.svg" alt="" class="hero-image" width="1920" height="1080" />
+        <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-gradient"></div>
+        <div class="hero-noise" aria-hidden="true"></div>
+      </div>
+      <div class="hero-grid"></div>
+      <div class="hero-scanlines" aria-hidden="true"></div>
+    </div>
     <header class="site-header" id="site-header">
       <div class="container header-inner">
         <a class="brand" href="#top">Gal Jacobson<span class="accent">.</span></a>
         <div id="owner-tools" class="owner-tools" aria-label="Owner settings"></div>
         <nav class="nav-desktop" aria-label="Primary">
-          <a href="#top">Index</a>
+          <a href="#top">Home</a>
           <a href="#about">About</a>
           <a href="#experience">Experience</a>
           <a href="#education">Education</a>
@@ -37,28 +47,20 @@
 
     <div class="mobile-menu" id="mobile-menu" hidden>
       <div class="mobile-menu-top">
-        <span class="mono-label">Index</span>
+        <span class="mono-label">Menu</span>
         <button type="button" class="menu-close" aria-label="Close menu">&times;</button>
       </div>
       <nav class="mobile-nav" aria-label="Mobile">
-        <a href="#top"><span>Index</span><span class="mono-label">01</span></a>
-        <a href="#about"><span>About</span><span class="mono-label">02</span></a>
-        <a href="#experience"><span>Experience</span><span class="mono-label">03</span></a>
-        <a href="#education"><span>Education</span><span class="mono-label">04</span></a>
-        <a href="resume.html"><span>Resume</span><span class="mono-label">05</span></a>
+        <a href="#top"><span>Home</span><span class="mono-label">00</span></a>
+        <a href="#about"><span>About</span><span class="mono-label">01</span></a>
+        <a href="#experience"><span>Experience</span><span class="mono-label">02</span></a>
+        <a href="#education"><span>Education</span><span class="mono-label">03</span></a>
+        <a href="resume.html"><span>Resume</span><span class="mono-label">04</span></a>
       </nav>
     </div>
 
     <main>
       <section id="top" class="hero hero--tech">
-        <div class="hero-media">
-          <img src="assets/images/hero-arctic.svg" alt="" class="hero-image" width="1920" height="1080" />
-          <canvas class="hero-canvas" id="hero-canvas" aria-hidden="true"></canvas>
-          <div class="hero-gradient"></div>
-          <div class="hero-noise" aria-hidden="true"></div>
-        </div>
-        <div class="hero-grid"></div>
-        <div class="hero-scanlines" aria-hidden="true"></div>
         <div class="hero-frame" aria-hidden="true">
           <span class="hero-corner hero-corner--tl"></span>
           <span class="hero-corner hero-corner--tr"></span>
@@ -145,8 +147,8 @@
                     <p class="mono-label">Education</p>
                     <div class="about-edu" data-list="educationSummary"></div>
                   </div>
-                  <div class="current-post">
-                    <p class="mono-label">Current post</p>
+                  <div class="current-position">
+                    <p class="mono-label" data-field="currentRole.label">Current position</p>
                     <p class="current-title" data-field="currentRole.title"></p>
                     <p class="current-company">@ <span data-field="currentRole.company"></span></p>
                   </div>
@@ -173,12 +175,12 @@
         </div>
       </section>
 
-      <section id="education" class="section education section-inverted">
+      <section id="education" class="section education">
         <div class="container">
           <div class="section-header-grid">
             <div data-reveal>
               <p class="section-index mono-label">03 / Education</p>
-              <span class="datum-line datum-line--inverted" aria-hidden="true"></span>
+              <span class="datum-line" aria-hidden="true"></span>
             </div>
             <div data-reveal data-reveal-delay="100">
               <h2 class="section-heading display-heading">Foundations</h2>

@@ -163,7 +163,6 @@ body.resume-page {
   width: 3.5rem;
   height: 3.5rem;
   flex-shrink: 0;
-  object-fit: contain;
   display: block;
 }
 

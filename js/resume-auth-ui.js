@@ -38,17 +38,6 @@ export async function mountResumeAuthToolbar(toolbarActions) {
     return user;
   }
 
-  if (!isAuthConfigured()) {
-    return null;
-  }
-
-  const signInBtn = el('button', 'resume-btn', 'Sign in with GitHub');
-  signInBtn.dataset.authUi = 'true';
-  signInBtn.type = 'button';
-  signInBtn.addEventListener('click', () => {
-    showDeviceFlowDialog(() => mountResumeAuthToolbar(toolbarActions));
-  });
-  toolbarActions.prepend(signInBtn);
   return null;
 }
 

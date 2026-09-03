@@ -7,7 +7,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 ## Resume
 
 - **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
-- **Edit (owner only):** sign in with GitHub on the resume page as `@JacobsonGal`, then use **Edit resume**. Requires a one-time [GitHub OAuth App](#github-oauth-for-resume-editing) (`read:user` scope, Device Flow enabled).
+- **Edit (owner only):** open [edit-resume.html](edit-resume.html) and sign in with GitHub as `@JacobsonGal`. After signing in, **Edit resume** appears on the resume toolbar. Requires a one-time [GitHub OAuth App](#github-oauth-for-resume-editing) (`read:user` scope, Device Flow enabled).
 - **Color palette:** default **Arctic** (icy blues from the hex logo). When signed in, use the **Palette** swatches on the portfolio header, resume toolbar, or editor to switch to **Editorial** (warm cream/rust). Choice is saved in your browser.
 - **Print to PDF:** open the resume page and use **Print / Save PDF**.
 
