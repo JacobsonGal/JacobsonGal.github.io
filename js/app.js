@@ -272,7 +272,6 @@ async function refreshOwnerUi() {
 async function init() {
   bindUi();
   initMotion();
-  mountLinkModal({ root: document.getElementById('app') });
   mountAppearanceToggle(document.getElementById('appearance-tools'));
   const profile = await loadProfile({ preferDraft: false });
   applyProfile(profile);
