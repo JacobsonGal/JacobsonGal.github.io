@@ -3,6 +3,12 @@ const PDF_LIBRARY_URLS = {
   jspdf: 'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/+esm',
 };
 
+const A4_WIDTH_MM = 210;
+const A4_HEIGHT_MM = 297;
+const PX_PER_MM = 96 / 25.4;
+const A4_WIDTH_PX = Math.round(A4_WIDTH_MM * PX_PER_MM);
+const A4_HEIGHT_PX = Math.round(A4_HEIGHT_MM * PX_PER_MM);
+
 let pdfLibrariesPromise;
 
 function loadPdfLibraries() {
@@ -23,18 +29,64 @@ export function getResumePdfFilename(profile) {
   return `${name} | CV.pdf`;
 }
 
-function addCanvasToSinglePage(pdf, canvas) {
+function waitForLayout() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);
+    });
+  });
+}
+
+function createRenderSheet(source) {
+  const host = document.createElement('div');
+  host.className = 'resume-pdf-render-host';
+  host.setAttribute('aria-hidden', 'true');
+
+  const clone = source.cloneNode(true);
+  clone.classList.add('resume-sheet--pdf');
+  host.append(clone);
+  document.body.append(host);
+
+  return { host, sheet: clone };
+}
+
+function collectLinkRects(root) {
+  const rootRect = root.getBoundingClientRect();
+
+  return [...root.querySelectorAll('a[href]')]
+    .map((anchor) => {
+      const rect = anchor.getBoundingClientRect();
+      return {
+        href: anchor.href,
+        left: rect.left - rootRect.left,
+        top: rect.top - rootRect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    })
+    .filter((link) => link.href && link.width > 0 && link.height > 0);
+}
+
+function addFullBleedImage(pdf, canvas) {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
   const imgData = canvas.toDataURL('image/png');
 
-  const widthAtFullBleed = pageWidth;
-  const heightAtFullBleed = (canvas.height * widthAtFullBleed) / canvas.width;
-  const scale = Math.min(1, pageHeight / heightAtFullBleed);
-  const width = widthAtFullBleed * scale;
-  const height = heightAtFullBleed * scale;
+  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
+}
 
-  pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+function addLinkAnnotations(pdf, links, sheetWidthPx, sheetHeightPx) {
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  links.forEach(({ href, left, top, width, height }) => {
+    const x = (left / sheetWidthPx) * pageWidth;
+    const y = (top / sheetHeightPx) * pageHeight;
+    const w = (width / sheetWidthPx) * pageWidth;
+    const h = (height / sheetHeightPx) * pageHeight;
+
+    pdf.link(x, y, w, h, { url: href });
+  });
 }
 
 export async function downloadResumePdf({ element, filename }) {
@@ -45,25 +97,27 @@ export async function downloadResumePdf({ element, filename }) {
   await document.fonts.ready;
 
   const { html2canvas, jsPDF } = await loadPdfLibraries();
-  document.body.classList.add('resume-pdf-capture');
+  const { host, sheet } = createRenderSheet(element);
 
   try {
-    const canvas = await html2canvas(element, {
-      scale: Math.max(2, window.devicePixelRatio || 1),
+    await waitForLayout();
+
+    const sheetHeightPx = Math.max(sheet.scrollHeight, A4_HEIGHT_PX);
+    const links = collectLinkRects(sheet);
+    const scale = Math.max(2, window.devicePixelRatio || 1);
+
+    const canvas = await html2canvas(sheet, {
+      scale,
       useCORS: true,
-      backgroundColor: null,
+      allowTaint: false,
+      backgroundColor: '#ffffff',
       logging: false,
-      width: element.scrollWidth,
-      height: element.scrollHeight,
-      windowWidth: element.scrollWidth,
-      windowHeight: element.scrollHeight,
-      onclone: (doc) => {
-        const sheet = doc.querySelector('.resume-sheet');
-        if (sheet) {
-          sheet.style.boxShadow = 'none';
-          sheet.style.margin = '0';
-        }
-      },
+      width: A4_WIDTH_PX,
+      height: sheetHeightPx,
+      windowWidth: A4_WIDTH_PX,
+      windowHeight: sheetHeightPx,
+      scrollX: 0,
+      scrollY: 0,
     });
 
     const pdf = new jsPDF({
@@ -73,10 +127,11 @@ export async function downloadResumePdf({ element, filename }) {
       compress: true,
     });
 
-    addCanvasToSinglePage(pdf, canvas);
+    addFullBleedImage(pdf, canvas);
+    addLinkAnnotations(pdf, links, A4_WIDTH_PX, sheetHeightPx);
     pdf.save(filename);
   } finally {
-    document.body.classList.remove('resume-pdf-capture');
+    host.remove();
   }
 }
 

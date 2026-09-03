@@ -639,8 +639,33 @@ body.resume-printing .resume-toolbar {
   visibility: hidden;
 }
 
-body.resume-pdf-capture .resume-sheet {
+.resume-pdf-render-host {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 794px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.resume-pdf-render-host .resume-sheet--pdf {
+  width: 794px !important;
+  min-height: 1123px !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border: 0 !important;
   box-shadow: none !important;
+  overflow: hidden;
+}
+
+.resume-pdf-render-host .resume-layout {
+  min-height: 1123px;
+}
+
+.resume-pdf-render-host .resume-sidebar {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 body.resume-page--preview {
