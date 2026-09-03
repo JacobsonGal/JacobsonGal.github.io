@@ -1,4 +1,4 @@
-import { fetchServerProfile, loadProfile } from './profile-store.js';
+import { loadProfile } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
 import { mountResumeAuthToolbar } from './resume-auth-ui.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
@@ -7,13 +7,13 @@ import './theme-init.js';
 
 const root = document.getElementById('resume-root');
 const toolbarActions = document.querySelector('.resume-toolbar-actions');
-const profile = await loadProfile({ preferDraft: false });
+const profile = await loadProfile({ preferDraft: true });
 
 document.title = `${profile.name} — Resume`;
 root.innerHTML = renderResumeHtml(profile);
 
-async function refreshResumeFromGithub() {
-  const freshProfile = await fetchServerProfile();
+async function refreshResumeForPdf() {
+  const freshProfile = await loadProfile({ preferDraft: true });
   root.innerHTML = renderResumeHtml(freshProfile);
   await document.fonts.ready;
   return freshProfile;
@@ -21,7 +21,7 @@ async function refreshResumeFromGithub() {
 
 bindResumePdfDownload({
   button: document.getElementById('download-resume-pdf'),
-  refreshResume: refreshResumeFromGithub,
+  refreshResume: refreshResumeForPdf,
 });
 
 await mountResumeAuthToolbar(toolbarActions);
@@ -31,4 +31,11 @@ mountOwnerSecretEntry({
     '.resume-name-block .resume-name-line:first-child',
   ],
   onAuthed: () => mountResumeAuthToolbar(toolbarActions),
+});
+
+window.addEventListener('pageshow', async (event) => {
+  if (!event.persisted) return;
+  const freshProfile = await loadProfile({ preferDraft: true });
+  root.innerHTML = renderResumeHtml(freshProfile);
+  document.title = `${freshProfile.name} — Resume`;
 });
