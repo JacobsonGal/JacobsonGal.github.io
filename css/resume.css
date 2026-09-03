@@ -30,6 +30,7 @@ html:has(body.resume-page) {
   backdrop-filter: blur(8px);
 }
 
+.resume-toolbar-start,
 .resume-toolbar-actions {
   display: flex;
   flex-wrap: wrap;
