@@ -25,10 +25,10 @@ html:has(body.resume-page) {
   align-items: center;
   justify-content: space-between;
   padding:
-    calc(1rem + var(--safe-top))
-    calc(1.5rem + var(--safe-right))
-    1rem
-    calc(1.5rem + var(--safe-left));
+    calc(var(--safe-top) + 0.65rem)
+    calc(0.75rem + var(--safe-right))
+    0.65rem
+    calc(0.75rem + var(--safe-left));
   background: hsl(var(--background) / 0.95);
   border-bottom: 1px solid hsl(var(--border));
   backdrop-filter: blur(8px);
@@ -862,7 +862,11 @@ body.resume-page--a4 .resume-name-line {
   }
 
   .resume-toolbar {
-    padding: 0.65rem 0.75rem;
+    padding:
+      calc(var(--safe-top) + 0.5rem)
+      calc(0.75rem + var(--safe-right))
+      0.5rem
+      calc(0.75rem + var(--safe-left));
     flex-wrap: nowrap;
     gap: 0.4rem;
   }
