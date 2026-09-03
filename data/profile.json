@@ -28,13 +28,22 @@
     "MBA · Entrepreneurship"
   ],
   "resume": {
+    "headline": "Software Engineer",
+    "location": "Central, Israel",
     "phone": "052-3565689",
+    "overview": [
+      "Experienced Full-Stack Engineer with 4+ years of building scalable, robust, and high-performance software solutions using Node.js, React, Docker, PostgreSQL, Apollo, cloud platforms (AWS, GCP), and more.",
+      "Proven record of delivering large-scale features and optimizing performance across distributed systems, with hands-on experience leading development from planning to production while collaborating with global cross-functional teams and demonstrating excellent communication skills.",
+      "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
+    ],
     "skills": {
       "Back End": ["Java", "C/C++/C#", "Python"],
       "Front End": ["JavaScript", "React.js", "HTML", "CSS", "React Native", "Flutter"],
       "Databases": ["PostgreSQL", "GraphQL", "MongoDB", "MSSQL"],
       "Frameworks": ["Node.js", "Express.js", "Apollo", "Sequelize", "GCP", "AWS"],
-      "Tools & Cloud": ["Git", "Docker", "Redux", "Grafana", "Redash", "Jenkins", "CircleCI", "Jira", "pgAdmin"]
+      "Tools & Cloud": ["Git", "Docker", "Redux", "Grafana", "Redash", "Jenkins", "CircleCI", "Jira", "pgAdmin"],
+      "Fundamentals": ["OOP", "Networking", "Data Structures", "Algorithms"],
+      "Operating Systems": ["MacOS", "Linux", "Windows"]
     },
     "softSkills": [
       "Organized & Thorough",
@@ -43,7 +52,10 @@
       "Feature Ownership",
       "Effective communicator"
     ],
-    "languages": ["Hebrew — Native", "English — Professional proficiency"]
+    "languages": [
+      { "name": "Hebrew", "level": "Native" },
+      { "name": "English", "level": "Professional proficiency" }
+    ]
   },
   "experience": [
     {
@@ -51,16 +63,17 @@
       "letter": "A",
       "title": "Full-Stack Engineer",
       "company": "Houzz",
+      "team": "Houzz Pro - Documents Team",
       "location": "Tel Aviv",
       "dates": "2021 — Present",
-      "summary": "Full-stack engineer in the Houzz Pro web platform documents team — responsible for core features of Houzz Pro.",
+      "summary": "",
       "bullets": [
-        "Led development of multiple robust, scalable technical features, ensuring high-quality performance and reliability with substantial improvements in functionality and user adoption.",
-        "Upgraded existing systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
-        "Managed large-scale projects and collaborated with cross-functional teams to derive technical design and performance requirements."
+        "Led the development of multiple robust, scalable, and technical features and software solutions, ensuring high-quality performance and reliability, resulting in substantial improvements in functionality and user adoption.",
+        "Upgraded existing software systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
+        "Managed large-scale projects and collaborated closely with cross-functional teams to analyze and derive technical software design and performance requirements."
       ],
       "highlights": ["Contracts", "Automation", "Houzz Pro Rebranding"],
-      "stack": ["React.js", "Node.js", "JavaScript", "GraphQL", "Express.js", "Docker", "Git"],
+      "stack": ["Node.js", "React", "GraphQL", "Docker", "Apollo", "CI/CD", "SQL"],
       "webOnly": false
     },
     {
@@ -89,12 +102,12 @@
       "company": "Yavo",
       "location": "Rishon Le Zion",
       "dates": "2020 — 2021",
-      "summary": "Built and optimized Yavo's medical assistant platform.",
+      "summary": "Built and optimized Yavo's medical assistant platform, focusing on scalable architecture, real-time data flows, and enhancing deployment efficiency and system reliability.",
       "bullets": [
-        "Focused on scalable architecture, real-time data flows, and enhanced deployment efficiency and system reliability."
+        "Express.js, React, Firebase, Redux, AWS."
       ],
       "highlights": ["Medical Platform", "Real-time Data", "Scalable Architecture"],
-      "stack": ["React.js", "Node.js", "Express.js"],
+      "stack": [],
       "webOnly": false
     },
     {
@@ -104,27 +117,28 @@
       "company": "Israel Defense Forces",
       "location": "Israel",
       "dates": "2013 — 2017",
-      "summary": "Acting and deputy honored company commander at combat engineering forces.",
+      "summary": "",
       "bullets": [
-        "Demonstrated high management and human relations capabilities while commanding 100 soldiers, managing operative information, and decision-making under pressure."
+        "Acting & deputy honored company commander."
       ],
-      "highlights": ["Leadership", "Management", "High performance under pressure"],
+      "highlights": [],
       "stack": [],
       "webOnly": false,
-      "hideOnWeb": true
+      "hideOnWeb": true,
+      "armyService": true
     }
   ],
   "education": [
     {
       "degree": "Master of Business Administration — MBA",
-      "field": "Entrepreneurship & Innovation",
+      "field": "Major in Entrepreneurship",
       "school": "College of Management Academic Studies",
       "location": "Rishon Le Zion",
       "dates": "2021 — 2022"
     },
     {
-      "degree": "Bachelor of Science — BS",
-      "field": "Computer Science",
+      "degree": "Bachelor of Science — BS | Computer Science",
+      "field": "Major in Full-Stack",
       "school": "College of Management Academic Studies",
       "location": "Rishon Le Zion",
       "dates": "2018 — 2021"

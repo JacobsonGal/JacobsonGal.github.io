@@ -10,7 +10,7 @@ function sleep(ms) {
 
 function readSession() {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -18,10 +18,12 @@ function readSession() {
 }
 
 function writeSession(session) {
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  sessionStorage.removeItem(STORAGE_KEY);
 }
 
 function clearSession() {
+  localStorage.removeItem(STORAGE_KEY);
   sessionStorage.removeItem(STORAGE_KEY);
 }
 

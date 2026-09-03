@@ -14,27 +14,54 @@ function el(tag, className, text) {
   return node;
 }
 
+function mountOwnerActions(container, { onSignOut } = {}) {
+  container.querySelectorAll('[data-auth-ui]').forEach((node) => node.remove());
+
+  const editLink = el('a', 'owner-tool-link resume-btn');
+  editLink.dataset.authUi = 'true';
+  editLink.href = 'edit-resume.html';
+  editLink.textContent = 'Edit resume';
+
+  const signOutBtn = el('button', 'owner-tool-link resume-btn resume-btn--ghost', 'Sign out');
+  signOutBtn.dataset.authUi = 'true';
+  signOutBtn.type = 'button';
+  signOutBtn.addEventListener('click', async () => {
+    signOut();
+    if (onSignOut) await onSignOut();
+  });
+
+  container.prepend(editLink, signOutBtn);
+  mountThemePicker(container);
+}
+
+export async function mountOwnerToolbar(container) {
+  if (!container) return null;
+
+  const user = await getAuthorizedUser();
+  container.replaceChildren();
+
+  if (!user) return null;
+
+  mountOwnerActions(container, {
+    onSignOut: async () => {
+      container.replaceChildren();
+    },
+  });
+
+  return user;
+}
+
 export async function mountResumeAuthToolbar(toolbarActions) {
   const user = await getAuthorizedUser();
 
   toolbarActions.querySelectorAll('[data-auth-ui]').forEach((node) => node.remove());
 
   if (user) {
-    const editLink = el('a', 'resume-btn');
-    editLink.dataset.authUi = 'true';
-    editLink.href = 'edit-resume.html';
-    editLink.textContent = 'Edit resume';
-
-    const signOutBtn = el('button', 'resume-btn resume-btn--ghost', 'Sign out');
-    signOutBtn.dataset.authUi = 'true';
-    signOutBtn.type = 'button';
-    signOutBtn.addEventListener('click', async () => {
-      signOut();
-      await mountResumeAuthToolbar(toolbarActions);
+    mountOwnerActions(toolbarActions, {
+      onSignOut: async () => {
+        await mountResumeAuthToolbar(toolbarActions);
+      },
     });
-
-    toolbarActions.append(editLink, signOutBtn);
-    mountThemePicker(toolbarActions);
     return user;
   }
 
