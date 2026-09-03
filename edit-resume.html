@@ -29,9 +29,12 @@
       </div>
       <p class="edit-status" id="edit-status" hidden></p>
       <div class="edit-actions">
-        <button class="resume-btn resume-btn--primary" type="submit" form="edit-form" id="save-resume">Save draft</button>
-        <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
-        <button class="resume-btn" type="button" id="export-json">Export JSON</button>
+        <label class="edit-publish-toggle" id="publish-option" hidden title="Publish to Github" aria-label="Publish to Github">
+          <input type="checkbox" name="publishToGithub" id="publish-to-github" class="edit-publish-toggle-input" checked />
+          <span class="edit-publish-github-icon" aria-hidden="true"></span>
+        </label>
+        <button class="resume-btn resume-btn--primary" type="submit" form="edit-form" id="save-resume">Save</button>
+        <button class="resume-btn" type="button" id="reset-draft">Reset</button>
       </div>
       <form class="edit-form" id="edit-form">
         <label>Name<input name="name" required /></label>
@@ -45,11 +48,6 @@
         <label>Portfolio URL<input name="portfolio" /></label>
         <label>LinkedIn URL<input name="linkedin" /></label>
         <label>GitHub URL<input name="github" /></label>
-        <label class="edit-publish-option" id="publish-option" hidden>
-          <input type="checkbox" name="publishToGithub" id="publish-to-github" class="edit-publish-toggle-input" checked />
-          <span class="edit-publish-github-icon" aria-hidden="true"></span>
-          <span class="edit-publish-label">Publish to GitHub</span>
-        </label>
       </form>
     </aside>
     <section class="edit-preview">

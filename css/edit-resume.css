@@ -44,17 +44,11 @@ body.edit-resume-page {
   color: hsl(var(--accent-deep, var(--accent)));
 }
 
-.edit-publish-option {
-  display: flex;
-  flex-direction: row;
+.edit-publish-toggle {
+  display: inline-flex;
+  flex: none;
   align-items: center;
-  gap: 0.6rem;
   margin: 0;
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  letter-spacing: 0;
-  text-transform: none;
-  color: hsl(var(--foreground));
   cursor: pointer;
   user-select: none;
 }
@@ -95,10 +89,6 @@ body.edit-resume-page {
 .edit-publish-toggle-input:focus-visible + .edit-publish-github-icon {
   outline: 2px solid hsl(var(--accent));
   outline-offset: 2px;
-}
-
-.edit-publish-label {
-  line-height: 1.35;
 }
 
 .edit-form {

@@ -2,7 +2,6 @@ import {
   loadProfile,
   saveDraft,
   clearDraft,
-  downloadJson,
   fetchServerProfile,
 } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
@@ -68,7 +67,6 @@ function initEditor() {
 
   if (publishEnabled) {
     publishOption.hidden = false;
-    saveButton.textContent = 'Save & publish';
     const publishIcon = publishOption.querySelector('.edit-publish-github-icon');
     if (publishIcon) publishIcon.innerHTML = iconMarkup('github');
   }
@@ -203,10 +201,6 @@ function initEditor() {
     profileToForm(profile);
     renderPreview(profile);
     setStatus('Reset to the live site profile.', 'info');
-  });
-
-  document.getElementById('export-json').addEventListener('click', () => {
-    downloadJson(formToProfile(profile));
   });
 
   bootstrap();
