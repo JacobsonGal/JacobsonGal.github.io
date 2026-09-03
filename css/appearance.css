@@ -2,18 +2,6 @@ html {
   color-scheme: light dark;
 }
 
-html[data-theme="arctic"][data-appearance="light"]:has(body.resume-page),
-html[data-theme="arctic"][data-appearance="light"]:has(body.edit-resume-page) {
-  --background: 210 40% 97%;
-  --foreground: 220 48% 11%;
-  --accent: 205 68% 42%;
-  --accent-deep: 215 58% 24%;
-  --border: 210 22% 86%;
-  --muted: 215 12% 42%;
-  --card: 210 34% 94%;
-  color-scheme: light;
-}
-
 /* Appearance switch — view transition (modern browsers) */
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
@@ -147,8 +135,10 @@ html.appearance-animate .mono-label {
   --card: 24 12% 14%;
 }
 
-/* Bright mode — editorial / Base44 warm palette (homepage only) */
-html[data-appearance="light"]:has(.app--continuous-hero) {
+/* Bright mode — editorial / Base44 warm palette (homepage + resume pages) */
+html[data-appearance="light"]:has(.app--continuous-hero),
+html[data-appearance="light"]:has(body.resume-page),
+html[data-appearance="light"]:has(body.edit-resume-page) {
   --background: 38 24% 94%;
   --foreground: 24 10% 10%;
   --accent: 18 42% 46%;

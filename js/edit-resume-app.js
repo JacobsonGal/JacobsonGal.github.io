@@ -170,8 +170,13 @@ function initEditor() {
     }, 1500);
   }
 
+  function previewShellAttrs() {
+    const { theme, appearance } = document.documentElement.dataset;
+    return `data-theme="${theme || 'arctic'}" data-appearance="${appearance || 'light'}"`;
+  }
+
   function renderPreview(p) {
-    const doc = `<!DOCTYPE html><html data-theme="arctic"><head><link rel="stylesheet" href="css/resume.css" /><link rel="stylesheet" href="css/themes.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
+    const doc = `<!DOCTYPE html><html ${previewShellAttrs()}><head><link rel="stylesheet" href="css/resume.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
     frame.srcdoc = doc;
   }
 
@@ -200,6 +205,10 @@ function initEditor() {
     profileToForm(profile);
     renderPreview(profile);
     setStatus('Reset to the live site profile.', 'info');
+  });
+
+  document.addEventListener('appearancechange', () => {
+    renderPreview(formToProfile(profile));
   });
 
   bootstrap();
