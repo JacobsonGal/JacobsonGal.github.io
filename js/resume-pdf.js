@@ -8,6 +8,9 @@ const A4_HEIGHT_MM = 297;
 const PX_PER_MM = 96 / 25.4;
 const A4_WIDTH_PX = Math.round(A4_WIDTH_MM * PX_PER_MM);
 const A4_HEIGHT_PX = Math.round(A4_HEIGHT_MM * PX_PER_MM);
+const PDF_LAYOUT_DPI = 96;
+const PDF_RENDER_DPI = 300;
+const PDF_MAX_RENDER_SCALE = 4;
 
 let pdfLibrariesPromise;
 
@@ -45,10 +48,13 @@ function isMobileDevice() {
 
 function getPdfRenderScale() {
   const dpr = window.devicePixelRatio || 1;
+  const targetScale = PDF_RENDER_DPI / PDF_LAYOUT_DPI;
+
   if (isMobileDevice()) {
-    return Math.min(1.25, Math.max(1, dpr * 0.85));
+    return Math.min(2, Math.max(1.5, dpr));
   }
-  return Math.max(2, dpr);
+
+  return Math.min(PDF_MAX_RENDER_SCALE, Math.max(targetScale, dpr * 2));
 }
 
 function canSharePdfFile(file) {
@@ -200,13 +206,9 @@ function collectLinkRects(root) {
 function addFullBleedImage(pdf, canvas) {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const useJpeg = isMobileDevice();
-  const format = useJpeg ? 'JPEG' : 'PNG';
-  const imgData = useJpeg
-    ? canvas.toDataURL('image/jpeg', 0.92)
-    : canvas.toDataURL('image/png');
+  const imgData = canvas.toDataURL('image/png');
 
-  pdf.addImage(imgData, format, 0, 0, pageWidth, pageHeight);
+  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, undefined, 'NONE');
 }
 
 function addLinkAnnotations(pdf, links, sheetWidthPx, sheetHeightPx) {
@@ -260,7 +262,7 @@ export async function downloadResumePdf({ element, filename }) {
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
-      compress: true,
+      compress: false,
     });
 
     addFullBleedImage(pdf, canvas);
