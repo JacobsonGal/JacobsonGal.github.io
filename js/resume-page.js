@@ -21,7 +21,6 @@ async function refreshResumeFromGithub() {
 
 bindResumePdfDownload({
   button: document.getElementById('download-resume-pdf'),
-  getResumeElement: () => document.querySelector('#resume-root .resume-sheet'),
   refreshResume: refreshResumeFromGithub,
 });
 

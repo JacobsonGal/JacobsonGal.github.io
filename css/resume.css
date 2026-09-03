@@ -548,20 +548,71 @@ body.resume-page--a4 #resume-root {
 }
 
 @media print {
-  .resume-toolbar { display: none; }
-  .resume-stage { padding: 0; }
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body.resume-page {
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+    color: hsl(220 48% 11%) !important;
+  }
+
+  .resume-toolbar,
+  .resume-toolbar-actions {
+    display: none !important;
+  }
+
+  .resume-stage {
+    width: 210mm;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+  }
+
   .resume-sheet {
-    width: 100%;
+    width: 210mm;
+    min-height: auto;
+    margin: 0;
     border: 0;
     box-shadow: none;
+    break-inside: avoid;
   }
 
   .resume-layout {
     display: flex;
     align-items: stretch;
+    min-height: 100%;
   }
 
   .resume-sidebar {
+    background: hsl(220 48% 11%) !important;
+    color: hsl(210 40% 97%) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .resume-sidebar-heading {
+    color: hsl(205 68% 55%) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .resume-sidebar a[href],
+  .resume-main a[href] {
+    color: hsl(205 68% 55%) !important;
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+  }
+
+  .resume-section-title {
+    color: hsl(205 68% 42%) !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
@@ -572,6 +623,16 @@ body.resume-page--a4 #resume-root {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
+  .resume-role-logo,
+  .exp-icon {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+body.resume-printing .resume-toolbar {
+  visibility: hidden;
 }
 
 body.resume-page--preview {

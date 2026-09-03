@@ -10,7 +10,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 - **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [edit-resume.html](edit-resume.html), then unlock with your **owner code**. After unlocking, **Edit resume** appears in the header and resume toolbar.
 - **Publish to GitHub:** enable **Publish to GitHub immediately** in the editor to commit `data/profile.json` without exporting JSON. Requires the Cloudflare worker below.
 - **Color palette:** resume and editor always use **Arctic** (icy blues). The portfolio homepage still supports light/dark appearance via the header toggle.
-- **Download PDF:** [resume.html](resume.html) — **Download PDF** generates a fresh A4 PDF from the latest `data/profile.json` on GitHub and saves it as `Gal Jacobson | CV.pdf`.
+- **Download PDF:** [resume.html](resume.html) — opens the print dialog with the Arctic CV layout. Choose **Save as PDF**; links stay clickable and text stays sharp (vector output). Default filename: `Gal Jacobson | CV.pdf`.
 
 The floating action menu links to **Resume** with your full logo mark.
 
