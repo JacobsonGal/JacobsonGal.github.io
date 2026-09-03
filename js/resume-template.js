@@ -39,16 +39,18 @@ function renderSidebarItem(iconName, text, href) {
 
 function renderSkillGroups(resume) {
   if (!resume?.skills) return '';
-  return Object.entries(resume.skills)
+  return `
+    <ul class="resume-sidebar-bullets resume-skill-list">
+      ${Object.entries(resume.skills)
     .map(([group, items]) => `
-      <div class="resume-skill-group">
-        <h4>${escapeHtml(group)}</h4>
-        <ul class="resume-sidebar-bullets resume-skill-list">
-          ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}
-        </ul>
-      </div>
-    `)
-    .join('');
+        <li class="resume-skill-group">
+          <span class="resume-skill-group-title">${escapeHtml(group)}</span>
+          <span class="resume-skill-items">${items.map(escapeHtml).join(', ')}</span>
+        </li>
+      `)
+    .join('')}
+    </ul>
+  `;
 }
 
 function renderLanguages(languages) {

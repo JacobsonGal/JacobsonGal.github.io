@@ -262,17 +262,32 @@ body.resume-page {
 }
 
 .resume-sidebar-skills {
-  display: grid;
-  gap: 0.65rem;
+  margin: 0;
 }
 
-.resume-skill-group h4 {
-  margin: 0 0 0.15rem;
+.resume-skill-group {
+  margin: 0;
+}
+
+.resume-skill-group + .resume-skill-group {
+  margin-top: 0.45rem;
+}
+
+.resume-skill-group-title {
+  display: block;
   font-family: var(--font-mono);
   font-size: 0.56rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: hsl(var(--background) / 0.92);
+}
+
+.resume-skill-items {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: hsl(var(--background) / 0.78);
 }
 
 .resume-sidebar-bullets {
@@ -285,12 +300,7 @@ body.resume-page {
 }
 
 .resume-skill-list {
-  margin-top: 0.1rem;
-  padding-left: 0.95rem;
-}
-
-.resume-skill-list li + li {
-  margin-top: 0.1rem;
+  margin-top: 0;
 }
 
 .resume-lang-grid {
