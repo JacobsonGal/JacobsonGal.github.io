@@ -181,6 +181,16 @@ body.resume-page--a4 #resume-root {
 }
 
 .resume-sheet {
+  /* CV document — fixed Arctic blue/white; page chrome still follows appearance */
+  --background: 0 0% 100%;
+  --foreground: 220 48% 11%;
+  --accent: 205 68% 42%;
+  --accent-deep: 215 58% 24%;
+  --border: 210 22% 86%;
+  --muted: 215 12% 42%;
+  --card: 210 34% 94%;
+  color: hsl(var(--foreground));
+  color-scheme: light;
   width: 100%;
   margin-inline: auto;
   background: hsl(var(--background));
