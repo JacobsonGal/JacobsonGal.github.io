@@ -132,13 +132,6 @@ function applyProfile(profile) {
     eduSummary.innerHTML = profile.educationSummary.map((e) => `<span>${e}</span>`).join('');
   }
 
-  const heroEducation = document.querySelector('[data-list="heroEducation"]');
-  if (heroEducation && profile.educationSummary) {
-    heroEducation.innerHTML = profile.educationSummary
-      .map((line) => `<p class="hero-fact-line">${line}</p>`)
-      .join('');
-  }
-
   const heroCompany = document.querySelector('[data-hero-company]');
   if (heroCompany && profile.currentRole) {
     const { company, id } = profile.currentRole;
