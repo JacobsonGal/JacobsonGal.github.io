@@ -263,7 +263,6 @@ async function init() {
   mountOwnerSecretEntry({
     selectors: [
       '.brand .accent',
-      '.hero-hud-dot',
       '.portrait-mark',
       '.hero-title-line--accent .accent',
     ],
