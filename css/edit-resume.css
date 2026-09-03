@@ -30,12 +30,6 @@ body.edit-resume-page {
 }
 .edit-panel-head h1 { margin: 0; flex: 1 1 auto; }
 
-.edit-hint {
-  margin: 0 0 1rem;
-  color: hsl(var(--muted));
-  font-size: 0.92rem;
-}
-
 .edit-status {
   margin: 0 0 1rem;
   font-size: 0.92rem;

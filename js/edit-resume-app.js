@@ -60,7 +60,6 @@ function initEditor() {
   const publishOption = document.getElementById('publish-option');
   const publishCheckbox = document.getElementById('publish-to-github');
   const saveButton = document.getElementById('save-resume');
-  const editHint = document.getElementById('edit-hint');
   const editStatus = document.getElementById('edit-status');
   const publishEnabled = isPublishConfigured();
   let profile;
@@ -70,7 +69,6 @@ function initEditor() {
   if (publishEnabled) {
     publishOption.hidden = false;
     saveButton.textContent = 'Save & publish';
-    editHint.textContent = 'Edits can publish straight to data/profile.json on GitHub when the publish proxy is configured.';
     const publishIcon = publishOption.querySelector('.edit-publish-github-icon');
     if (publishIcon) publishIcon.innerHTML = iconMarkup('github');
   }
