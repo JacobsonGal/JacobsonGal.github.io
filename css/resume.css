@@ -181,20 +181,29 @@ body.resume-page--a4 #resume-root {
   border: 1px solid hsl(var(--border));
   box-shadow: 0 24px 60px hsl(var(--foreground) / 0.08);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .resume-layout {
-  display: grid;
-  grid-template-columns: minmax(11rem, 32%) 1fr;
+  display: flex;
+  align-items: stretch;
+  flex: 1 1 auto;
+  width: 100%;
   min-height: 100%;
 }
 
 .resume-sidebar {
   --resume-side-fg: 210 40% 97%;
   --resume-side-muted: 210 30% 72%;
+  flex: 0 0 32%;
+  width: 32%;
+  min-width: 11rem;
+  align-self: stretch;
   background: hsl(220 48% 11%);
   color: hsl(var(--resume-side-fg));
   padding: 1.75rem 1.35rem;
+  box-sizing: border-box;
 }
 
 .resume-name-block {
@@ -340,7 +349,10 @@ body.resume-page--a4 #resume-root {
 }
 
 .resume-main {
+  flex: 1 1 auto;
+  min-width: 0;
   padding: 1.75rem 1.5rem 2rem;
+  box-sizing: border-box;
 }
 
 .resume-section--main {
@@ -520,10 +532,13 @@ body.resume-page--a4 #resume-root {
 
 @media (max-width: 720px) {
   .resume-layout {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .resume-sidebar {
+    flex: none;
+    width: 100%;
+    min-width: 0;
     padding: 1.25rem 1rem;
   }
 
@@ -542,7 +557,8 @@ body.resume-page--a4 #resume-root {
   }
 
   .resume-layout {
-    grid-template-columns: 32% 1fr;
+    display: flex;
+    align-items: stretch;
   }
 
   .resume-sidebar {
@@ -597,11 +613,14 @@ body.resume-page--a4 .resume-sheet {
 
 body.resume-page--preview .resume-layout,
 body.resume-page--a4 .resume-layout {
-  grid-template-columns: 32% 1fr;
+  align-items: stretch;
 }
 
 body.resume-page--preview .resume-sidebar,
 body.resume-page--a4 .resume-sidebar {
+  flex: 0 0 32%;
+  width: 32%;
+  align-self: stretch;
   padding: 1.75rem 1.35rem;
 }
 
