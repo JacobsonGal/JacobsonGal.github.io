@@ -30,6 +30,5 @@ mountOwnerSecretEntry({
   selectors: [
     '.resume-name-block .resume-name-line:first-child',
   ],
-  corners: ['bl'],
   onAuthed: () => mountResumeAuthToolbar(toolbarActions),
 });
