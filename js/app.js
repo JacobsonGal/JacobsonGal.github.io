@@ -147,12 +147,6 @@ function applyProfile(profile) {
   const floatingLinks = document.getElementById('floating-links');
   if (floatingLinks) floatingLinks.innerHTML = renderFloatingLinks(profile);
 
-  const syncStatus = document.getElementById('sync-status');
-  if (syncStatus && profile.syncedAt) {
-    const when = new Date(profile.syncedAt).toLocaleString();
-    syncStatus.textContent = `Profile synced ${when}${profile.source ? ` · ${profile.source}` : ''}`;
-  }
-
   initRevealAnimations();
 }
 
@@ -258,7 +252,6 @@ async function init() {
       '.brand .accent',
       '.hero-hud-dot',
       '.portrait-mark',
-      '#sync-status',
       '.hero-title-line--accent .accent',
     ],
     corners: ['tr'],
