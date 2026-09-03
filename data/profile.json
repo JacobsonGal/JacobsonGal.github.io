@@ -79,7 +79,8 @@
       ],
       "highlights": ["Teaching", "Curriculum", "Mentorship"],
       "stack": ["JavaScript", "ASP.NET", "jQuery", "AJAX", "HTML", "CSS", "Full-Stack"],
-      "webOnly": true
+      "webOnly": false,
+      "resumeOnly": true
     },
     {
       "id": "yavo",

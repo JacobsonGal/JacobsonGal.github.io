@@ -20,7 +20,7 @@ function renderSkillGroups(resume) {
 
 function renderExperienceForResume(experience) {
   return (experience || [])
-    .filter((item) => !item.webOnly)
+    .filter((item) => !item.webOnly && !item.resumeOnly)
     .map((item) => `
       <article class="resume-role">
         <div class="resume-role-head">

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Israel Defense Forces">
+  <rect width="64" height="64" rx="14" fill="#2f3b2f"/>
+  <path fill="#c8b88a" d="M32 14 20 42h6l6-14 6 14h6Z"/>
+  <rect x="18" y="44" width="28" height="6" rx="1" fill="#c8b88a"/>
+</svg>

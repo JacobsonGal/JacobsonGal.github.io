@@ -516,12 +516,36 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .experience-toggle {
   width: 100%;
   display: grid;
-  grid-template-columns: 2.5rem 1fr auto;
+  grid-template-columns: 3rem 1fr auto;
   gap: 1rem 1.5rem;
   align-items: center;
   padding: 2rem 0;
   text-align: left;
   transition: color 0.3s ease;
+}
+.exp-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+}
+.exp-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.65rem;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 4px 14px hsl(var(--foreground) / 0.08);
+  border: 1px solid hsl(var(--border));
+}
+.exp-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 .experience-toggle:hover .exp-title { color: hsl(var(--accent)); }
 .exp-title {
@@ -760,14 +784,14 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
     gap: clamp(2rem, 4vw, 3.5rem);
   }
   .experience-toggle {
-    grid-template-columns: 1fr 4fr 3fr 3fr auto;
+    grid-template-columns: 3rem 4fr 3fr 3fr auto;
   }
   .exp-meta-inline {
     display: block;
   }
   .experience-panel-inner {
     grid-template-columns: 1fr 1fr;
-    padding-left: calc(2.5rem + 8.33%);
+    padding-left: calc(3rem + 1.5rem);
   }
   .education-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));

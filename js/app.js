@@ -1,4 +1,5 @@
 import { iconMarkup, brandLogoMarkup } from './icons.js';
+import { companyIconMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountThemePicker } from './theme-picker.js';
@@ -28,11 +29,12 @@ function renderExperienceItem(item, index) {
   const stackTags = (item.stack || []).map((s) => `<span class="tag">${s}</span>`).join('');
   const highlightTags = (item.highlights || []).map((h) => `<span class="tag">${h}</span>`).join('');
   const bullets = (item.bullets || []).map((b) => `<li><span class="mono-label">—</span><span>${b}</span></li>`).join('');
+  const icon = companyIconMarkup(item.id, BASE_PATH) || `<span class="mono-label exp-letter">${item.letter}</span>`;
 
   return `
     <article class="experience-item" data-id="${item.id}" data-reveal data-reveal-delay="${index * 80}">
       <button class="experience-toggle" type="button" aria-expanded="false">
-        <span class="mono-label">${item.letter}</span>
+        <span class="exp-icon-wrap" aria-hidden="true">${icon}</span>
         <div>
           <h3 class="exp-title">${item.title}</h3>
           <div class="exp-meta">
