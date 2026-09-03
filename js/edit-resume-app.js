@@ -55,19 +55,32 @@ function parseSkillsFormText(text) {
 function initEditor() {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
-  const publishOption = document.getElementById('publish-option');
-  const publishCheckbox = document.getElementById('publish-to-github');
+  const publishToggle = document.getElementById('publish-option');
   const editStatus = document.getElementById('edit-status');
   const publishEnabled = isPublishConfigured();
+  let publishOnSave = publishEnabled;
   let profile;
   let publishTimer;
   let publishInFlight = false;
 
+  function syncPublishToggleUi() {
+    publishToggle.setAttribute('aria-pressed', String(publishOnSave));
+  }
+
   if (!publishEnabled) {
-    publishCheckbox.checked = false;
-    publishCheckbox.disabled = true;
-    publishOption.classList.add('edit-publish-toggle--disabled');
-    publishOption.title = 'GitHub publish is not configured yet';
+    publishOnSave = false;
+    publishToggle.title = 'Publish to Github (not configured — saves draft locally)';
+  }
+
+  syncPublishToggleUi();
+
+  publishToggle.addEventListener('click', () => {
+    publishOnSave = !publishOnSave;
+    syncPublishToggleUi();
+  });
+
+  function shouldPublish() {
+    return publishEnabled && publishOnSave;
   }
 
   function setStatus(message, type = 'info') {
@@ -137,7 +150,7 @@ function initEditor() {
     saveDraft(profile);
     renderPreview(profile);
 
-    if (!publish || !publishCheckbox.checked || !publishEnabled) {
+    if (!publish || !shouldPublish()) {
       if (statusMessage) setStatus(statusMessage, 'info');
       return profile;
     }
@@ -163,7 +176,7 @@ function initEditor() {
   }
 
   function schedulePublish() {
-    if (!publishEnabled || !publishCheckbox.checked) return;
+    if (!shouldPublish()) return;
     window.clearTimeout(publishTimer);
     publishTimer = window.setTimeout(() => {
       persistProfile(formToProfile(profile), { publish: true }).catch(() => {});

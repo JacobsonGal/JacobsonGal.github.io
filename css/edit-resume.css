@@ -60,29 +60,13 @@ body.edit-resume-page {
   flex: none;
   align-items: center;
   margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
   user-select: none;
-}
-
-.edit-publish-toggle-input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.edit-publish-toggle--disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.edit-publish-toggle--disabled .edit-publish-github-icon {
-  pointer-events: none;
+  font: inherit;
+  color: inherit;
 }
 
 .edit-publish-github-icon {
@@ -199,17 +183,19 @@ body.edit-resume-page {
 @media (min-width: 1100px) {
   .edit-layout {
     grid-template-columns: 26rem 1fr;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
   }
   .edit-panel {
     border-bottom: 0;
     border-right: 1px solid hsl(var(--border));
-    overflow: auto;
-    height: 100vh;
-    position: sticky;
-    top: 0;
+    height: 100%;
+    max-height: 100vh;
   }
   .edit-preview {
     padding: 1.5rem 1rem 2rem;
+    max-height: 100vh;
   }
   .edit-preview iframe {
     border-left: 0;
@@ -218,14 +204,19 @@ body.edit-resume-page {
 
 @media (max-width: 1099px) {
   body.edit-resume-page {
-    height: auto;
-    overflow: auto;
+    height: 100vh;
+    overflow: hidden;
   }
   .edit-layout {
-    height: auto;
+    height: 100vh;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .edit-panel {
+    min-height: 0;
   }
   .edit-preview {
-    min-height: 70vh;
+    min-height: 0;
     justify-content: flex-start;
   }
 }
