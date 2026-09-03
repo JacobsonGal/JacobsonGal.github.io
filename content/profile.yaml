@@ -10,7 +10,7 @@ urls:
   instagram: https://www.instagram.com/jacobsongal/
 resume:
   path: /resume.html
-  edit: /edit-resume.html
+  edit: local only — /local/edit-resume.html when running python3 -m http.server
 
 experience:
   - company: Houzz

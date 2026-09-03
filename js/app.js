@@ -216,7 +216,7 @@ async function refreshLinkedInOverlay(profile) {
 async function init() {
   bindUi();
   initMotion();
-  const profile = await loadProfile();
+  const profile = await loadProfile({ preferDraft: false });
   applyProfile(profile);
   refreshLinkedInOverlay(profile);
 }

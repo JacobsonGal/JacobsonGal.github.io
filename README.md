@@ -6,15 +6,15 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 
 ## Resume
 
-- **View / print:** [resume.html](resume.html) — styled with the same warm palette as the portfolio (`css/tokens.css`).
-- **Edit in browser:** [edit-resume.html](edit-resume.html) — saves a draft in `localStorage`. Use **Export JSON** and commit to `data/profile.json` to publish changes.
+- **View / print (public):** [resume.html](resume.html) — styled with the same warm palette as the portfolio (`css/tokens.css`).
+- **Edit (local only):** run the site locally, then open [local/edit-resume.html](http://localhost:8080/local/edit-resume.html). Export JSON and commit to `data/profile.json` to publish. The editor is not linked or available on the live GitHub Pages site.
 - **Print to PDF:** open the resume page and use **Print / Save PDF**.
 
 The floating action menu links to **Resume** (with your logo in accent colors, not blue).
 
 ## Update content
 
-1. Edit `data/profile.json` (or use the resume editor + export).
+1. Edit `data/profile.json` directly, or use the local resume editor and export.
 2. Commit and push to `main`.
 
 ## LinkedIn sync

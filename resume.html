@@ -15,7 +15,6 @@
   <div class="resume-toolbar">
     <a class="resume-btn" href="index.html">← Portfolio</a>
     <div class="resume-toolbar-actions">
-      <a class="resume-btn" href="edit-resume.html">Edit resume</a>
       <button class="resume-btn resume-btn--primary" type="button" id="print-resume">Print / Save PDF</button>
     </div>
   </div>
@@ -27,7 +26,7 @@
     import { renderResumeHtml } from './js/resume-template.js';
 
     const root = document.getElementById('resume-root');
-    const profile = await loadProfile();
+    const profile = await loadProfile({ preferDraft: false });
     document.title = `${profile.name} — Resume`;
     root.innerHTML = renderResumeHtml(profile);
 
