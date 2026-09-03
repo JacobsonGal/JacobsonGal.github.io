@@ -44,6 +44,10 @@ body.resume-page {
   cursor: pointer;
 }
 .resume-btn:hover { background: hsl(var(--foreground)); color: hsl(var(--background)); }
+.resume-btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
 .resume-btn--primary {
   background: hsl(var(--foreground));
   color: hsl(var(--background));
