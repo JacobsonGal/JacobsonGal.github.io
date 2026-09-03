@@ -186,11 +186,6 @@ async function printResumeFallback() {
   }, 500);
 }
 
-async function saveResumeOnMobile() {
-  await printResumeFallback();
-  return 'print';
-}
-
 function waitForLayout() {
   return new Promise((resolve) => {
     requestAnimationFrame(() => {
