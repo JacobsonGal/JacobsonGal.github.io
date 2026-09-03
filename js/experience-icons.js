@@ -11,6 +11,7 @@ const COMPANY_URLS = {
 
 const FEATURE_LINKS = {
   Contracts: 'https://pro.houzz.com/for-pros/feature-contracts',
+  Automation: 'https://pro.houzz.com/pro-help/r/how-to-use-automations-on-documents',
 };
 
 const CONTAIN_LOGO_IDS = new Set(['colman', 'yavo', 'idf']);
