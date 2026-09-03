@@ -22,6 +22,37 @@ if (!user) {
   initEditor();
 }
 
+function skillsToFormText(skills = {}) {
+  return Object.entries(skills)
+    .map(([group, items]) => `${group}: ${items.join(', ')}`)
+    .join('\n');
+}
+
+function parseSkillsFormText(text) {
+  const skills = {};
+
+  text.split('\n').forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) return;
+
+    const colonIndex = trimmed.indexOf(':');
+    if (colonIndex === -1) return;
+
+    const group = trimmed.slice(0, colonIndex).trim();
+    const items = trimmed
+      .slice(colonIndex + 1)
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (group && items.length) {
+      skills[group] = items;
+    }
+  });
+
+  return skills;
+}
+
 function initEditor() {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
@@ -67,6 +98,8 @@ function initEditor() {
     form.phone.value = resume.phone || '';
     form.location.value = resume.location || p.location || '';
     form.about.value = (resume.overview || p.about || []).join('\n');
+    form.hardSkills.value = skillsToFormText(resume.skills);
+    form.softSkills.value = (resume.softSkills || []).join('\n');
     form.portfolio.value = p.urls?.portfolio || '';
     form.linkedin.value = p.urls?.linkedin || '';
     form.github.value = p.urls?.github || '';
@@ -74,6 +107,9 @@ function initEditor() {
 
   function formToProfile(base) {
     const overview = form.about.value.split('\n').map((l) => l.trim()).filter(Boolean);
+    const softSkills = form.softSkills.value.split('\n').map((l) => l.trim()).filter(Boolean);
+    const skills = parseSkillsFormText(form.hardSkills.value);
+
     return {
       ...base,
       updatedAt: new Date().toISOString(),
@@ -92,6 +128,8 @@ function initEditor() {
         phone: form.phone.value.trim(),
         location: form.location.value.trim(),
         overview,
+        skills,
+        softSkills,
       },
     };
   }
