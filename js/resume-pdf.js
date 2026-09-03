@@ -45,32 +45,93 @@ function isMobileDevice() {
 
 function getPdfRenderScale() {
   const dpr = window.devicePixelRatio || 1;
-  if (window.innerWidth <= 720) {
-    return Math.min(1.75, Math.max(1, dpr));
+  if (isMobileDevice()) {
+    return Math.min(1.25, Math.max(1, dpr * 0.85));
   }
   return Math.max(2, dpr);
 }
 
-function savePdfDocument(pdf, filename) {
+function canSharePdfFile(file) {
+  return typeof navigator.share === 'function'
+    && typeof navigator.canShare === 'function'
+    && navigator.canShare({ files: [file] });
+}
+
+async function sharePdfFile(blob, filename) {
+  const file = new File([blob], filename, { type: 'application/pdf' });
+  if (!canSharePdfFile(file)) return false;
+
+  try {
+    await navigator.share({
+      files: [file],
+      title: filename,
+    });
+    return true;
+  } catch (error) {
+    if (error?.name === 'AbortError') return true;
+    return false;
+  }
+}
+
+function showPdfPreview(blob, filename) {
+  const safeName = sanitizePdfFilename(filename);
+  const url = URL.createObjectURL(blob);
+  const overlay = document.createElement('div');
+  overlay.className = 'resume-pdf-preview';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', 'CV PDF preview');
+
+  overlay.innerHTML = `
+    <div class="resume-pdf-preview-panel">
+      <div class="resume-pdf-preview-bar">
+        <p class="resume-pdf-preview-copy">Use the viewer menu to save or share this PDF.</p>
+        <button type="button" class="resume-btn resume-pdf-preview-close">Close</button>
+      </div>
+      <iframe class="resume-pdf-preview-frame" title="${safeName}" src="${url}"></iframe>
+    </div>
+  `;
+
+  const close = () => {
+    overlay.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  overlay.querySelector('.resume-pdf-preview-close')?.addEventListener('click', close);
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) close();
+  });
+
+  document.body.append(overlay);
+  return 'preview';
+}
+
+async function savePdfDocument(pdf, filename) {
   const safeName = sanitizePdfFilename(filename);
   const blob = pdf.output('blob');
-  const url = URL.createObjectURL(blob);
 
-  if (isIOS()) {
-    const opened = window.open(url, '_blank');
-    if (!opened) {
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.append(link);
-      link.click();
-      link.remove();
-    }
-    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
-    return 'ios-open';
+  if (isMobileDevice() && await sharePdfFile(blob, safeName)) {
+    return 'share';
   }
 
+  if (!isMobileDevice()) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = safeName;
+    link.rel = 'noopener';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    return 'download';
+  }
+
+  if (isIOS()) {
+    return showPdfPreview(blob, safeName);
+  }
+
+  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
   link.download = safeName;
@@ -132,9 +193,13 @@ function collectLinkRects(root) {
 function addFullBleedImage(pdf, canvas) {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
-  const imgData = canvas.toDataURL('image/png');
+  const useJpeg = isMobileDevice();
+  const format = useJpeg ? 'JPEG' : 'PNG';
+  const imgData = useJpeg
+    ? canvas.toDataURL('image/jpeg', 0.92)
+    : canvas.toDataURL('image/png');
 
-  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
+  pdf.addImage(imgData, format, 0, 0, pageWidth, pageHeight);
 }
 
 function addLinkAnnotations(pdf, links, sheetWidthPx, sheetHeightPx) {
@@ -180,7 +245,8 @@ export async function downloadResumePdf({ element, filename }) {
       windowHeight: sheetHeightPx,
       scrollX: 0,
       scrollY: 0,
-      imageTimeout: 15_000,
+      imageTimeout: isMobileDevice() ? 30_000 : 15_000,
+      foreignObjectRendering: false,
     });
 
     const pdf = new jsPDF({
@@ -192,7 +258,7 @@ export async function downloadResumePdf({ element, filename }) {
 
     addFullBleedImage(pdf, canvas);
     addLinkAnnotations(pdf, links, A4_WIDTH_PX, sheetHeightPx);
-    return savePdfDocument(pdf, filename);
+    return await savePdfDocument(pdf, filename);
   } finally {
     host.remove();
   }
@@ -201,8 +267,8 @@ export async function downloadResumePdf({ element, filename }) {
 export function bindResumePdfDownload({ button, getResumeElement, refreshResume }) {
   if (!button) return;
 
-  const defaultLabel = button.textContent?.trim() || 'Download PDF';
   const generatingLabel = isMobileDevice() ? 'Preparing…' : 'Generating…';
+  const defaultLabel = button.textContent?.trim() || (isMobileDevice() ? 'Save PDF' : 'Download PDF');
   button.removeAttribute('href');
   button.removeAttribute('download');
 
@@ -219,10 +285,15 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
       const filename = getResumePdfFilename(profile);
       const result = await downloadResumePdf({ element: resumeElement, filename });
 
-      if (result === 'ios-open') {
+      if (result === 'share') {
+        return;
+      }
+
+      if (result === 'preview') {
         window.setTimeout(() => {
-          window.alert('Your CV opened in a new tab. Tap Share, then "Save to Files" to download the PDF.');
+          window.alert('Your CV opened below. Tap the share icon in the PDF viewer, then choose "Save to Files".');
         }, 300);
+        return;
       }
     } catch (error) {
       console.error(error);

@@ -666,10 +666,12 @@ body.resume-printing .resume-toolbar {
 
 .resume-pdf-render-host {
   position: fixed;
-  left: -10000px;
+  left: 0;
   top: 0;
   width: 794px;
   overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
   pointer-events: none;
   z-index: -1;
 }
@@ -691,6 +693,54 @@ body.resume-printing .resume-toolbar {
 .resume-pdf-render-host .resume-sidebar {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
+}
+
+.resume-pdf-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding:
+    calc(0.75rem + var(--safe-top))
+    calc(0.75rem + var(--safe-right))
+    calc(0.75rem + var(--safe-bottom))
+    calc(0.75rem + var(--safe-left));
+  background: hsl(215 58% 6% / 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.resume-pdf-preview-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 48rem);
+  height: 100%;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 24px 64px hsl(var(--foreground) / 0.18);
+}
+
+.resume-pdf-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.resume-pdf-preview-copy {
+  margin: 0;
+  font-size: 0.82rem;
+  color: hsl(var(--muted));
+}
+
+.resume-pdf-preview-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #fff;
 }
 
 body.resume-page--preview {
