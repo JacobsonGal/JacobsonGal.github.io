@@ -10,7 +10,8 @@
     "linkedin": "https://www.linkedin.com/in/jacobsongal",
     "github": "https://github.com/JacobsonGal",
     "instagram": "https://www.instagram.com/jacobsongal/",
-    "cv": "resume.html"
+    "cv": "resume.html",
+    "cvPdf": "assets/documents/Gal-Jacobson-Resume.pdf"
   },
   "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
   "about": [

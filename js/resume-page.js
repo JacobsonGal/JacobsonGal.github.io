@@ -2,6 +2,7 @@ import { loadProfile } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
 import { mountResumeAuthToolbar } from './resume-auth-ui.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
+import { bindResumePdfDownload } from './resume-pdf.js';
 import './theme-init.js';
 
 const root = document.getElementById('resume-root');
@@ -11,7 +12,7 @@ const profile = await loadProfile({ preferDraft: false });
 document.title = `${profile.name} — Resume`;
 root.innerHTML = renderResumeHtml(profile);
 
-document.getElementById('print-resume').addEventListener('click', () => window.print());
+bindResumePdfDownload(document.getElementById('download-resume-pdf'), profile);
 await mountResumeAuthToolbar(toolbarActions);
 
 mountOwnerSecretEntry({

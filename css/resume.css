@@ -160,6 +160,17 @@ body.resume-page {
   margin-inline: auto;
 }
 
+body.resume-page--a4 .resume-stage {
+  padding: 1.5rem 1rem 2rem;
+  background: hsl(var(--foreground) / 0.03);
+}
+
+body.resume-page--a4 #resume-root {
+  width: 210mm;
+  max-width: 100%;
+  margin: 0;
+}
+
 .resume-sheet {
   width: 100%;
   margin-inline: auto;
@@ -553,36 +564,50 @@ body.resume-page--preview {
   background: hsl(var(--background));
 }
 
-body.resume-page--preview .resume-stage {
+body.resume-page--preview .resume-stage,
+body.resume-page--a4 .resume-stage {
   width: 210mm;
+  max-width: 100%;
   min-height: 297mm;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   box-sizing: border-box;
 }
 
-body.resume-page--preview .resume-sheet {
+body.resume-page--preview .resume-sheet,
+body.resume-page--a4 .resume-sheet {
   width: 210mm;
-  max-width: 210mm;
+  max-width: 100%;
   min-height: 297mm;
   margin: 0;
   border: 0;
-  box-shadow: none;
   box-sizing: border-box;
 }
 
-body.resume-page--preview .resume-layout {
+body.resume-page--preview .resume-sheet {
+  box-shadow: none;
+}
+
+body.resume-page--a4 .resume-sheet {
+  box-shadow: 0 24px 60px hsl(var(--foreground) / 0.12);
+}
+
+body.resume-page--preview .resume-layout,
+body.resume-page--a4 .resume-layout {
   grid-template-columns: 32% 1fr;
 }
 
-body.resume-page--preview .resume-sidebar {
+body.resume-page--preview .resume-sidebar,
+body.resume-page--a4 .resume-sidebar {
   padding: 1.75rem 1.35rem;
 }
 
-body.resume-page--preview .resume-main {
+body.resume-page--preview .resume-main,
+body.resume-page--a4 .resume-main {
   padding: 1.75rem 1.5rem 2rem;
 }
 
-body.resume-page--preview .resume-name-line {
+body.resume-page--preview .resume-name-line,
+body.resume-page--a4 .resume-name-line {
   font-size: 1.75rem;
 }

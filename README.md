@@ -9,7 +9,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 - **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
 - **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [edit-resume.html](edit-resume.html), then unlock with your **owner code**. After unlocking, **Edit resume** appears in the header and resume toolbar.
 - **Color palette:** default **Arctic** (icy blues from the hex logo). When signed in, use the **Palette** swatches on the portfolio header, resume toolbar, or editor to switch to **Editorial** (warm cream/rust). Choice is saved in your browser.
-- **Print to PDF:** open the resume page and use **Print / Save PDF**.
+- **Download PDF:** [resume.html](resume.html) — **Download PDF** serves the saved file at `assets/documents/Gal-Jacobson-Resume.pdf` (update via `urls.cvPdf` in `data/profile.json`).
 
 The floating action menu links to **Resume** with your full logo mark.
 
