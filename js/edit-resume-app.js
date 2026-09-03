@@ -7,7 +7,6 @@ import {
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import { isPublishConfigured, publishProfile } from './github-publish.js';
-import { iconMarkup } from './icons.js';
 import './theme-init.js';
 
 const gateRoot = document.getElementById('editor-gate');
@@ -64,10 +63,11 @@ function initEditor() {
   let publishTimer;
   let publishInFlight = false;
 
-  if (publishEnabled) {
-    publishOption.hidden = false;
-    const publishIcon = publishOption.querySelector('.edit-publish-github-icon');
-    if (publishIcon) publishIcon.innerHTML = iconMarkup('github');
+  if (!publishEnabled) {
+    publishCheckbox.checked = false;
+    publishCheckbox.disabled = true;
+    publishOption.classList.add('edit-publish-toggle--disabled');
+    publishOption.title = 'GitHub publish is not configured yet';
   }
 
   function setStatus(message, type = 'info') {
