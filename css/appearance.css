@@ -1,0 +1,120 @@
+html {
+  color-scheme: light dark;
+}
+
+[data-appearance="light"] body {
+  background: hsl(var(--background));
+}
+
+[data-appearance="dark"] body,
+[data-appearance="dark"] .page-backdrop {
+  background: #061018;
+}
+
+/* Dark appearance — invert palette tokens for resume / editor pages */
+[data-appearance="dark"][data-theme="arctic"] {
+  --background: 215 58% 8%;
+  --foreground: 210 40% 97%;
+  --accent: 205 68% 52%;
+  --accent-deep: 205 68% 62%;
+  --border: 215 30% 22%;
+  --muted: 210 20% 68%;
+  --card: 215 58% 12%;
+}
+
+[data-appearance="dark"][data-theme="editorial"] {
+  --background: 24 10% 10%;
+  --foreground: 38 24% 94%;
+  --accent: 18 48% 58%;
+  --accent-deep: 18 42% 68%;
+  --border: 30 12% 24%;
+  --muted: 30 10% 68%;
+  --card: 24 12% 14%;
+}
+
+/* Homepage — light system appearance */
+[data-appearance="light"] .app--continuous-hero {
+  --surface-text: 220 48% 11%;
+  --surface-muted: 215 12% 42%;
+  --surface-label: 205 68% 42%;
+  --surface-border: 210 22% 78% / 0.75;
+  --surface-card: 210 34% 94% / 0.92;
+  color: hsl(var(--surface-text));
+}
+
+[data-appearance="light"] .page-backdrop {
+  background: hsl(var(--background));
+}
+
+[data-appearance="light"] .hero {
+  color: hsl(var(--surface-text));
+}
+
+[data-appearance="light"] .site-header {
+  color: hsl(var(--surface-text));
+}
+
+[data-appearance="light"] .app--continuous-hero .site-header.scrolled,
+[data-appearance="light"] .site-header.scrolled {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background) / 0.88);
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+[data-appearance="light"] .hero-gradient {
+  background:
+    linear-gradient(105deg, hsl(var(--background) / 0.94) 0%, hsl(var(--background) / 0.72) 42%, transparent 68%),
+    linear-gradient(to top, hsl(var(--background) / 0.98) 0%, transparent 45%),
+    radial-gradient(ellipse 80% 60% at 70% 40%, hsl(var(--accent) / 0.14), transparent 60%);
+}
+
+[data-appearance="light"] .hero-grid,
+[data-appearance="light"] .app--continuous-hero .section-grid {
+  opacity: 0.1;
+  background-image:
+    linear-gradient(hsl(var(--accent) / 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--accent) / 0.22) 1px, transparent 1px);
+}
+
+[data-appearance="light"] .hero-chrome-row--meta {
+  color: hsl(var(--accent) / 0.75);
+}
+
+[data-appearance="light"] .page-backdrop .hero-canvas {
+  mix-blend-mode: multiply;
+  opacity: 0.28;
+}
+
+[data-appearance="light"] .hero-scanlines {
+  opacity: 0.18;
+}
+
+[data-appearance="light"] .app--continuous-hero .exp-icon {
+  background: hsl(var(--background) / 0.85);
+  border-color: hsl(var(--border));
+  box-shadow: 0 4px 14px hsl(var(--foreground) / 0.06);
+}
+
+[data-appearance="light"] .app--continuous-hero .experience-item.open {
+  box-shadow: 0 8px 24px hsl(var(--foreground) / 0.05);
+}
+
+[data-appearance="light"] .app--continuous-hero .floating-link,
+[data-appearance="light"] .app--continuous-hero .floating-trigger {
+  background: hsl(var(--background) / 0.94);
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+  box-shadow: 0 12px 32px hsl(var(--foreground) / 0.08);
+}
+
+[data-appearance="light"] .app--continuous-hero .portrait-frame {
+  background: hsl(var(--background) / 0.72);
+  border-color: hsl(var(--accent) / 0.35);
+  box-shadow: 0 10px 32px hsl(var(--foreground) / 0.08);
+}
+
+[data-appearance="light"] .owner-tool-link {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background) / 0.88);
+  border-color: hsl(var(--border));
+}

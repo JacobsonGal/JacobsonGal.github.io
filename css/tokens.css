@@ -1,4 +1,5 @@
 @import url("./themes.css");
+@import url("./appearance.css");
 
 :root {
   --header-height: 88px;

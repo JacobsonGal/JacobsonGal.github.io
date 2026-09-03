@@ -7,7 +7,7 @@ body {
   margin: 0;
   font-family: var(--font-body);
   color: hsl(var(--foreground));
-  background: #061018;
+  background: hsl(var(--background));
   line-height: 1.6;
 }
 

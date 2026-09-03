@@ -176,8 +176,10 @@ body.resume-page {
 }
 
 .resume-sidebar {
-  background: hsl(var(--foreground));
-  color: hsl(var(--background));
+  --resume-side-fg: 210 40% 97%;
+  --resume-side-muted: 210 30% 72%;
+  background: hsl(220 48% 11%);
+  color: hsl(var(--resume-side-fg));
   padding: 1.75rem 1.35rem;
 }
 
@@ -199,7 +201,7 @@ body.resume-page {
 .resume-sidebar-title {
   margin: 0 0 1.5rem;
   font-size: 0.95rem;
-  color: hsl(var(--background) / 0.82);
+  color: hsl(var(--resume-side-fg) / 0.82);
 }
 
 .resume-sidebar-section {
@@ -279,7 +281,7 @@ body.resume-page {
   font-size: 0.56rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: hsl(var(--background) / 0.92);
+  color: hsl(var(--resume-side-fg) / 0.92);
 }
 
 .resume-skill-items {
@@ -287,7 +289,7 @@ body.resume-page {
   margin-top: 0.1rem;
   font-size: 0.72rem;
   line-height: 1.4;
-  color: hsl(var(--background) / 0.78);
+  color: hsl(var(--resume-side-muted));
 }
 
 .resume-sidebar-bullets {
@@ -295,7 +297,7 @@ body.resume-page {
   padding-left: 1rem;
   font-size: 0.72rem;
   line-height: 1.45;
-  color: hsl(var(--background) / 0.82);
+  color: hsl(var(--resume-side-muted));
   list-style-type: disc;
 }
 
@@ -320,7 +322,7 @@ body.resume-page {
 }
 
 .resume-lang-level {
-  color: hsl(var(--background) / 0.72);
+  color: hsl(var(--resume-side-muted) / 0.9);
 }
 
 .resume-main {
