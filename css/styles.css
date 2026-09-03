@@ -839,6 +839,17 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   line-height: 1.2;
 }
 .education-item p { margin: 0.25rem 0; }
+.education-school {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.education-school-logo {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
+  flex-shrink: 0;
+}
 .education-item-footer {
   display: flex;
   justify-content: space-between;

@@ -67,11 +67,20 @@ function renderExperienceItem(item, index) {
 }
 
 function renderEducationItem(item, index) {
+  const schoolLogo = companyIconMarkup(item.id, BASE_PATH, {
+    className: 'education-school-logo',
+    width: 28,
+    height: 28,
+  });
+  const schoolLine = schoolLogo
+    ? `<p class="education-school">${schoolLogo}<span>${item.school}</span></p>`
+    : `<p>${item.school}</p>`;
+
   return `
     <article class="education-item" data-reveal data-reveal-delay="${index * 100}">
       <span class="mono-label">0${index + 1}</span>
       <h3>${item.degree}</h3>
-      <p>${item.school}</p>
+      ${schoolLine}
       <div class="education-item-footer">
         <span class="mono-label">${item.field}</span>
         <span class="mono-label">${item.dates}</span>
