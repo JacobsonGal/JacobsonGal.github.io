@@ -1,0 +1,22 @@
+/* Arctic — matches the icy hex logo (default) */
+:root,
+[data-theme="arctic"] {
+  --background: 210 40% 97%;
+  --foreground: 220 48% 11%;
+  --accent: 205 68% 42%;
+  --accent-deep: 215 58% 24%;
+  --border: 210 22% 86%;
+  --muted: 215 12% 42%;
+  --card: 210 34% 94%;
+}
+
+/* Editorial — warm Base44 palette (previous default) */
+[data-theme="editorial"] {
+  --background: 38 24% 94%;
+  --foreground: 24 10% 10%;
+  --accent: 18 42% 46%;
+  --accent-deep: 18 35% 32%;
+  --border: 30 12% 82%;
+  --muted: 30 8% 42%;
+  --card: 36 20% 91%;
+}

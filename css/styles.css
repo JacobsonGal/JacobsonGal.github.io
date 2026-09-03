@@ -1,4 +1,5 @@
 @import url("./tokens.css");
+@import url("./theme-picker.css");
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -539,7 +540,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   position: relative;
   width: 4rem;
   height: 4rem;
-  padding: 0.35rem;
+  padding: 0.2rem;
   border-radius: 50%;
   background: hsl(var(--background));
   border: 1px solid hsl(var(--border));

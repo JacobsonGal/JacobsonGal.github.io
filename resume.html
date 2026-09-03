@@ -9,6 +9,7 @@
   <link rel="icon" href="assets/images/favicon-16x16.png" sizes="16x16" type="image/png" />
   <link rel="icon" href="assets/images/logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('gal-portfolio-theme')||'arctic'}catch(e){document.documentElement.dataset.theme='arctic'}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -24,16 +25,6 @@
   <main class="resume-stage">
     <div id="resume-root"></div>
   </main>
-  <script type="module">
-    import { loadProfile } from './js/profile-store.js';
-    import { renderResumeHtml } from './js/resume-template.js';
-
-    const root = document.getElementById('resume-root');
-    const profile = await loadProfile({ preferDraft: false });
-    document.title = `${profile.name} — Resume`;
-    root.innerHTML = renderResumeHtml(profile);
-
-    document.getElementById('print-resume').addEventListener('click', () => window.print());
-  </script>
+  <script type="module" src="js/resume-page.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 import { iconMarkup, brandLogoMarkup } from './icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
+import { getAuthorizedUser } from './github-auth.js';
+import { mountThemePicker } from './theme-picker.js';
+import './theme-init.js';
 
 const CHEVRON = '<svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
@@ -217,6 +220,11 @@ async function init() {
   const profile = await loadProfile({ preferDraft: false });
   applyProfile(profile);
   refreshLinkedInOverlay(profile);
+
+  const user = await getAuthorizedUser();
+  if (user) {
+    mountThemePicker(document.getElementById('owner-tools'));
+  }
 }
 
 init();

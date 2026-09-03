@@ -3,12 +3,50 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="base-path" content="/" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Not available</title>
-  <meta http-equiv="refresh" content="0; url=resume.html" />
-  <link rel="canonical" href="resume.html" />
+  <title>Gal Jacobson — Edit Resume</title>
+  <link rel="icon" href="assets/images/favicon-32x32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="assets/images/favicon-16x16.png" sizes="16x16" type="image/png" />
+  <link rel="icon" href="assets/images/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('gal-portfolio-theme')||'arctic'}catch(e){document.documentElement.dataset.theme='arctic'}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/resume.css" />
+  <link rel="stylesheet" href="css/edit-resume.css" />
 </head>
-<body>
-  <p><a href="resume.html">Resume</a></p>
+<body class="edit-resume-page">
+  <div id="editor-gate"></div>
+  <div id="editor-root" class="edit-layout" hidden>
+    <aside class="edit-panel">
+      <div class="edit-panel-head">
+        <h1>Edit resume</h1>
+        <a class="resume-btn" href="resume.html">← Resume</a>
+      </div>
+      <p class="edit-hint">Changes save in this browser. Export JSON and commit to <code>data/profile.json</code> to publish.</p>
+      <form class="edit-form" id="edit-form">
+        <label>Name<input name="name" required /></label>
+        <label>Headline<input name="headline" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Phone (resume only)<input name="phone" /></label>
+        <label>Location<input name="location" /></label>
+        <label>Overview (one paragraph per line)<textarea name="about" rows="6"></textarea></label>
+        <label>Portfolio URL<input name="portfolio" /></label>
+        <label>LinkedIn URL<input name="linkedin" /></label>
+        <label>GitHub URL<input name="github" /></label>
+        <div class="edit-actions">
+          <button class="resume-btn resume-btn--primary" type="submit">Save draft</button>
+          <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
+          <button class="resume-btn" type="button" id="export-json">Export JSON</button>
+        </div>
+      </form>
+    </aside>
+    <section class="edit-preview">
+      <iframe id="preview-frame" title="Resume preview"></iframe>
+    </section>
+  </div>
+  <script type="module" src="js/edit-resume-app.js"></script>
 </body>
 </html>

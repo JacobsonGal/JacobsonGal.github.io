@@ -1,4 +1,5 @@
 @import url("./tokens.css");
+@import url("./theme-picker.css");
 
 body.resume-page {
   margin: 0;
@@ -47,15 +48,92 @@ body.resume-page {
   border-color: hsl(var(--foreground));
 }
 .resume-btn--primary:hover { background: hsl(var(--accent)); border-color: hsl(var(--accent)); }
+.resume-btn--ghost {
+  background: transparent;
+  color: hsl(var(--foreground));
+}
+.resume-btn--ghost:hover {
+  background: hsl(var(--foreground) / 0.06);
+  color: hsl(var(--foreground));
+}
+
+.auth-gate {
+  width: min(32rem, calc(100% - 2rem));
+  margin: 4rem auto;
+  padding: 2rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+.auth-gate-title {
+  font-family: var(--font-heading);
+  margin: 0 0 0.75rem;
+  font-size: 1.75rem;
+}
+.auth-gate-copy,
+.auth-gate-error {
+  margin: 0 0 1.25rem;
+  color: hsl(var(--muted));
+  line-height: 1.55;
+}
+.auth-gate-error { color: hsl(var(--accent-deep, var(--accent))); }
+.auth-gate .resume-btn { margin-right: 0.5rem; margin-top: 0.5rem; }
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: hsl(var(--foreground) / 0.45);
+  backdrop-filter: blur(4px);
+}
+.auth-dialog {
+  width: min(28rem, 100%);
+  padding: 1.5rem;
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 24px 60px hsl(var(--foreground) / 0.12);
+}
+.auth-dialog-title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+}
+.auth-dialog-status {
+  margin: 0 0 1rem;
+  color: hsl(var(--muted));
+  line-height: 1.5;
+}
+.auth-code {
+  margin: 0 0 1rem;
+  font-family: var(--font-mono);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  letter-spacing: 0.14em;
+  text-align: center;
+  color: hsl(var(--accent));
+}
+.auth-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 
 .resume-stage {
   padding: 2rem 1rem 4rem;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+}
+
+#resume-root {
+  width: min(210mm, 100%);
+  margin-inline: auto;
 }
 
 .resume-sheet {
-  width: min(210mm, 100%);
+  width: 100%;
+  margin-inline: auto;
   background: hsl(var(--background));
   border: 1px solid hsl(var(--border));
   padding: 2rem 2.25rem;
@@ -174,4 +252,16 @@ body.resume-page {
     box-shadow: none;
     padding: 0;
   }
+}
+
+body.resume-page--preview {
+  margin: 0;
+  min-height: 100%;
+  background: hsl(var(--background));
+}
+
+body.resume-page--preview .resume-stage {
+  min-height: 100vh;
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
 }

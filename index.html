@@ -11,6 +11,7 @@
   <link rel="icon" href="assets/images/favicon-16x16.png" sizes="16x16" type="image/png" />
   <link rel="icon" href="assets/images/logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png" />
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('gal-portfolio-theme')||'arctic'}catch(e){document.documentElement.dataset.theme='arctic'}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -22,6 +23,7 @@
     <header class="site-header" id="site-header">
       <div class="container header-inner">
         <a class="brand" href="#top">Gal Jacobson<span class="accent">.</span></a>
+        <div id="owner-tools" class="owner-tools" aria-label="Owner settings"></div>
         <nav class="nav-desktop" aria-label="Primary">
           <a href="#top">Index</a>
           <a href="#about">About</a>

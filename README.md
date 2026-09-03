@@ -6,8 +6,9 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 
 ## Resume
 
-- **View / print (public):** [resume.html](resume.html) — styled with the same warm palette as the portfolio (`css/tokens.css`).
-- **Edit (local only):** run the site locally, then open [local/edit-resume.html](http://localhost:8080/local/edit-resume.html). Export JSON and commit to `data/profile.json` to publish. The editor is not linked or available on the live GitHub Pages site.
+- **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
+- **Edit (owner only):** sign in with GitHub on the resume page as `@JacobsonGal`, then use **Edit resume**. Requires a one-time [GitHub OAuth App](#github-oauth-for-resume-editing) (`read:user` scope, Device Flow enabled).
+- **Color palette:** default **Arctic** (icy blues from the hex logo). When signed in, use the **Palette** swatches on the portfolio header, resume toolbar, or editor to switch to **Editorial** (warm cream/rust). Choice is saved in your browser.
 - **Print to PDF:** open the resume page and use **Print / Save PDF**.
 
 The floating action menu links to **Resume** with your full logo mark.
@@ -35,6 +36,17 @@ python3 -m http.server 8080
 ```
 
 Open http://localhost:8080/ after `python3 -m http.server 8080` from the repo root.
+
+## GitHub OAuth for resume editing
+
+1. Create an OAuth App: [github.com/settings/applications/new](https://github.com/settings/applications/new)
+2. **Homepage URL:** `https://jacobsongal.github.io`
+3. **Authorization callback URL:** `https://jacobsongal.github.io/resume.html`
+4. Enable **Device Flow**
+5. Copy the **Client ID** into `js/auth-config.js` as `GITHUB_CLIENT_ID`
+6. Commit and push
+
+Only the GitHub user `JacobsonGal` can open the editor after signing in.
 
 ## Canonical profile
 

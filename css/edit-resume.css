@@ -1,16 +1,20 @@
 @import url("./tokens.css");
+@import url("./theme-picker.css");
 
 body.edit-resume-page {
   margin: 0;
   font-family: var(--font-body);
   color: hsl(var(--foreground));
   background: hsl(var(--background));
+  height: 100vh;
+  overflow: hidden;
 }
 
 .edit-layout {
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
 }
 
 .edit-panel {
@@ -18,11 +22,14 @@ body.edit-resume-page {
   border-bottom: 1px solid hsl(var(--border));
 }
 
-.edit-panel h1 {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  margin: 0 0 0.25rem;
+.edit-panel-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.25rem;
 }
+.edit-panel-head h1 { margin: 0; flex: 1 1 auto; }
 
 .edit-hint {
   margin: 0 0 1rem;
@@ -65,15 +72,21 @@ body.edit-resume-page {
 }
 
 .edit-preview {
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
   background: hsl(var(--foreground) / 0.03);
 }
 
 .edit-preview iframe {
+  flex: 1;
   width: 100%;
-  min-height: 80vh;
-  border: 1px solid hsl(var(--border));
-  background: white;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  background: hsl(var(--background));
 }
 
 @media (min-width: 1100px) {
@@ -84,8 +97,24 @@ body.edit-resume-page {
     border-bottom: 0;
     border-right: 1px solid hsl(var(--border));
     overflow: auto;
-    max-height: 100vh;
+    height: 100vh;
     position: sticky;
     top: 0;
+  }
+  .edit-preview iframe {
+    border-left: 1px solid hsl(var(--border));
+  }
+}
+
+@media (max-width: 1099px) {
+  body.edit-resume-page {
+    height: auto;
+    overflow: auto;
+  }
+  .edit-layout {
+    height: auto;
+  }
+  .edit-preview {
+    min-height: 70vh;
   }
 }

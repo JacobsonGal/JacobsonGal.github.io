@@ -1,0 +1,57 @@
+.theme-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.theme-picker-label {
+  color: hsl(var(--muted));
+  white-space: nowrap;
+}
+.theme-picker-options {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+.theme-swatch {
+  width: 1.65rem;
+  height: 1.65rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid hsl(var(--border));
+  background: linear-gradient(135deg, var(--swatch-a) 50%, var(--swatch-b) 50%);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.theme-swatch:hover {
+  transform: scale(1.08);
+}
+.theme-swatch.is-active {
+  border-color: hsl(var(--foreground));
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 3px hsl(var(--foreground));
+}
+
+.owner-tools {
+  display: none;
+  align-items: center;
+  gap: 0.75rem;
+}
+.owner-tools:not(:empty) {
+  display: inline-flex;
+}
+
+.resume-toolbar-actions .theme-picker {
+  margin-right: 0.25rem;
+}
+
+.edit-panel-head .theme-picker {
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .owner-tools:not(:empty) {
+    display: none;
+  }
+  .resume-toolbar-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
