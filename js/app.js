@@ -223,7 +223,7 @@ function ensureMobileEditLink() {
   const editLink = document.createElement('a');
   editLink.href = 'edit-resume.html';
   editLink.dataset.ownerEdit = 'true';
-  editLink.innerHTML = '<span>Edit resume</span><span class="mono-label">05</span>';
+  editLink.innerHTML = '<span>Edit Resume</span><span class="mono-label">05</span>';
   mobileNav.append(editLink);
 }
 

@@ -21,7 +21,7 @@ function mountOwnerActions(container, { onSignOut } = {}) {
   const editLink = el('a', 'owner-tool-link resume-btn');
   editLink.dataset.authUi = 'true';
   editLink.href = 'edit-resume.html';
-  editLink.textContent = 'Edit resume';
+  editLink.textContent = 'Edit Resume';
 
   const signOutBtn = el('button', 'owner-tool-link resume-btn resume-btn--ghost', 'Sign out');
   signOutBtn.dataset.authUi = 'true';
@@ -79,8 +79,8 @@ export async function requireResumeEditorAuth(root) {
 
   root.replaceChildren();
   const gate = el('section', 'auth-gate');
-  const title = el('h1', 'auth-gate-title', 'Edit resume');
-  const copy = el('p', 'auth-gate-copy', 'Unlock the editor with your private owner code.');
+  const title = el('h1', 'auth-gate-title', 'Edit Resume');
+  const copy = el('p', 'auth-gate-copy', 'Enter your private owner code to edit the resume.');
 
   gate.append(title, copy);
 
@@ -172,8 +172,8 @@ function createOwnerUnlockForm(onSuccess) {
 export function promptOwnerUnlock(onSuccess) {
   const overlay = el('div', 'auth-overlay');
   const dialog = el('div', 'auth-dialog');
-  const title = el('h2', 'auth-dialog-title', 'Owner access');
-  const copy = el('p', 'auth-dialog-status', 'Enter your private owner code to edit the resume.');
+  const title = el('h2', 'auth-dialog-title', 'Edit Resume');
+  const copy = el('p', 'auth-dialog-status', 'Enter your private owner code to continue.');
   const actions = el('div', 'auth-dialog-actions');
   const cancelBtn = el('button', 'resume-btn', 'Cancel');
   cancelBtn.type = 'button';
@@ -211,8 +211,9 @@ export function promptOwnerUnlock(onSuccess) {
 export function promptGitHubSignIn(onSuccess) {
   const overlay = el('div', 'auth-overlay');
   const dialog = el('div', 'auth-dialog');
-  const title = el('h2', 'auth-dialog-title', 'Sign in with GitHub');
-  const status = el('p', 'auth-dialog-status', 'Starting sign-in…');
+  const title = el('h2', 'auth-dialog-title', 'Edit Resume');
+  const copy = el('p', 'auth-dialog-status', 'Sign in with GitHub to continue.');
+  const status = el('p', 'auth-dialog-status auth-dialog-status--progress', 'Starting sign-in…');
   const codeBox = el('p', 'auth-code', '');
   const actions = el('div', 'auth-dialog-actions');
   const openBtn = el('a', 'resume-btn resume-btn--primary', 'Open GitHub');
@@ -226,7 +227,7 @@ export function promptGitHubSignIn(onSuccess) {
   cancelBtn.addEventListener('click', () => overlay.remove());
 
   actions.append(openBtn, cancelBtn);
-  dialog.append(title, status, codeBox, actions);
+  dialog.append(title, copy, status, codeBox, actions);
   overlay.append(dialog);
   document.body.append(overlay);
 
