@@ -1,0 +1,45 @@
+name: Gal Jacobson
+headline: Senior Software Engineer
+email: jacobsongal@gmail.com
+phone: "052-3565689" # PDF only — not shown on website
+location: Central, Israel
+urls:
+  portfolio: https://JacobsonGal.github.io
+  linkedin: https://www.linkedin.com/in/jacobsongal
+  github: https://github.com/JacobsonGal
+  instagram: https://www.instagram.com/jacobsongal/
+cv:
+  path: /cv/gal-jacobson-cv.pdf
+  filename: gal-jacobson-cv.pdf
+
+experience:
+  - company: Houzz
+    title: Full-Stack Engineer
+    team: Houzz Pro — Documents
+    location: Tel Aviv
+    dates: 2021 – Present
+    web_only: false
+  - company: College of Management Academic Studies
+    title: Practitioner
+    location: Rishon Le Zion
+    dates: 2021 – Present
+    web_only: true
+  - company: Yavo
+    title: Full-Stack Engineer
+    location: Rishon Le Zion
+    dates: 2020 – 2021
+    web_only: false
+  - company: Israel Defense Forces
+    title: Combat Engineering Officer — Captain
+    dates: 2013 – 2017
+    web_only: false
+
+education:
+  - degree: MBA
+    field: Entrepreneurship & Innovation
+    school: College of Management Academic Studies
+    dates: 2021 – 2022
+  - degree: B.Sc.
+    field: Computer Science
+    school: College of Management Academic Studies
+    dates: 2018 – 2021
