@@ -9,7 +9,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 - **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
 - **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [edit-resume.html](edit-resume.html), then unlock with your **owner code**. After unlocking, **Edit resume** appears in the header and resume toolbar.
 - **Publish to GitHub:** enable **Publish to GitHub immediately** in the editor to commit `data/profile.json` without exporting JSON. Requires the Cloudflare worker below.
-- **Color palette:** default **Arctic** (icy blues from the hex logo). When signed in, use the **Palette** swatches on the portfolio header, resume toolbar, or editor to switch to **Editorial** (warm cream/rust). Choice is saved in your browser.
+- **Color palette:** resume and editor always use **Arctic** (icy blues). The portfolio homepage still supports light/dark appearance via the header toggle.
 - **Download PDF:** [resume.html](resume.html) — **Download PDF** generates a fresh A4 PDF from the latest `data/profile.json` on GitHub and saves it as `Gal Jacobson | CV.pdf`.
 
 The floating action menu links to **Resume** with your full logo mark.

@@ -15,7 +15,15 @@ export const THEMES = {
 
 export const DEFAULT_THEME = 'arctic';
 
+function getThemeLock() {
+  const lock = document.querySelector('meta[name="theme-lock"]')?.content;
+  return lock && THEMES[lock] ? lock : null;
+}
+
 export function getTheme() {
+  const lock = getThemeLock();
+  if (lock) return lock;
+
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     return stored && THEMES[stored] ? stored : DEFAULT_THEME;
@@ -25,6 +33,7 @@ export function getTheme() {
 }
 
 export function setTheme(id) {
+  if (getThemeLock()) return;
   if (!THEMES[id]) return;
   try {
     localStorage.setItem(STORAGE_KEY, id);
@@ -35,7 +44,7 @@ export function setTheme(id) {
 }
 
 export function applyTheme(id) {
-  document.documentElement.dataset.theme = id || getTheme();
+  document.documentElement.dataset.theme = getThemeLock() || id || getTheme();
 }
 
 applyTheme(getTheme());

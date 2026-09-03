@@ -7,7 +7,6 @@ import {
 } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
-import { mountThemePicker } from './theme-picker.js';
 import { isPublishConfigured, publishProfile } from './github-publish.js';
 import './theme-init.js';
 
@@ -20,7 +19,6 @@ if (!user) {
 } else {
   gateRoot.hidden = true;
   editorRoot.hidden = false;
-  mountThemePicker(document.querySelector('.edit-panel-head'));
   initEditor();
 }
 
@@ -137,7 +135,7 @@ function initEditor() {
   }
 
   function renderPreview(p) {
-    const doc = `<!DOCTYPE html><html><head><link rel="stylesheet" href="css/resume.css" /><link rel="stylesheet" href="css/themes.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
+    const doc = `<!DOCTYPE html><html data-theme="arctic"><head><link rel="stylesheet" href="css/resume.css" /><link rel="stylesheet" href="css/themes.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
     frame.srcdoc = doc;
   }
 
