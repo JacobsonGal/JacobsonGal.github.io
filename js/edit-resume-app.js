@@ -58,7 +58,6 @@ function initEditor() {
   const frame = document.getElementById('preview-frame');
   const publishOption = document.getElementById('publish-option');
   const publishCheckbox = document.getElementById('publish-to-github');
-  const saveButton = document.getElementById('save-resume');
   const editStatus = document.getElementById('edit-status');
   const publishEnabled = isPublishConfigured();
   let profile;
