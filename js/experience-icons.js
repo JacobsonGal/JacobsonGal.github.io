@@ -1,7 +1,7 @@
 const COMPANY_ICONS = {
-  houzz: 'assets/images/companies/houzz.svg',
-  colman: 'assets/images/companies/colman.svg',
-  yavo: 'assets/images/companies/yavo.svg',
+  houzz: 'assets/images/companies/houzz.png',
+  colman: 'assets/images/companies/colman.png',
+  yavo: 'assets/images/companies/yavo.png',
   idf: 'assets/images/companies/idf.svg',
 };
 

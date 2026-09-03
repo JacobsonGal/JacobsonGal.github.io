@@ -535,10 +535,12 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 0.65rem;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: hsl(var(--background));
   box-shadow: 0 4px 14px hsl(var(--foreground) / 0.08);
   border: 1px solid hsl(var(--border));
+  padding: 0.2rem;
 }
 .exp-letter {
   display: inline-flex;
