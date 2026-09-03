@@ -73,7 +73,7 @@
         "Upgraded existing software systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
         "Managed large-scale projects and collaborated closely with cross-functional teams to analyze and derive technical software design and performance requirements."
       ],
-      "highlights": ["Contracts", "Automation", "Houzz Pro Rebranding"],
+      "highlights": ["Contracts", "Credit Memos", "Automation", "Houzz Pro Rebranding"],
       "stack": ["Node.js", "React", "GraphQL", "Docker", "Apollo", "CI/CD", "SQL"],
       "webOnly": false
     },
