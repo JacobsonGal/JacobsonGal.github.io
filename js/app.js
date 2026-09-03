@@ -192,11 +192,13 @@ function bindExperienceToggles() {
   });
 }
 
-function bindUi() {
+function bindUi(cleanup) {
   const header = document.getElementById('site-header');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
-  }, { passive: true });
+  const onScroll = () => {
+    header?.classList.toggle('scrolled', window.scrollY > 40);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  cleanup.push(() => window.removeEventListener('scroll', onScroll));
 
   const navCta = document.getElementById('site-nav-cta');
   const menu = document.getElementById('mobile-menu');
@@ -210,23 +212,34 @@ function bindUi() {
     menu?.setAttribute('aria-hidden', String(!open));
   };
 
-  toggle?.addEventListener('click', (event) => {
+  const onToggleClick = (event) => {
     event.stopPropagation();
     setMenuOpen(!navCta?.classList.contains('open'));
-  });
+  };
+  toggle?.addEventListener('click', onToggleClick);
+  cleanup.push(() => toggle?.removeEventListener('click', onToggleClick));
 
   menu?.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => setMenuOpen(false));
+    const onMenuLinkClick = () => {
+      const href = link.getAttribute('href') ?? '';
+      if (href.startsWith('#')) setMenuOpen(false);
+    };
+    link.addEventListener('click', onMenuLinkClick);
+    cleanup.push(() => link.removeEventListener('click', onMenuLinkClick));
   });
 
-  document.addEventListener('click', (event) => {
+  const onDocumentClick = (event) => {
     if (!navCta?.classList.contains('open')) return;
     if (!navCta.contains(event.target)) setMenuOpen(false);
-  });
+  };
+  document.addEventListener('click', onDocumentClick);
+  cleanup.push(() => document.removeEventListener('click', onDocumentClick));
 
-  document.addEventListener('keydown', (event) => {
+  const onDocumentKeydown = (event) => {
     if (event.key === 'Escape') setMenuOpen(false);
-  });
+  };
+  document.addEventListener('keydown', onDocumentKeydown);
+  cleanup.push(() => document.removeEventListener('keydown', onDocumentKeydown));
 
   const buildDate = document.querySelector('[data-build-date]');
   if (buildDate) {
@@ -281,11 +294,16 @@ async function refreshOwnerUi() {
   return user;
 }
 
-async function init() {
-  bindUi();
+let homeCleanup = null;
+
+export async function mountHomePage() {
+  if (homeCleanup) return;
+
+  const cleanup = [];
+  bindUi(cleanup);
   initMotion();
   mountAppearanceToggle(document.getElementById('appearance-tools'));
-  const profile = await loadProfile({ preferDraft: false });
+  const profile = await loadProfile();
   applyProfile(profile);
   refreshLinkedInOverlay(profile);
 
@@ -300,6 +318,13 @@ async function init() {
     corners: ['tr'],
     onAuthed: refreshOwnerUi,
   });
+
+  homeCleanup = () => {
+    cleanup.forEach((fn) => fn());
+    homeCleanup = null;
+  };
 }
 
-init();
+export function destroyHomePage() {
+  homeCleanup?.();
+}

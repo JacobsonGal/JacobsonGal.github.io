@@ -7,9 +7,11 @@ function getAppearanceLock() {
   return lock === 'light' || lock === 'dark' ? lock : null;
 }
 
-const SUN_ICON = '<svg class="appearance-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18h18"/><path d="M5.5 18a6.5 6.5 0 0 1 13 0"/><path d="M12 10V5.5"/><path d="m8.25 12.75 1.4-1.4"/><path d="m15.75 12.75-1.4-1.4"/><path d="M12 3v1.75"/></svg>';
+const SUN_ICON = '<svg class="appearance-toggle-icon appearance-toggle-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
 
-const MOON_ICON = '<svg class="appearance-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z" fill="currentColor" fill-opacity="0.14"/><path d="M18.75 3v1.75M20.75 5h-1.75"/><path d="M5.25 6.25l.85.85M6.1 5.4l-.85.85"/><circle cx="17.25" cy="7.75" r="0.7" fill="currentColor" stroke="none"/></svg>';
+const MOON_ICON = '<svg class="appearance-toggle-icon appearance-toggle-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 7 7 0 1 0 20 14.5Z"/></svg>';
+
+const TOGGLE_ICON_MARKUP = `<span class="appearance-toggle-icon-wrap" aria-hidden="true">${SUN_ICON}${MOON_ICON}</span>`;
 
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -102,10 +104,10 @@ export function mountAppearanceToggle(container) {
   btn.type = 'button';
   btn.className = 'appearance-toggle-btn';
   btn.dataset.appearanceUi = 'true';
+  btn.innerHTML = TOGGLE_ICON_MARKUP;
 
   function syncActiveState() {
     const isDark = resolveAppearance() === 'dark';
-    btn.innerHTML = isDark ? SUN_ICON : MOON_ICON;
     btn.setAttribute('aria-label', isDark ? 'Switch to bright mode' : 'Switch to dark mode');
     btn.setAttribute('aria-pressed', String(isDark));
     btn.title = isDark ? 'Bright mode' : 'Dark mode';

@@ -26,7 +26,69 @@ function loadPdfLibraries() {
 
 export function getResumePdfFilename(profile) {
   const name = profile?.name?.trim() || 'Gal Jacobson';
-  return `${name} | CV.pdf`;
+  return `${name} - CV.pdf`;
+}
+
+function sanitizePdfFilename(filename) {
+  return filename.replace(/[<>:"/\\|?*\u0000-\u001f]/g, '-').replace(/\s+/g, ' ').trim();
+}
+
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function isMobileDevice() {
+  return isIOS() || /Android/i.test(navigator.userAgent)
+    || (navigator.maxTouchPoints > 0 && window.innerWidth <= 720);
+}
+
+function getPdfRenderScale() {
+  const dpr = window.devicePixelRatio || 1;
+  if (window.innerWidth <= 720) {
+    return Math.min(1.75, Math.max(1, dpr));
+  }
+  return Math.max(2, dpr);
+}
+
+function savePdfDocument(pdf, filename) {
+  const safeName = sanitizePdfFilename(filename);
+  const blob = pdf.output('blob');
+  const url = URL.createObjectURL(blob);
+
+  if (isIOS()) {
+    const opened = window.open(url, '_blank');
+    if (!opened) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.append(link);
+      link.click();
+      link.remove();
+    }
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    return 'ios-open';
+  }
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = safeName;
+  link.rel = 'noopener';
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  return 'download';
+}
+
+async function printResumeFallback() {
+  document.body.classList.add('resume-printing');
+  await waitForLayout();
+  window.print();
+  window.setTimeout(() => {
+    document.body.classList.remove('resume-printing');
+  }, 500);
 }
 
 function waitForLayout() {
@@ -104,7 +166,7 @@ export async function downloadResumePdf({ element, filename }) {
 
     const sheetHeightPx = Math.max(sheet.scrollHeight, A4_HEIGHT_PX);
     const links = collectLinkRects(sheet);
-    const scale = Math.max(2, window.devicePixelRatio || 1);
+    const scale = getPdfRenderScale();
 
     const canvas = await html2canvas(sheet, {
       scale,
@@ -118,6 +180,7 @@ export async function downloadResumePdf({ element, filename }) {
       windowHeight: sheetHeightPx,
       scrollX: 0,
       scrollY: 0,
+      imageTimeout: 15_000,
     });
 
     const pdf = new jsPDF({
@@ -129,7 +192,7 @@ export async function downloadResumePdf({ element, filename }) {
 
     addFullBleedImage(pdf, canvas);
     addLinkAnnotations(pdf, links, A4_WIDTH_PX, sheetHeightPx);
-    pdf.save(filename);
+    return savePdfDocument(pdf, filename);
   } finally {
     host.remove();
   }
@@ -139,6 +202,7 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
   if (!button) return;
 
   const defaultLabel = button.textContent?.trim() || 'Download PDF';
+  const generatingLabel = isMobileDevice() ? 'Preparing…' : 'Generating…';
   button.removeAttribute('href');
   button.removeAttribute('download');
 
@@ -147,15 +211,29 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
     if (button.disabled) return;
 
     button.disabled = true;
-    button.textContent = 'Generating…';
+    button.textContent = generatingLabel;
 
     try {
       const profile = await refreshResume?.();
       const resumeElement = getResumeElement?.();
       const filename = getResumePdfFilename(profile);
-      await downloadResumePdf({ element: resumeElement, filename });
+      const result = await downloadResumePdf({ element: resumeElement, filename });
+
+      if (result === 'ios-open') {
+        window.setTimeout(() => {
+          window.alert('Your CV opened in a new tab. Tap Share, then "Save to Files" to download the PDF.');
+        }, 300);
+      }
     } catch (error) {
       console.error(error);
+      if (isMobileDevice()) {
+        try {
+          await printResumeFallback();
+          return;
+        } catch (printError) {
+          console.error(printError);
+        }
+      }
       window.alert('Could not generate the CV PDF. Please try again in a moment.');
     } finally {
       button.disabled = false;

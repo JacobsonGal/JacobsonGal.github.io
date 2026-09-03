@@ -58,7 +58,6 @@ html.appearance-animate .site-header,
 html.appearance-animate .hero,
 html.appearance-animate .hero-fact-line,
 html.appearance-animate .hero-fact-title,
-html.appearance-animate .hero-fact-sub,
 html.appearance-animate .hero-rail,
 html.appearance-animate .hero-badge,
 html.appearance-animate .hero-title,
@@ -285,7 +284,7 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
   color: hsl(var(--foreground));
 }
 
-[data-appearance="light"] .hero-fact-sub {
+[data-appearance="light"] .hero-fact-title [data-hero-company] {
   color: hsl(var(--muted));
 }
 
@@ -323,7 +322,7 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 [data-appearance="light"] .app--continuous-hero .numbered-item p,
 [data-appearance="light"] .app--continuous-hero .experience-panel p,
 [data-appearance="light"] .app--continuous-hero .experience-panel li,
-[data-appearance="light"] .app--continuous-hero .current-company {
+[data-appearance="light"] .app--continuous-hero .current-title [data-field="currentRole.company"] {
   color: hsl(var(--muted));
 }
 
