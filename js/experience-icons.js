@@ -9,9 +9,14 @@ export function companyIconPath(id) {
   return COMPANY_ICONS[id] || null;
 }
 
-export function companyIconMarkup(id, basePath = '') {
+export function companyIconMarkup(id, basePath = '', options = {}) {
+  const {
+    className = 'exp-icon',
+    width = 40,
+    height = 40,
+  } = options;
   const path = companyIconPath(id);
   if (!path) return '';
   const src = `${basePath}${path}`;
-  return `<img class="exp-icon" src="${src}" alt="" width="40" height="40" loading="lazy" decoding="async" />`;
+  return `<img class="${className}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
 }

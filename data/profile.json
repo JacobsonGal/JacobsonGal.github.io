@@ -133,6 +133,7 @@
       "degree": "Master of Business Administration — MBA",
       "field": "Major in Entrepreneurship",
       "school": "College of Management Academic Studies",
+      "id": "colman",
       "location": "Rishon Le Zion",
       "dates": "2021 — 2022"
     },
@@ -140,6 +141,7 @@
       "degree": "Bachelor of Science — BS | Computer Science",
       "field": "Major in Full-Stack",
       "school": "College of Management Academic Studies",
+      "id": "colman",
       "location": "Rishon Le Zion",
       "dates": "2018 — 2021"
     }

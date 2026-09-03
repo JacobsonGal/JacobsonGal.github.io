@@ -326,6 +326,37 @@ body.resume-page {
   border-top: 0;
 }
 
+.resume-role-head {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+  margin-bottom: 0.35rem;
+}
+
+.resume-role-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+}
+
+.resume-role-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+}
+
+.resume-role-copy {
+  min-width: 0;
+}
+
 .resume-role-title {
   margin: 0 0 0.2rem;
   font-family: var(--font-heading);
@@ -336,6 +367,13 @@ body.resume-page {
   margin: 0 0 0.35rem;
   font-size: 0.74rem;
   color: hsl(var(--muted));
+}
+
+.resume-role-stack,
+.resume-role-summary,
+.resume-role-features,
+.resume-role-list {
+  margin-left: calc(2rem + 0.65rem);
 }
 
 .resume-role-stack,
@@ -365,6 +403,10 @@ body.resume-page {
   padding-top: 0;
   margin-top: 0;
   border-top: 0;
+}
+
+.resume-edu-item .resume-role-head {
+  margin-bottom: 0;
 }
 
 .resume-edu-item h3 {
@@ -416,6 +458,11 @@ body.resume-page {
   }
 
   .resume-sidebar {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .resume-role-icon {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
