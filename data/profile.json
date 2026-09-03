@@ -110,7 +110,8 @@
       ],
       "highlights": ["Leadership", "Management", "High performance under pressure"],
       "stack": [],
-      "webOnly": false
+      "webOnly": false,
+      "hideOnWeb": true
     }
   ],
   "education": [

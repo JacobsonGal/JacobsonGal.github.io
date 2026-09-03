@@ -123,7 +123,7 @@ function applyProfile(profile) {
   const experienceList = document.querySelector('[data-list="experience"]');
   if (experienceList && profile.experience) {
     experienceList.innerHTML = profile.experience
-      .filter((item) => !item.webOnly)
+      .filter((item) => !item.webOnly && !item.hideOnWeb)
       .map((item, index) => renderExperienceItem(item, index))
       .join('');
     bindExperienceToggles();
