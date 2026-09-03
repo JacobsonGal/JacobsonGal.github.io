@@ -73,7 +73,7 @@ function renderFloatingLinks(profile) {
 }
 
 function applyProfile(profile) {
-  document.title = `${profile.name} — ${profile.headline}`;
+  document.title = profile.name;
 
   document.querySelectorAll('[data-field]').forEach((el) => {
     const value = getNested(profile, el.dataset.field);
