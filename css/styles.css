@@ -75,16 +75,44 @@ body {
 }
 
 .app--continuous-hero .experience-list {
-  border-top-color: hsl(var(--surface-border));
+  border-top-color: transparent;
 }
 
 .app--continuous-hero .experience-item {
-  border-bottom-color: hsl(var(--surface-border));
+  border-bottom-color: transparent;
 }
 
 .app--continuous-hero .experience-item.open {
-  background: hsl(var(--surface-card) / 0.55);
+  background: transparent;
   box-shadow: none;
+}
+
+.app--continuous-hero .exp-timeline-card {
+  background: hsl(var(--surface-card) / 0.42);
+  border-color: hsl(var(--surface-border));
+}
+
+.app--continuous-hero .experience-item.open .exp-timeline-card {
+  background: hsl(var(--surface-card) / 0.62);
+  border-color: hsl(var(--accent) / 0.35);
+  box-shadow: 0 12px 40px hsl(215 58% 6% / 0.28);
+}
+
+.app--continuous-hero .exp-timeline-line {
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--accent) / 0.55),
+    hsl(var(--surface-border) / 0.45)
+  );
+}
+
+.app--continuous-hero .exp-timeline-node::before {
+  border-color: hsl(var(--accent) / 0.45);
+  background: hsl(215 58% 10% / 0.72);
+}
+
+.app--continuous-hero .exp-timeline-date {
+  color: hsl(var(--surface-label) / 0.9);
 }
 
 .app--continuous-hero .exp-icon {
@@ -701,37 +729,109 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 }
 
 .experience-list {
-  border-top: 1px solid hsl(var(--border) / 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  border-top: none;
 }
 .experience-item {
-  --exp-icon-col: 2.25rem;
-  --exp-gap: 0.875rem;
+  --exp-icon-col: 2.75rem;
+  --exp-gap: 1rem;
   display: grid;
   grid-template-columns: var(--exp-icon-col) minmax(0, 1fr);
-  column-gap: var(--exp-gap);
-  border-bottom: 1px solid hsl(var(--border) / 0.45);
-  transition: background-color 0.25s ease;
+  column-gap: clamp(1rem, 2.5vw, 1.75rem);
+  align-items: stretch;
+  border-bottom: none;
+  padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  transition: none;
+}
+.experience-item:last-child {
+  padding-bottom: 0;
+}
+.experience-item:last-child .exp-timeline-line {
+  opacity: 0;
+}
+.exp-timeline-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+}
+.exp-timeline-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--exp-icon-col);
+  height: var(--exp-icon-col);
+  flex-shrink: 0;
+}
+.exp-timeline-node::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid hsl(var(--accent) / 0.4);
+  background: hsl(var(--background) / 0.72);
+  box-shadow: 0 0 0 4px hsl(var(--accent) / 0.06);
+}
+.exp-timeline-node .exp-icon,
+.exp-timeline-node .exp-letter {
+  position: relative;
+  z-index: 1;
+}
+.exp-timeline-line {
+  flex: 1;
+  width: 2px;
+  min-height: 1.5rem;
+  margin-top: 0.65rem;
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--accent) / 0.5),
+    hsl(var(--border) / 0.35)
+  );
+}
+.exp-timeline-main {
+  min-width: 0;
+  padding-top: 0.1rem;
+}
+.exp-timeline-date {
+  display: block;
+  margin: 0 0 0.65rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: hsl(var(--accent));
+}
+.exp-timeline-card {
+  border: 1px solid hsl(var(--border) / 0.55);
+  background: hsl(var(--card) / 0.2);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.experience-item.open .exp-timeline-card {
+  border-color: hsl(var(--accent) / 0.32);
+  background: hsl(var(--card) / 0.34);
+  box-shadow: 0 10px 36px hsl(var(--foreground) / 0.07);
 }
 .experience-item.open {
-  background: hsl(var(--card) / 0.28);
+  background: transparent;
 }
 .experience-toggle {
-  grid-column: 1 / -1;
   width: 100%;
   display: grid;
-  grid-template-columns: var(--exp-icon-col) minmax(0, 1fr) auto;
-  gap: 0 var(--exp-gap);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem 1rem;
   align-items: center;
-  padding: 0.85rem 0;
+  padding: 1rem 1rem 1rem 1.15rem;
   text-align: left;
   transition: color 0.25s ease;
 }
 .exp-header {
   min-width: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.35rem 1.25rem;
-  align-items: baseline;
 }
 .exp-header-main {
   min-width: 0;
@@ -762,14 +862,6 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .exp-meta-sep {
   opacity: 0.4;
   font-size: 0.75em;
-}
-.exp-dates {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.05em;
-  color: hsl(var(--muted));
-  white-space: nowrap;
-  text-align: right;
 }
 .exp-icon-wrap {
   display: flex;
@@ -856,7 +948,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .experience-panel-inner {
   display: grid;
   gap: 1.15rem;
-  padding: 0.15rem 0 1rem calc(var(--exp-icon-col) + var(--exp-gap));
+  padding: 0 1.15rem 1.15rem;
 }
 .exp-panel-copy {
   display: grid;
@@ -1100,7 +1192,7 @@ a.tag:hover {
     gap: clamp(2rem, 4vw, 3.5rem);
   }
   .experience-toggle {
-    grid-template-columns: var(--exp-icon-col) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
   .experience-panel-inner {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -1123,19 +1215,19 @@ a.tag:hover {
 }
 
 @media (max-width: 767px) {
-  .exp-header {
-    grid-template-columns: 1fr;
-    gap: 0.2rem;
+  .experience-item {
+    --exp-icon-col: 2.35rem;
+    column-gap: 0.85rem;
   }
 
-  .exp-dates {
-    text-align: left;
-    font-size: 0.65rem;
+  .exp-timeline-date {
+    font-size: 0.62rem;
   }
 
-  .experience-panel-inner {
-    padding-left: 0;
+  .experience-toggle {
+    padding: 0.85rem 0.85rem 0.85rem 1rem;
   }
+
   .floating-cta {
     right: 1.25rem;
     bottom: 1rem;

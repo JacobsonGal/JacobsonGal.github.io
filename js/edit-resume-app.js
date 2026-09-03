@@ -197,8 +197,8 @@ function initEditor() {
     e.preventDefault();
     try {
       await persistProfile(formToProfile(profile), {
-        publish: publishEnabled && publishCheckbox.checked,
-        statusMessage: publishEnabled && publishCheckbox.checked ? undefined : 'Draft saved in this browser.',
+        publish: shouldPublish(),
+        statusMessage: shouldPublish() ? undefined : 'Draft saved in this browser.',
       });
     } catch {
       // status already set

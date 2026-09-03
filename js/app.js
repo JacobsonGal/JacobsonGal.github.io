@@ -3,7 +3,6 @@ import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './exp
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle } from './appearance.js';
-import { mountLinkModal } from './link-modal.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
 import './theme-init.js';
 
@@ -40,34 +39,51 @@ function renderExperienceItem(item, index) {
 
   return `
     <article class="experience-item" data-id="${item.id}" data-reveal data-reveal-delay="${index * 80}">
-      <button class="experience-toggle" type="button" aria-expanded="false">
-        <span class="exp-icon-wrap" aria-hidden="true">${icon}</span>
-        <div class="exp-header">
-          <div class="exp-header-main">
-            <h3 class="exp-title">${item.title}</h3>
-            <p class="exp-meta-line">
-              <span class="exp-company">${companyLinkMarkup(item.company, item.id, 'exp-company-link')}</span>
-              <span class="exp-meta-sep" aria-hidden="true">·</span>
-              <span class="exp-location">${item.location}</span>
-            </p>
-          </div>
-          <span class="exp-dates">${item.dates}</span>
-        </div>
-        ${CHEVRON}
-      </button>
-      <div class="experience-panel-wrap">
-        <div class="experience-panel">
-          <div class="experience-panel-inner">
-            <div class="exp-panel-copy">
-              ${item.summary ? `<p class="exp-summary">${item.summary}</p>` : ''}
-              ${bullets ? `<ul class="exp-bullets">${bullets}</ul>` : ''}
+      <div class="exp-timeline-track" aria-hidden="true">
+        <div class="exp-timeline-node">${icon}</div>
+        <span class="exp-timeline-line"></span>
+      </div>
+      <div class="exp-timeline-main">
+        <time class="exp-timeline-date mono-label">${item.dates}</time>
+        <div class="exp-timeline-card">
+          <button class="experience-toggle" type="button" aria-expanded="false">
+            <div class="exp-header">
+              <div class="exp-header-main">
+                <h3 class="exp-title">${item.title}</h3>
+                <p class="exp-meta-line">
+                  <span class="exp-company">${companyLinkMarkup(item.company, item.id, 'exp-company-link')}</span>
+                  <span class="exp-meta-sep" aria-hidden="true">·</span>
+                  <span class="exp-location">${item.location}</span>
+                </p>
+              </div>
             </div>
-            ${tagSections ? `<div class="exp-panel-tags">${tagSections}</div>` : ''}
+            ${CHEVRON}
+          </button>
+          <div class="experience-panel-wrap">
+            <div class="experience-panel">
+              <div class="experience-panel-inner">
+                <div class="exp-panel-copy">
+                  ${item.summary ? `<p class="exp-summary">${item.summary}</p>` : ''}
+                  ${bullets ? `<ul class="exp-bullets">${bullets}</ul>` : ''}
+                </div>
+                ${tagSections ? `<div class="exp-panel-tags">${tagSections}</div>` : ''}
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </article>
   `;
+}
+
+function orderEducationForHomepage(education) {
+  const rank = (item) => {
+    if (/bachelor|\bBS\b/i.test(item.degree)) return 0;
+    if (/master|\bMBA\b/i.test(item.degree)) return 1;
+    return 2;
+  };
+
+  return [...education].sort((a, b) => rank(a) - rank(b));
 }
 
 function renderEducationItem(item, index) {
@@ -104,7 +120,7 @@ function renderFloatingLinks(profile) {
   ];
 
   return links.map((link) => `
-    <a class="floating-link mono-label stagger-item" href="${link.href}"${link.external ? '' : ' data-link-modal-skip'}>
+    <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
       <span class="floating-link-icon" aria-hidden="true">${link.icon}</span>
       <span>${link.label}</span>
     </a>
@@ -151,7 +167,9 @@ function applyProfile(profile) {
 
   const educationList = document.querySelector('[data-list="education"]');
   if (educationList && profile.education) {
-    educationList.innerHTML = profile.education.map(renderEducationItem).join('');
+    educationList.innerHTML = orderEducationForHomepage(profile.education)
+      .map((item, index) => renderEducationItem(item, index))
+      .join('');
   }
 
   const floatingLinks = document.getElementById('floating-links');
