@@ -42,14 +42,15 @@ function renderExperienceItem(item, index) {
       <button class="experience-toggle" type="button" aria-expanded="false">
         <span class="exp-icon-wrap" aria-hidden="true">${icon}</span>
         <div class="exp-header">
-          <h3 class="exp-title">${item.title}</h3>
-          <p class="exp-meta-line">
-            <span class="exp-company">${companyLinkMarkup(item.company, item.id, 'exp-company-link')}</span>
-            <span class="exp-meta-sep" aria-hidden="true">·</span>
-            <span class="exp-location">${item.location}</span>
-            <span class="exp-meta-sep exp-meta-sep--dates" aria-hidden="true">·</span>
-            <span class="exp-dates">${item.dates}</span>
-          </p>
+          <div class="exp-header-main">
+            <h3 class="exp-title">${item.title}</h3>
+            <p class="exp-meta-line">
+              <span class="exp-company">${companyLinkMarkup(item.company, item.id, 'exp-company-link')}</span>
+              <span class="exp-meta-sep" aria-hidden="true">·</span>
+              <span class="exp-location">${item.location}</span>
+            </p>
+          </div>
+          <span class="exp-dates">${item.dates}</span>
         </div>
         ${CHEVRON}
       </button>
