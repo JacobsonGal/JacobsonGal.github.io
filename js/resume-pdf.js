@@ -46,15 +46,41 @@ function isMobileDevice() {
     || (navigator.maxTouchPoints > 0 && window.innerWidth <= 720);
 }
 
-function getPdfRenderScale() {
+function getPdfRenderScale(sheetHeightPx) {
   const dpr = window.devicePixelRatio || 1;
   const targetScale = PDF_RENDER_DPI / PDF_LAYOUT_DPI;
+  const maxPixels = 16_000_000;
+  let scale = Math.min(PDF_MAX_RENDER_SCALE, Math.max(targetScale, dpr * 2));
 
-  if (isMobileDevice()) {
-    return Math.min(2, Math.max(1.5, dpr));
+  while (scale > 1 && A4_WIDTH_PX * scale * sheetHeightPx * scale > maxPixels) {
+    scale -= 0.25;
   }
 
-  return Math.min(PDF_MAX_RENDER_SCALE, Math.max(targetScale, dpr * 2));
+  return Math.max(2, scale);
+}
+
+function isCanvasMostlyBlank(canvas) {
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  if (!context) return true;
+
+  const sampleWidth = Math.min(canvas.width, 320);
+  const sampleHeight = Math.min(canvas.height, 320);
+  const { data } = context.getImageData(0, 0, sampleWidth, sampleHeight);
+  let uniformPixels = 0;
+  const pixelCount = data.length / 4;
+
+  for (let index = 0; index < data.length; index += 4) {
+    const red = data[index];
+    const green = data[index + 1];
+    const blue = data[index + 2];
+    const isNearWhite = red > 245 && green > 245 && blue > 245;
+    const isNearBlack = red < 10 && green < 10 && blue < 10;
+    if (isNearWhite || isNearBlack) {
+      uniformPixels += 1;
+    }
+  }
+
+  return uniformPixels / pixelCount > 0.97;
 }
 
 function canSharePdfFile(file) {
@@ -177,6 +203,7 @@ function createRenderSheet(source) {
   const host = document.createElement('div');
   host.className = 'resume-pdf-render-host';
   host.setAttribute('aria-hidden', 'true');
+  host.setAttribute('data-appearance', 'light');
 
   const clone = source.cloneNode(true);
   clone.classList.add('resume-sheet--pdf');
@@ -208,7 +235,7 @@ function addFullBleedImage(pdf, canvas) {
   const pageHeight = pdf.internal.pageSize.getHeight();
   const imgData = canvas.toDataURL('image/png');
 
-  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight, undefined, 'NONE');
+  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pageHeight);
 }
 
 function addLinkAnnotations(pdf, links, sheetWidthPx, sheetHeightPx) {
@@ -240,7 +267,7 @@ export async function downloadResumePdf({ element, filename }) {
 
     const sheetHeightPx = Math.max(sheet.scrollHeight, A4_HEIGHT_PX);
     const links = collectLinkRects(sheet);
-    const scale = getPdfRenderScale();
+    const scale = getPdfRenderScale(sheetHeightPx);
 
     const canvas = await html2canvas(sheet, {
       scale,
@@ -256,13 +283,24 @@ export async function downloadResumePdf({ element, filename }) {
       scrollY: 0,
       imageTimeout: isMobileDevice() ? 30_000 : 15_000,
       foreignObjectRendering: false,
+      onclone: (doc) => {
+        const renderHost = doc.querySelector('.resume-pdf-render-host');
+        if (renderHost) {
+          renderHost.style.left = '0';
+          renderHost.style.top = '0';
+        }
+      },
     });
+
+    if (isCanvasMostlyBlank(canvas)) {
+      throw new Error('PDF capture was blank.');
+    }
 
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
-      compress: false,
+      compress: true,
     });
 
     addFullBleedImage(pdf, canvas);
@@ -277,8 +315,8 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
   if (!button) return;
 
   const mobile = isMobileDevice();
-  const defaultLabel = mobile ? 'Save PDF' : (button.textContent?.trim() || 'Download PDF');
-  const generatingLabel = mobile ? 'Opening…' : 'Generating…';
+  const defaultLabel = button.textContent?.trim() || 'Download PDF';
+  const generatingLabel = mobile ? 'Preparing…' : 'Generating…';
   button.textContent = defaultLabel;
   button.removeAttribute('href');
   button.removeAttribute('download');
@@ -292,15 +330,6 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
 
     try {
       const profile = await refreshResume?.();
-
-      if (mobile) {
-        await saveResumeOnMobile();
-        window.setTimeout(() => {
-          window.alert('In the print preview, tap Share (top right), then choose Save to Files to save your CV as a PDF.');
-        }, 500);
-        return;
-      }
-
       const resumeElement = getResumeElement?.();
       const filename = getResumePdfFilename(profile);
       const result = await downloadResumePdf({ element: resumeElement, filename });
@@ -313,13 +342,20 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
         window.setTimeout(() => {
           window.alert('Your CV opened below. Tap the share icon in the PDF viewer, then choose "Save to Files".');
         }, 300);
+        return;
+      }
+
+      if (result === 'download') {
+        return;
       }
     } catch (error) {
       console.error(error);
       try {
         await printResumeFallback();
         window.setTimeout(() => {
-          window.alert('Use the print preview Share button, then Save to Files.');
+          window.alert(mobile
+            ? 'In the print preview, tap Share (top right), then choose Save to Files.'
+            : 'Use the print preview Share button, then Save to Files.');
         }, 500);
       } catch (printError) {
         console.error(printError);
