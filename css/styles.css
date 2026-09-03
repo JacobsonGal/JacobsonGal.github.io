@@ -24,7 +24,8 @@ body {
   background: #061018;
 }
 
-.app > :not(.page-backdrop) {
+.app > main,
+.app > footer {
   position: relative;
   z-index: 1;
 }
