@@ -1,25 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <link href="https://media.base44.com/images/public/6a99763be3946e84ffcc6d6b/140172470_logo.jpg" rel="icon" type="image/svg+xml"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <link href="/manifest.json" rel="manifest"/>
-  <link href="https://JacobsonGal.github.io/" rel="canonical"/>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="base-path" content="/Portfolio/" />
   <title>Gal Jacobson — Senior Software Engineer</title>
-  <meta content="Gal Jacobson — Senior Software Engineer building scalable, high-performance software. Portfolio, experience, and contact." name="description"/>
-  <meta content="https://jacobsonGal.github.io/" property="og:url"/>
-  <link href="https://fonts.googleapis.com" rel="preconnect"/>
-  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter+Tight:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
-  <script crossorigin="" src="/assets/index-DW20pz8d.js" type="module"></script>
-  <link crossorigin="" href="/assets/index-C1MolBI7.css" rel="stylesheet"/>
-  <meta content="yes" name="mobile-web-app-capable"/>
-  <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-  <meta content="Gal Jacobson" name="apple-mobile-web-app-title"/>
-  <script defer src="/site-patch.js"></script>
- </head>
- <body>
-  <div id="root"></div>
- </body>
+  <meta name="description" content="Gal Jacobson — Senior Software Engineer. Portfolio, experience, and contact." />
+  <link rel="canonical" href="https://JacobsonGal.github.io/Portfolio/" />
+  <link rel="icon" href="assets/images/logo.webp" type="image/webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="app" class="app" aria-live="polite">
+    <header class="site-header" id="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#top">Gal Jacobson<span class="accent">.</span></a>
+        <nav class="nav-desktop" aria-label="Primary">
+          <a href="#top">Index</a>
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#education">Education</a>
+        </nav>
+        <button class="menu-toggle mono-label" type="button" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+      </div>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu" hidden>
+      <div class="mobile-menu-top">
+        <span class="mono-label">Index</span>
+        <button type="button" class="menu-close" aria-label="Close menu">&times;</button>
+      </div>
+      <nav class="mobile-nav" aria-label="Mobile">
+        <a href="#top"><span>Index</span><span class="mono-label">01</span></a>
+        <a href="#about"><span>About</span><span class="mono-label">02</span></a>
+        <a href="#experience"><span>Experience</span><span class="mono-label">03</span></a>
+        <a href="#education"><span>Education</span><span class="mono-label">04</span></a>
+      </nav>
+    </div>
+
+    <main>
+      <section id="top" class="hero">
+        <div class="hero-media">
+          <img src="assets/images/hero.webp" alt="" class="hero-image" />
+          <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-grid"></div>
+        <div class="hero-meta mono-label left">Build · <span data-build-date></span></div>
+        <div class="hero-meta mono-label right">Portfolio / v2.0</div>
+        <div class="hero-content container">
+          <p class="mono-label hero-kicker" data-field="headline">Senior Software Engineer</p>
+          <h1 class="display-heading hero-title">
+            <span>Gal</span>
+            <span>Jacobson<span class="accent">.</span></span>
+          </h1>
+          <div class="hero-lead">
+            <span class="hero-line"></span>
+            <p data-field="heroTagline"></p>
+          </div>
+        </div>
+        <div class="scroll-cue mono-label">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+          Scroll
+        </div>
+      </section>
+
+      <section id="about" class="section about">
+        <div class="section-grid"></div>
+        <div class="container about-grid">
+          <div class="about-copy">
+            <p class="section-index mono-label">01 / About</p>
+            <h2 class="section-title">Senior Software Engineer designing resilient, high-throughput systems — translating ambiguous requirements into clean architecture, reliable infrastructure, and interfaces people genuinely enjoy using.</h2>
+            <div class="about-paragraphs" data-list="about"></div>
+            <div class="about-edu mono-label" data-list="educationSummary"></div>
+            <div class="current-post">
+              <p class="mono-label">Current post</p>
+              <p class="current-title" data-field="currentRole.title"></p>
+              <p class="current-company">@ <span data-field="currentRole.company"></span></p>
+            </div>
+          </div>
+          <figure class="portrait-wrap">
+            <p class="mono-label portrait-caption">Fig. 01 — Portrait</p>
+            <div class="portrait-frame">
+              <img src="assets/images/portrait.webp" alt="Portrait of Gal Jacobson" class="portrait-image" width="160" height="160" />
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="experience" class="section experience">
+        <div class="container">
+          <p class="section-index mono-label">02 / Experience</p>
+          <h2 class="section-heading">Selected experience</h2>
+          <p class="section-intro">A chronological archive of roles — each a structural volume in the practice. Expand any entry to read the technical readout.</p>
+          <div class="experience-list" data-list="experience" data-template="experience"></div>
+        </div>
+      </section>
+
+      <section id="education" class="section education">
+        <div class="container">
+          <p class="section-index mono-label">03 / Education</p>
+          <div class="education-list" data-list="education" data-template="education"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p class="mono-label" data-field="email"></p>
+        <p class="mono-label sync-status" id="sync-status"></p>
+      </div>
+    </footer>
+
+    <aside class="floating-cta" id="floating-cta">
+      <div class="floating-links" id="floating-links" aria-hidden="true"></div>
+      <button type="button" class="floating-trigger" aria-label="Open social links" aria-expanded="false" aria-controls="floating-links">
+        <img src="assets/images/logo.webp" alt="Gal Jacobson logo" width="48" height="48" />
+      </button>
+    </aside>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
 </html>

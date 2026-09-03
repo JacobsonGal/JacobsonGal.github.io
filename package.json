@@ -1,0 +1,8 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync-linkedin": "node scripts/sync-linkedin.mjs"
+  }
+}

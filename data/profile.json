@@ -1,0 +1,113 @@
+{
+  "syncedAt": "2026-09-03T14:30:00.000Z",
+  "source": "seed",
+  "name": "Gal Jacobson",
+  "headline": "Senior Software Engineer",
+  "location": "Tel Aviv, Israel",
+  "email": "jacobsongal@gmail.com",
+  "urls": {
+    "portfolio": "https://JacobsonGal.github.io/Portfolio/",
+    "linkedin": "https://www.linkedin.com/in/jacobsongal",
+    "github": "https://github.com/JacobsonGal",
+    "instagram": "https://www.instagram.com/jacobsongal/",
+    "cv": "cv/gal-jacobson-cv.pdf"
+  },
+  "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
+  "about": [
+    "Senior Software Engineer building scalable, high-performance software end to end — from architecture and infrastructure to the last pixel of the interface, across Node.js, React, Docker, PostgreSQL, Apollo, and cloud platforms (AWS, GCP).",
+    "Proven track record of shipping large-scale features and optimizing distributed systems — leading work from planning to production with global, cross-functional teams while keeping quality, performance, and user value in focus.",
+    "A problem-solver drawn to the hard seams between systems — integrations, edge cases, and performance ceilings — with the attention to detail that turns a working feature into one that feels inevitable."
+  ],
+  "currentRole": {
+    "title": "Senior Software Engineer",
+    "company": "Houzz",
+    "label": "Current post"
+  },
+  "educationSummary": [
+    "BS · Computer Science",
+    "MBA · Entrepreneurship"
+  ],
+  "experience": [
+    {
+      "id": "houzz",
+      "letter": "A",
+      "title": "Full-Stack Engineer",
+      "company": "Houzz",
+      "location": "Tel Aviv",
+      "dates": "2021 — Present",
+      "summary": "Full-stack engineer in the Houzz Pro web platform documents team — responsible for core features of Houzz Pro.",
+      "bullets": [
+        "Led development of multiple robust, scalable technical features, ensuring high-quality performance and reliability with substantial improvements in functionality and user adoption.",
+        "Upgraded existing systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
+        "Managed large-scale projects and collaborated with cross-functional teams to derive technical design and performance requirements."
+      ],
+      "highlights": ["Contracts", "Automation", "Houzz Pro Rebranding"],
+      "stack": ["React.js", "Node.js", "JavaScript", "GraphQL", "Express.js", "Docker", "Git"],
+      "webOnly": false
+    },
+    {
+      "id": "colman",
+      "letter": "B",
+      "title": "Practitioner",
+      "company": "College of Management Academic Studies",
+      "location": "Rishon Le Zion",
+      "dates": "2021 — Present",
+      "summary": "Practitioner teaching advanced full-stack and mobile development courses.",
+      "bullets": [
+        "Web Application Development.",
+        "Advanced Software Development.",
+        "Advanced Web Application Development.",
+        "Advanced Mobile Application Development."
+      ],
+      "highlights": ["Teaching", "Curriculum", "Mentorship"],
+      "stack": ["JavaScript", "ASP.NET", "jQuery", "AJAX", "HTML", "CSS", "Full-Stack"],
+      "webOnly": true
+    },
+    {
+      "id": "yavo",
+      "letter": "C",
+      "title": "Full-Stack Engineer",
+      "company": "Yavo",
+      "location": "Rishon Le Zion",
+      "dates": "2020 — 2021",
+      "summary": "Built and optimized Yavo's medical assistant platform.",
+      "bullets": [
+        "Focused on scalable architecture, real-time data flows, and enhanced deployment efficiency and system reliability."
+      ],
+      "highlights": ["Medical Platform", "Real-time Data", "Scalable Architecture"],
+      "stack": ["React.js", "Node.js", "Express.js"],
+      "webOnly": false
+    },
+    {
+      "id": "idf",
+      "letter": "D",
+      "title": "Combat Engineering Officer — Captain",
+      "company": "Israel Defense Forces",
+      "location": "Israel",
+      "dates": "2013 — 2017",
+      "summary": "Acting and deputy honored company commander at combat engineering forces.",
+      "bullets": [
+        "Demonstrated high management and human relations capabilities while commanding 100 soldiers, managing operative information, and decision-making under pressure."
+      ],
+      "highlights": ["Leadership", "Management", "High performance under pressure"],
+      "stack": [],
+      "webOnly": false
+    }
+  ],
+  "education": [
+    {
+      "degree": "Master of Business Administration — MBA",
+      "field": "Entrepreneurship & Innovation",
+      "school": "College of Management Academic Studies",
+      "location": "Rishon Le Zion",
+      "dates": "2021 — 2022"
+    },
+    {
+      "degree": "Bachelor of Science — BS",
+      "field": "Computer Science",
+      "school": "College of Management Academic Studies",
+      "location": "Rishon Le Zion",
+      "dates": "2018 — 2021"
+    }
+  ]
+}

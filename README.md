@@ -1,24 +1,33 @@
 # Gal Jacobson — Portfolio
 
-Personal portfolio hosted on [GitHub Pages](https://JacobsonGal.github.io).
+Personal portfolio on GitHub Pages: **https://JacobsonGal.github.io/Portfolio/**
 
-Design is built in [Base44](https://jacobsongal.base44.app/) (free tier). This repo mirrors the production static build for hosting without Base44 subscription.
+Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/profile.json`.
 
-## Update after Base44 edits
+## Update content
 
-1. Edit the site in Base44.
-2. Run `./scripts/mirror-from-base44.sh`
-3. Re-apply `site/index.html` patches if the mirror overwrote them (or keep patched `index.html` as source of truth).
-4. Commit and push to `main`.
+1. Edit `data/profile.json` (or let LinkedIn sync update headline/about).
+2. Commit and push to `main`.
 
-## Canonical profile
+## LinkedIn sync
 
-`content/profile.yaml` — single source of truth for website, LinkedIn, and CV alignment.
+- **On page load:** the site fetches `data/profile.json` and best-effort refreshes headline/about from your public LinkedIn profile.
+- **Daily GitHub Action:** `.github/workflows/sync-linkedin.yml` commits LinkedIn metadata into `data/profile.json`.
+
+Trigger manually:
+
+```bash
+gh workflow run sync-linkedin.yml --repo JacobsonGal/Portfolio
+```
 
 ## Local preview
 
 ```bash
-cd . && python3 -m http.server 8080
+python3 -m http.server 8080
 ```
 
-Open http://localhost:8080
+Open http://localhost:8080/Portfolio/ (use a subpath proxy) or temporarily set `<meta name="base-path" content="/" />` for root preview.
+
+## Canonical profile
+
+See `content/profile.yaml` for cross-surface alignment (website, LinkedIn, CV PDF).
