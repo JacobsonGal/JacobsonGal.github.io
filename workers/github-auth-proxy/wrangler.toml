@@ -4,3 +4,11 @@ compatibility_date = "2024-01-01"
 
 [vars]
 ALLOWED_ORIGINS = "https://jacobsongal.github.io,http://localhost:8080,http://127.0.0.1:8080"
+GITHUB_REPO_OWNER = "JacobsonGal"
+GITHUB_REPO_NAME = "JacobsonGal.github.io"
+GITHUB_REPO_BRANCH = "main"
+PROFILE_PATH = "data/profile.json"
+
+# Set secrets before deploy:
+# wrangler secret put GITHUB_TOKEN
+# wrangler secret put OWNER_UNLOCK_HASH

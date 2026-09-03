@@ -8,6 +8,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 
 - **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
 - **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [edit-resume.html](edit-resume.html), then unlock with your **owner code**. After unlocking, **Edit resume** appears in the header and resume toolbar.
+- **Publish to GitHub:** enable **Publish to GitHub immediately** in the editor to commit `data/profile.json` without exporting JSON. Requires the Cloudflare worker below.
 - **Color palette:** default **Arctic** (icy blues from the hex logo). When signed in, use the **Palette** swatches on the portfolio header, resume toolbar, or editor to switch to **Editorial** (warm cream/rust). Choice is saved in your browser.
 - **Download PDF:** [resume.html](resume.html) — **Download PDF** serves the saved file at `assets/documents/Gal-Jacobson-Resume.pdf` (update via `urls.cvPdf` in `data/profile.json`).
 
@@ -37,8 +38,27 @@ Default code shipped in this repo (change it after first deploy):
 
 ## Update content
 
-1. Edit `data/profile.json` directly, or use the local resume editor and export.
-2. Commit and push to `main`.
+1. Edit `data/profile.json` directly, use the resume editor with **Publish to GitHub immediately**, or use the local resume editor and export.
+2. Commit and push to `main` when not using GitHub publish.
+
+### GitHub publish from the editor
+
+The editor can commit `data/profile.json` for you through the Cloudflare worker in `workers/github-auth-proxy`.
+
+1. Create a fine-grained GitHub PAT with **Contents: Read and write** on `JacobsonGal/JacobsonGal.github.io`.
+2. Deploy the worker:
+
+```bash
+cd workers/github-auth-proxy
+wrangler secret put GITHUB_TOKEN
+wrangler secret put OWNER_UNLOCK_HASH
+wrangler deploy
+```
+
+3. Set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js` to the worker URL (for example `https://gal-github-auth-proxy.<your-subdomain>.workers.dev`).
+4. Open [edit-resume.html](edit-resume.html), unlock with your owner code, keep **Publish to GitHub immediately** checked, and edit. Changes publish after a short pause or when you click **Save & publish**.
+
+GitHub sign-in with `public_repo` scope can also publish directly from the browser once the auth proxy is configured for device flow.
 
 ## LinkedIn sync
 

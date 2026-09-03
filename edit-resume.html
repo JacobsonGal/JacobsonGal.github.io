@@ -25,7 +25,8 @@
         <h1>Edit resume</h1>
         <a class="resume-btn" href="resume.html">← Resume</a>
       </div>
-      <p class="edit-hint">Changes save in this browser. Export JSON and commit to <code>data/profile.json</code> to publish.</p>
+      <p class="edit-hint" id="edit-hint">Changes save in this browser. Export JSON and commit to <code>data/profile.json</code> to publish.</p>
+      <p class="edit-status" id="edit-status" hidden></p>
       <form class="edit-form" id="edit-form">
         <label>Name<input name="name" required /></label>
         <label>Headline<input name="headline" required /></label>
@@ -36,8 +37,12 @@
         <label>Portfolio URL<input name="portfolio" /></label>
         <label>LinkedIn URL<input name="linkedin" /></label>
         <label>GitHub URL<input name="github" /></label>
+        <label class="edit-publish-option" id="publish-option" hidden>
+          <input type="checkbox" name="publishToGithub" id="publish-to-github" checked />
+          Publish to GitHub immediately
+        </label>
         <div class="edit-actions">
-          <button class="resume-btn resume-btn--primary" type="submit">Save draft</button>
+          <button class="resume-btn resume-btn--primary" type="submit" id="save-resume">Save draft</button>
           <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
           <button class="resume-btn" type="button" id="export-json">Export JSON</button>
         </div>

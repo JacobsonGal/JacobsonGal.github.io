@@ -1,6 +1,7 @@
 import { ALLOWED_GITHUB_USERNAME, OWNER_UNLOCK_HASH } from './auth-config.js';
 
 const STORAGE_KEY = 'portfolio_auth_session';
+let cachedOwnerCode = null;
 
 async function sha256Hex(text) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -50,11 +51,19 @@ export async function unlockWithOwnerCode(code) {
     method: 'owner',
     login: ALLOWED_GITHUB_USERNAME,
   };
+  cachedOwnerCode = normalized;
   writeSession(session);
   return session;
 }
 
+export function getOwnerCodeForPublish() {
+  const session = getOwnerSession();
+  if (!session) return null;
+  return cachedOwnerCode;
+}
+
 export function clearOwnerSession() {
+  cachedOwnerCode = null;
   const session = readSession();
   if (session?.method === 'owner') {
     localStorage.removeItem(STORAGE_KEY);

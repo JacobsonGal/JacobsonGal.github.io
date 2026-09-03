@@ -8,6 +8,7 @@ import {
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import { mountThemePicker } from './theme-picker.js';
+import { isPublishConfigured, publishProfile } from './github-publish.js';
 import './theme-init.js';
 
 const gateRoot = document.getElementById('editor-gate');
@@ -26,7 +27,33 @@ if (!user) {
 function initEditor() {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
+  const publishOption = document.getElementById('publish-option');
+  const publishCheckbox = document.getElementById('publish-to-github');
+  const saveButton = document.getElementById('save-resume');
+  const editHint = document.getElementById('edit-hint');
+  const editStatus = document.getElementById('edit-status');
+  const publishEnabled = isPublishConfigured();
   let profile;
+  let publishTimer;
+  let publishInFlight = false;
+
+  if (publishEnabled) {
+    publishOption.hidden = false;
+    saveButton.textContent = 'Save & publish';
+    editHint.textContent = 'Edits can publish straight to data/profile.json on GitHub when the publish proxy is configured.';
+  }
+
+  function setStatus(message, type = 'info') {
+    if (!message) {
+      editStatus.hidden = true;
+      editStatus.textContent = '';
+      editStatus.dataset.status = '';
+      return;
+    }
+    editStatus.hidden = false;
+    editStatus.textContent = message;
+    editStatus.dataset.status = type;
+  }
 
   async function bootstrap() {
     profile = await loadProfile({ preferDraft: true });
@@ -54,6 +81,7 @@ function initEditor() {
       updatedAt: new Date().toISOString(),
       name: form.name.value.trim(),
       email: form.email.value.trim(),
+      about: overview.length ? overview : base.about,
       urls: {
         ...base.urls,
         portfolio: form.portfolio.value.trim(),
@@ -70,20 +98,66 @@ function initEditor() {
     };
   }
 
+  async function persistProfile(nextProfile, { publish = false, statusMessage } = {}) {
+    profile = nextProfile;
+    saveDraft(profile);
+    renderPreview(profile);
+
+    if (!publish || !publishCheckbox.checked || !publishEnabled) {
+      if (statusMessage) setStatus(statusMessage, 'info');
+      return profile;
+    }
+
+    if (publishInFlight) return profile;
+
+    publishInFlight = true;
+    setStatus('Publishing to GitHub…', 'info');
+
+    try {
+      const published = await publishProfile(profile);
+      profile = published;
+      clearDraft();
+      saveDraft(profile);
+      setStatus('Published to GitHub. Site updates in about a minute.', 'success');
+      return profile;
+    } catch (error) {
+      setStatus(error.message || 'Publish failed.', 'error');
+      throw error;
+    } finally {
+      publishInFlight = false;
+    }
+  }
+
+  function schedulePublish() {
+    if (!publishEnabled || !publishCheckbox.checked) return;
+    window.clearTimeout(publishTimer);
+    publishTimer = window.setTimeout(() => {
+      persistProfile(formToProfile(profile), { publish: true }).catch(() => {});
+    }, 1500);
+  }
+
   function renderPreview(p) {
     const doc = `<!DOCTYPE html><html><head><link rel="stylesheet" href="css/resume.css" /><link rel="stylesheet" href="css/themes.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
     frame.srcdoc = doc;
   }
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    profile = formToProfile(profile);
-    saveDraft(profile);
-    renderPreview(profile);
+    try {
+      await persistProfile(formToProfile(profile), {
+        publish: publishEnabled && publishCheckbox.checked,
+        statusMessage: publishEnabled && publishCheckbox.checked ? undefined : 'Draft saved in this browser.',
+      });
+    } catch {
+      // status already set
+    }
   });
 
   form.addEventListener('input', () => {
-    renderPreview(formToProfile(profile));
+    const nextProfile = formToProfile(profile);
+    saveDraft(nextProfile);
+    renderPreview(nextProfile);
+    schedulePublish();
   });
 
   document.getElementById('reset-draft').addEventListener('click', async () => {
@@ -91,6 +165,7 @@ function initEditor() {
     profile = await fetchServerProfile();
     profileToForm(profile);
     renderPreview(profile);
+    setStatus('Reset to the live site profile.', 'info');
   });
 
   document.getElementById('export-json').addEventListener('click', () => {

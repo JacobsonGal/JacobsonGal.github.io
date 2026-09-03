@@ -140,7 +140,7 @@ export async function startDeviceFlow() {
 
   return postDeviceFlow('/login/device/code', {
     client_id: GITHUB_CLIENT_ID,
-    scope: 'read:user',
+    scope: 'read:user,public_repo',
   });
 }
 

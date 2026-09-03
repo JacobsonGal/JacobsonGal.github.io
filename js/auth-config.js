@@ -17,3 +17,11 @@ export const GITHUB_CLIENT_ID = 'Ov23liYKlYpky0kfvxr6';
  * Leave empty to use owner-code unlock only.
  */
 export const GITHUB_AUTH_PROXY_URL = '';
+
+export const GITHUB_REPO = {
+  owner: 'JacobsonGal',
+  name: 'JacobsonGal.github.io',
+  branch: 'main',
+};
+
+export const GITHUB_PROFILE_PATH = 'data/profile.json';
