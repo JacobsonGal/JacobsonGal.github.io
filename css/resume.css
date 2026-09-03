@@ -24,7 +24,11 @@ html:has(body.resume-page) {
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding:
+    calc(1rem + var(--safe-top))
+    calc(1.5rem + var(--safe-right))
+    1rem
+    calc(1.5rem + var(--safe-left));
   background: hsl(var(--background) / 0.95);
   border-bottom: 1px solid hsl(var(--border));
   backdrop-filter: blur(8px);

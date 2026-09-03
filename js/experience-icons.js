@@ -7,6 +7,12 @@ const COMPANY_ICONS = {
 
 const COMPANY_URLS = {
   houzz: 'https://pro.houzz.com',
+  colman: 'https://english.colman.ac.il/',
+};
+
+const COMPANY_LINK_LABELS = {
+  houzz: 'Houzz Pro website',
+  colman: 'College of Management Academic Studies website',
 };
 
 const FEATURE_LINKS = {
@@ -48,6 +54,7 @@ export function companyIconMarkup(id, basePath = '', options = {}) {
     className = 'exp-icon',
     width = 40,
     height = 40,
+    linked = true,
   } = options;
   const path = companyIconPath(id);
   if (!path) return '';
@@ -55,5 +62,10 @@ export function companyIconMarkup(id, basePath = '', options = {}) {
   const containClass = CONTAIN_LOGO_IDS.has(id) ? ' exp-icon--contain' : '';
   const logoClass = id ? ` exp-icon--logo-${id}` : '';
   const classes = `${className}${containClass}${logoClass}`;
-  return `<img class="${classes}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
+  const img = `<img class="${classes}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
+  const url = linked ? companyUrl(id) : null;
+  if (!url) return img;
+
+  const label = COMPANY_LINK_LABELS[id] || 'Company website';
+  return `<a class="exp-icon-link" href="${url}" target="_blank" rel="noopener noreferrer" data-company-link aria-label="${label}">${img}</a>`;
 }
