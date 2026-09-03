@@ -29,6 +29,11 @@
       </div>
       <p class="edit-hint" id="edit-hint">Changes save in this browser. Export JSON and commit to <code>data/profile.json</code> to publish.</p>
       <p class="edit-status" id="edit-status" hidden></p>
+      <div class="edit-actions">
+        <button class="resume-btn resume-btn--primary" type="submit" form="edit-form" id="save-resume">Save draft</button>
+        <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
+        <button class="resume-btn" type="button" id="export-json">Export JSON</button>
+      </div>
       <form class="edit-form" id="edit-form">
         <label>Name<input name="name" required /></label>
         <label>Headline<input name="headline" required /></label>
@@ -45,11 +50,6 @@
           <input type="checkbox" name="publishToGithub" id="publish-to-github" checked />
           Publish to GitHub immediately
         </label>
-        <div class="edit-actions">
-          <button class="resume-btn resume-btn--primary" type="submit" id="save-resume">Save draft</button>
-          <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
-          <button class="resume-btn" type="button" id="export-json">Export JSON</button>
-        </div>
       </form>
     </aside>
     <section class="edit-preview">
