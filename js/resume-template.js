@@ -1,4 +1,4 @@
-import { companyIconMarkup } from './experience-icons.js';
+import { companyIconMarkup, companyLinkMarkup } from './experience-icons.js';
 import { iconMarkup } from './icons.js';
 
 function escapeHtml(text) {
@@ -79,7 +79,7 @@ function renderWorkCompanyMeta(item) {
 
   return `
     <p class="resume-role-meta">
-      <strong class="resume-company-name">${escapeHtml(item.company)}</strong>${logo}<span class="resume-company-suffix">${escapeHtml(suffix)}</span>
+      <strong class="resume-company-name">${companyLinkMarkup(escapeHtml(item.company), item.id)}</strong>${logo}<span class="resume-company-suffix">${escapeHtml(suffix)}</span>
     </p>
   `;
 }

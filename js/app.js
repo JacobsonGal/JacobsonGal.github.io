@@ -1,5 +1,5 @@
 import { iconMarkup, brandLogoMarkup } from './icons.js';
-import { companyIconMarkup } from './experience-icons.js';
+import { companyIconMarkup, companyLinkMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle } from './appearance.js';
@@ -44,7 +44,7 @@ function renderExperienceItem(item, index) {
         <div class="exp-header">
           <h3 class="exp-title">${item.title}</h3>
           <p class="exp-meta-line">
-            <span class="exp-company">${item.company}</span>
+            <span class="exp-company">${companyLinkMarkup(item.company, item.id, 'exp-company-link')}</span>
             <span class="exp-meta-sep" aria-hidden="true">·</span>
             <span class="exp-location">${item.location}</span>
             <span class="exp-meta-sep exp-meta-sep--dates" aria-hidden="true">·</span>
@@ -139,6 +139,12 @@ function applyProfile(profile) {
       .join('');
   }
 
+  const heroCompany = document.querySelector('[data-hero-company]');
+  if (heroCompany && profile.currentRole) {
+    const { company, id } = profile.currentRole;
+    heroCompany.innerHTML = companyLinkMarkup(company, id, 'hero-company-link');
+  }
+
   const experienceList = document.querySelector('[data-list="experience"]');
   if (experienceList && profile.experience) {
     experienceList.innerHTML = profile.experience
@@ -160,6 +166,10 @@ function applyProfile(profile) {
 }
 
 function bindExperienceToggles() {
+  document.querySelectorAll('[data-company-link]').forEach((link) => {
+    link.addEventListener('click', (event) => event.stopPropagation());
+  });
+
   document.querySelectorAll('.experience-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.experience-item');

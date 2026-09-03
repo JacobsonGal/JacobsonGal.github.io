@@ -5,11 +5,26 @@ const COMPANY_ICONS = {
   idf: 'assets/images/companies/idf.svg',
 };
 
+const COMPANY_URLS = {
+  houzz: 'https://pro.houzz.com',
+};
+
 const CONTAIN_LOGO_IDS = new Set(['colman', 'yavo', 'idf']);
 const ICON_CACHE_VERSION = '20260903d';
 
 export function companyIconPath(id) {
   return COMPANY_ICONS[id] || null;
+}
+
+export function companyUrl(id) {
+  return COMPANY_URLS[id] || null;
+}
+
+export function companyLinkMarkup(company, id, className = '') {
+  const url = companyUrl(id);
+  const classAttr = className ? ` class="${className}"` : '';
+  if (!url) return `<span${classAttr}>${company}</span>`;
+  return `<a${classAttr} href="${url}" target="_blank" rel="noopener noreferrer" data-company-link>${company}</a>`;
 }
 
 export function companyIconMarkup(id, basePath = '', options = {}) {

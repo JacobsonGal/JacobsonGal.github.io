@@ -428,6 +428,15 @@ body.resume-page {
   font-weight: 600;
 }
 
+.resume-company-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.resume-company-name a:hover {
+  text-decoration: underline;
+}
+
 .resume-company-logo {
   display: inline-block;
   width: 1.05rem;
