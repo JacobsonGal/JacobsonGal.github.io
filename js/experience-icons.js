@@ -5,6 +5,8 @@ const COMPANY_ICONS = {
   idf: 'assets/images/companies/idf.svg',
 };
 
+const CONTAIN_LOGO_IDS = new Set(['colman', 'yavo', 'idf']);
+
 export function companyIconPath(id) {
   return COMPANY_ICONS[id] || null;
 }
@@ -18,5 +20,7 @@ export function companyIconMarkup(id, basePath = '', options = {}) {
   const path = companyIconPath(id);
   if (!path) return '';
   const src = `${basePath}${path}`;
-  return `<img class="${className}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
+  const containClass = CONTAIN_LOGO_IDS.has(id) ? ' exp-icon--contain' : '';
+  const classes = `${className}${containClass}`;
+  return `<img class="${classes}" src="${src}" alt="" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
 }
