@@ -41,8 +41,10 @@
 }
 
 .hero-kicker,
-.hero-title span,
-.hero-lead {
+.hero-title-line,
+.hero-lead,
+.hero-badge,
+.hero-metrics {
   opacity: 0;
   transform: translateY(40px);
 }
@@ -51,16 +53,28 @@
   opacity: 0;
 }
 
+.hero--entered .hero-badge {
+  animation: hero-rise 0.7s var(--ease-out-expo) 0.15s forwards;
+}
+
 .hero--entered .hero-kicker {
-  animation: hero-rise 0.7s var(--ease-out-expo) 0.2s forwards;
+  animation: hero-rise 0.7s var(--ease-out-expo) 0.25s forwards;
 }
 
-.hero--entered .hero-title span:nth-child(1) {
-  animation: hero-rise 0.8s var(--ease-out-expo) 0.35s forwards;
+.hero--entered .hero-title-line:nth-child(1) {
+  animation: hero-rise 0.8s var(--ease-out-expo) 0.4s forwards;
 }
 
-.hero--entered .hero-title span:nth-child(2) {
-  animation: hero-rise 0.8s var(--ease-out-expo) 0.5s forwards;
+.hero--entered .hero-title-line:nth-child(2) {
+  animation: hero-rise 0.8s var(--ease-out-expo) 0.55s forwards;
+}
+
+.hero--entered .hero-metrics {
+  animation: hero-rise 0.8s var(--ease-out-expo) 0.7s forwards;
+}
+
+.hero--entered .hero-lead {
+  animation: hero-rise 0.8s var(--ease-out-expo) 0.85s forwards;
 }
 
 .hero--entered .hero-line {
@@ -70,7 +84,7 @@
 }
 
 .hero--entered .hero-lead p {
-  animation: hero-fade 0.8s var(--ease-out-expo) 1.1s forwards;
+  animation: hero-fade 0.8s var(--ease-out-expo) 1.05s forwards;
 }
 
 .hero--entered .hero-meta {
@@ -103,6 +117,16 @@
 @keyframes scroll-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(5px); }
+}
+
+@keyframes rail-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes hud-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(0.85); }
 }
 
 .scroll-cue svg {

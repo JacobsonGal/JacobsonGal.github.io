@@ -78,4 +78,5 @@ export function initMotion() {
   initHeroEntrance();
   initRevealAnimations();
   initFloatingCta();
+  import('./hero-canvas.js').then(({ initHeroCanvas }) => initHeroCanvas()).catch(() => {});
 }
