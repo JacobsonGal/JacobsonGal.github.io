@@ -73,20 +73,23 @@ body.edit-resume-page {
 
 .edit-preview {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   min-height: 0;
   height: 100%;
-  padding: 0;
+  padding: 1.5rem;
+  overflow: auto;
   background: hsl(var(--foreground) / 0.03);
 }
 
 .edit-preview iframe {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
+  flex: none;
+  width: 210mm;
+  height: 297mm;
+  min-height: 297mm;
   border: 0;
   background: hsl(var(--background));
+  box-shadow: 0 24px 60px hsl(var(--foreground) / 0.12);
 }
 
 @media (min-width: 1100px) {
@@ -101,8 +104,11 @@ body.edit-resume-page {
     position: sticky;
     top: 0;
   }
+  .edit-preview {
+    padding: 1.5rem 1rem 2rem;
+  }
   .edit-preview iframe {
-    border-left: 1px solid hsl(var(--border));
+    border-left: 0;
   }
 }
 
@@ -116,5 +122,6 @@ body.edit-resume-page {
   }
   .edit-preview {
     min-height: 70vh;
+    justify-content: flex-start;
   }
 }
