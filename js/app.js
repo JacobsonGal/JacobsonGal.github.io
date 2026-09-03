@@ -3,6 +3,7 @@ import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './exp
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle } from './appearance.js';
+import { mountLinkModal } from './link-modal.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
 import './theme-init.js';
 
@@ -103,7 +104,7 @@ function renderFloatingLinks(profile) {
   ];
 
   return links.map((link) => `
-    <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+    <a class="floating-link mono-label stagger-item" href="${link.href}"${link.external ? '' : ' data-link-modal-skip'}>
       <span class="floating-link-icon" aria-hidden="true">${link.icon}</span>
       <span>${link.label}</span>
     </a>
@@ -253,6 +254,7 @@ async function refreshOwnerUi() {
 async function init() {
   bindUi();
   initMotion();
+  mountLinkModal({ root: document.getElementById('app') });
   mountAppearanceToggle(document.getElementById('appearance-tools'));
   const profile = await loadProfile({ preferDraft: false });
   applyProfile(profile);
