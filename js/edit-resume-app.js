@@ -8,6 +8,7 @@ import {
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import { isPublishConfigured, publishProfile } from './github-publish.js';
+import { iconMarkup } from './icons.js';
 import './theme-init.js';
 
 const gateRoot = document.getElementById('editor-gate');
@@ -70,6 +71,8 @@ function initEditor() {
     publishOption.hidden = false;
     saveButton.textContent = 'Save & publish';
     editHint.textContent = 'Edits can publish straight to data/profile.json on GitHub when the publish proxy is configured.';
+    const publishIcon = publishOption.querySelector('.edit-publish-github-icon');
+    if (publishIcon) publishIcon.innerHTML = iconMarkup('github');
   }
 
   function setStatus(message, type = 'info') {
