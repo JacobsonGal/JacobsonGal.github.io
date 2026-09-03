@@ -2,8 +2,15 @@
 
 body.resume-page {
   margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-body);
   color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+html:has(body.resume-page) {
   background: hsl(var(--background));
 }
 
@@ -152,19 +159,17 @@ body.resume-page {
 }
 
 .resume-stage {
+  flex: 1;
   padding: 2rem 1rem 4rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  background: hsl(var(--card));
 }
 
 #resume-root {
   width: min(210mm, 100%);
   margin-inline: auto;
-}
-
-body.resume-page--a4 .resume-stage {
-  background: hsl(var(--foreground) / 0.03);
 }
 
 body.resume-page--a4 #resume-root {
@@ -649,6 +654,8 @@ body.resume-page--preview .resume-stage {
   min-height: 297mm;
   margin: 0 auto;
   padding: 0;
+  flex: none;
+  background: hsl(var(--background));
   box-sizing: border-box;
 }
 

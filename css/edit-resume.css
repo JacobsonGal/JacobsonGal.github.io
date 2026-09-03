@@ -109,7 +109,7 @@ body.edit-resume-page {
   height: 100%;
   padding: 1.5rem;
   overflow: auto;
-  background: hsl(var(--foreground) / 0.03);
+  background: hsl(var(--card));
 }
 
 .edit-preview iframe {
