@@ -1,5 +1,5 @@
 import { iconMarkup, brandLogoMarkup } from './icons.js';
-import { companyIconMarkup, companyLinkMarkup } from './experience-icons.js';
+import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle } from './appearance.js';
@@ -28,7 +28,7 @@ function getNested(obj, path) {
 
 function renderExperienceItem(item, index) {
   const stackTags = (item.stack || []).map((s) => `<span class="tag">${s}</span>`).join('');
-  const highlightTags = (item.highlights || []).map((h) => `<span class="tag">${h}</span>`).join('');
+  const highlightTags = (item.highlights || []).map((h) => highlightLinkMarkup(h)).join('');
   const bullets = (item.bullets || []).map((b) => `<li>${b}</li>`).join('');
   const icon = companyIconMarkup(item.id, BASE_PATH) || `<span class="mono-label exp-letter">${item.letter}</span>`;
 

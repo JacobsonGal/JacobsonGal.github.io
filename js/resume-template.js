@@ -1,4 +1,4 @@
-import { companyIconMarkup, companyLinkMarkup } from './experience-icons.js';
+import { companyIconMarkup, companyLinkMarkup, featureLinkUrl } from './experience-icons.js';
 import { iconMarkup } from './icons.js';
 
 function escapeHtml(text) {
@@ -84,6 +84,13 @@ function renderWorkCompanyMeta(item) {
   `;
 }
 
+function renderHighlight(label) {
+  const text = escapeHtml(label);
+  const url = featureLinkUrl(label);
+  if (!url) return text;
+  return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+}
+
 function renderWorkRoles(experience) {
   return (experience || [])
     .filter((item) => !item.webOnly && !item.resumeOnly && !item.armyService)
@@ -94,7 +101,7 @@ function renderWorkRoles(experience) {
         ${item.stack?.length ? `<p class="resume-role-stack">${item.stack.map(escapeHtml).join(', ')}</p>` : ''}
         ${item.summary ? `<p class="resume-role-summary">${escapeHtml(item.summary)}</p>` : ''}
         ${item.bullets?.length ? `<ul class="resume-role-list">${item.bullets.map((b) => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
-        ${item.highlights?.length ? `<p class="resume-role-features"><strong>Key Features:</strong> ${item.highlights.map(escapeHtml).join(', ')}.</p>` : ''}
+        ${item.highlights?.length ? `<p class="resume-role-features"><strong>Key Features:</strong> ${item.highlights.map(renderHighlight).join(', ')}.</p>` : ''}
       </article>
     `)
     .join('');

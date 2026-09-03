@@ -920,6 +920,11 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   color: hsl(var(--foreground) / 0.78);
   background: hsl(var(--background) / 0.35);
   transition: border-color 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+}
+a.tag:hover {
+  border-color: hsl(var(--accent));
+  color: hsl(var(--accent));
 }
 .experience-item.open .tag {
   border-color: hsl(var(--foreground) / 0.12);

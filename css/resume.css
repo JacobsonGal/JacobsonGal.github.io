@@ -504,6 +504,15 @@ body.resume-page--a4 #resume-root {
   color: hsl(var(--muted));
 }
 
+.resume-role-features a {
+  color: hsl(var(--accent));
+  text-decoration: none;
+}
+
+.resume-role-features a:hover {
+  text-decoration: underline;
+}
+
 .resume-role-list {
   margin: 0.25rem 0 0.35rem;
   padding-left: 1rem;
@@ -725,6 +734,11 @@ body.resume-page--preview .resume-sheet {
 
 body.resume-page--a4 .resume-sheet {
   box-shadow: 0 24px 60px hsl(var(--foreground) / 0.12);
+}
+
+[data-appearance="dark"] body.resume-page--a4 .resume-sheet,
+[data-appearance="dark"] body.resume-page .resume-sheet {
+  box-shadow: 0 24px 60px hsl(220 48% 4% / 0.45);
 }
 
 body.resume-page--preview .resume-layout,

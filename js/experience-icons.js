@@ -9,6 +9,10 @@ const COMPANY_URLS = {
   houzz: 'https://pro.houzz.com',
 };
 
+const FEATURE_LINKS = {
+  Contracts: 'https://pro.houzz.com/for-pros/feature-contracts',
+};
+
 const CONTAIN_LOGO_IDS = new Set(['colman', 'yavo', 'idf']);
 const ICON_CACHE_VERSION = '20260903d';
 
@@ -25,6 +29,16 @@ export function companyLinkMarkup(company, id, className = '') {
   const classAttr = className ? ` class="${className}"` : '';
   if (!url) return `<span${classAttr}>${company}</span>`;
   return `<a${classAttr} href="${url}" target="_blank" rel="noopener noreferrer" data-company-link>${company}</a>`;
+}
+
+export function featureLinkUrl(label) {
+  return FEATURE_LINKS[label] || null;
+}
+
+export function highlightLinkMarkup(label, className = 'tag') {
+  const url = featureLinkUrl(label);
+  if (!url) return `<span class="${className}">${label}</span>`;
+  return `<a class="${className}" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 }
 
 export function companyIconMarkup(id, basePath = '', options = {}) {
