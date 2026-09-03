@@ -2,7 +2,7 @@
 @import url("./appearance.css");
 
 :root {
-  --header-height: 88px;
+  --header-height: 72px;
   --font-heading: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter Tight", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;

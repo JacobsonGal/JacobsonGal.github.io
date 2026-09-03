@@ -177,15 +177,52 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
   color: hsl(var(--foreground));
 }
 
-[data-appearance="light"] .site-header {
+[data-appearance="light"] .nav-pill {
   color: hsl(var(--foreground));
+  border-color: hsl(var(--border));
+  background: hsl(var(--card) / 0.88);
+  box-shadow: 0 10px 32px hsl(var(--foreground) / 0.07);
 }
 
-[data-appearance="light"] .app--continuous-hero .site-header.scrolled,
-[data-appearance="light"] .site-header.scrolled {
+[data-appearance="light"] .app--continuous-hero .site-header.scrolled .nav-pill,
+[data-appearance="light"] .site-header.scrolled .nav-pill {
+  background: hsl(var(--background) / 0.94);
+  border-color: hsl(var(--border));
+}
+
+[data-appearance="light"] .nav-pill--controls .owner-tools:not(:empty) {
+  border-inline-end-color: hsl(var(--border));
+}
+
+[data-appearance="light"] .nav-pill--controls .appearance-toggle-btn {
+  color: hsl(var(--accent-deep));
+}
+
+[data-appearance="light"] .nav-pill--controls .appearance-toggle-btn:hover {
+  background: hsl(var(--accent) / 0.1);
+}
+
+[data-appearance="light"] .nav-menu-link {
   color: hsl(var(--foreground));
-  background: hsl(var(--background) / 0.92);
-  border-bottom: 1px solid hsl(var(--border));
+  border-color: hsl(var(--border));
+  background: hsl(var(--card) / 0.94);
+  box-shadow: 0 8px 24px hsl(var(--foreground) / 0.07);
+}
+
+[data-appearance="light"] .nav-menu-link:hover {
+  background: hsl(var(--accent));
+  border-color: hsl(var(--accent));
+  color: hsl(var(--background));
+}
+
+[data-appearance="light"] .nav-menu-link .mono-label {
+  background: hsl(var(--foreground) / 0.05);
+  border-color: hsl(var(--border));
+}
+
+[data-appearance="light"] .nav-menu-link:hover .mono-label {
+  background: hsl(var(--background) / 0.18);
+  border-color: hsl(var(--background) / 0.28);
 }
 
 [data-appearance="light"] .hero-gradient {
@@ -303,8 +340,18 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .app--continuous-hero .experience-item.open {
+  background: transparent;
+  box-shadow: none;
+}
+
+[data-appearance="light"] .app--continuous-hero .experience-item.open .exp-timeline-card {
   background: hsl(var(--card));
-  box-shadow: inset 3px 0 0 hsl(var(--accent));
+  border-color: hsl(var(--accent) / 0.35);
+  box-shadow: 0 10px 36px hsl(var(--foreground) / 0.07);
+}
+
+[data-appearance="light"] .app--continuous-hero .experience-list::before {
+  background: hsl(var(--border));
 }
 
 [data-appearance="light"] .app--continuous-hero .tag {

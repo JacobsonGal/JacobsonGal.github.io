@@ -1,4 +1,4 @@
-import { iconMarkup, brandLogoMarkup } from './icons.js';
+import { iconMarkup } from './icons.js';
 import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 import { getAuthorizedUser } from './github-auth.js';
@@ -116,7 +116,7 @@ function renderFloatingLinks(profile) {
     { label: 'GitHub', href: profile.urls.github, icon: iconMarkup('github'), external: true },
     { label: 'Instagram', href: profile.urls.instagram, icon: iconMarkup('instagram'), external: true },
     { label: 'Email', href: `mailto:${profile.email}`, icon: iconMarkup('mail'), external: true },
-    { label: 'Resume', href: resumeHref, icon: brandLogoMarkup(asset('assets/images/logo.png'), 'brand-logo brand-logo--sm', 16), external: false },
+    { label: 'Resume', href: resumeHref, icon: iconMarkup('resume'), external: false },
   ];
 
   return links.map((link) => `
@@ -198,24 +198,35 @@ function bindUi() {
     header.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
+  const navCta = document.getElementById('site-nav-cta');
   const menu = document.getElementById('mobile-menu');
   const toggle = document.querySelector('.menu-toggle');
-  const closeBtn = document.querySelector('.menu-close');
 
-  const openMenu = () => {
-    menu.hidden = false;
-    requestAnimationFrame(() => menu.classList.add('open'));
-    toggle.setAttribute('aria-expanded', 'true');
-  };
-  const closeMenu = () => {
-    menu.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-    setTimeout(() => { menu.hidden = true; }, 450);
+  const setMenuOpen = (open) => {
+    navCta?.classList.toggle('open', open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    toggle?.classList.toggle('is-open', open);
+    menu?.setAttribute('aria-hidden', String(!open));
   };
 
-  toggle?.addEventListener('click', openMenu);
-  closeBtn?.addEventListener('click', closeMenu);
-  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
+  toggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setMenuOpen(!navCta?.classList.contains('open'));
+  });
+
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setMenuOpen(false));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!navCta?.classList.contains('open')) return;
+    if (!navCta.contains(event.target)) setMenuOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
 
   const buildDate = document.querySelector('[data-build-date]');
   if (buildDate) {
@@ -253,11 +264,12 @@ async function refreshLinkedInOverlay(profile) {
 }
 
 function ensureMobileEditLink() {
-  const mobileNav = document.querySelector('.mobile-nav');
+  const mobileNav = document.querySelector('.nav-menu-links');
   if (!mobileNav || mobileNav.querySelector('[data-owner-edit]')) return;
 
   const editLink = document.createElement('a');
   editLink.href = 'edit-resume.html';
+  editLink.className = 'nav-menu-link';
   editLink.dataset.ownerEdit = 'true';
   editLink.innerHTML = '<span>Edit Resume</span><span class="mono-label">05</span>';
   mobileNav.append(editLink);

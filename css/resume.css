@@ -763,3 +763,63 @@ body.resume-page--preview .resume-name-line,
 body.resume-page--a4 .resume-name-line {
   font-size: 1.75rem;
 }
+
+@media (max-width: 720px) {
+  body.resume-page--a4 .resume-stage,
+  body.resume-page--preview .resume-stage {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  body.resume-page--a4 #resume-root,
+  body.resume-page--preview #resume-root {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+  }
+
+  body.resume-page--a4 .resume-sheet,
+  body.resume-page--preview .resume-sheet {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  body.resume-page--a4 .resume-layout,
+  body.resume-page--preview .resume-layout {
+    flex-direction: column;
+  }
+
+  body.resume-page--a4 .resume-sidebar,
+  body.resume-page--preview .resume-sidebar {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    padding: 1.25rem 1rem;
+  }
+
+  body.resume-page--a4 .resume-main,
+  body.resume-page--preview .resume-main {
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  body.resume-page--a4 .resume-name-line,
+  body.resume-page--preview .resume-name-line {
+    font-size: clamp(1.35rem, 7vw, 1.75rem);
+  }
+
+  .resume-toolbar {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .resume-toolbar-start,
+  .resume-toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .resume-btn {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.62rem;
+  }
+}
