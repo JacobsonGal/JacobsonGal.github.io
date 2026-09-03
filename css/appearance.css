@@ -2,10 +2,6 @@ html {
   color-scheme: light dark;
 }
 
-[data-appearance="light"] body {
-  background: hsl(var(--background));
-}
-
 [data-appearance="dark"] body,
 [data-appearance="dark"] .page-backdrop {
   background: #061018;
@@ -32,18 +28,36 @@ html {
   --card: 24 12% 14%;
 }
 
-/* Homepage — light system appearance */
+/* Bright mode — editorial / Base44 warm palette */
+[data-appearance="light"] {
+  --background: 38 24% 94%;
+  --foreground: 24 10% 10%;
+  --accent: 18 42% 46%;
+  --accent-deep: 18 35% 32%;
+  --border: 30 12% 82%;
+  --muted: 30 8% 42%;
+  --card: 36 20% 91%;
+}
+
+[data-appearance="light"] body,
+[data-appearance="light"] .page-backdrop {
+  background: hsl(var(--background));
+}
+
 [data-appearance="light"] .app--continuous-hero {
-  --surface-text: 220 48% 11%;
-  --surface-muted: 215 12% 42%;
-  --surface-label: 205 68% 42%;
-  --surface-border: 210 22% 78% / 0.75;
-  --surface-card: 210 34% 94% / 0.92;
+  --surface-text: 24 10% 10%;
+  --surface-muted: 30 8% 42%;
+  --surface-label: 18 42% 46%;
+  --surface-border: 30 12% 82%;
+  --surface-card: 36 20% 91%;
   color: hsl(var(--surface-text));
 }
 
-[data-appearance="light"] .page-backdrop {
-  background: hsl(var(--background));
+[data-appearance="light"] .page-backdrop .hero-image,
+[data-appearance="light"] .page-backdrop .hero-canvas,
+[data-appearance="light"] .page-backdrop .hero-scanlines,
+[data-appearance="light"] .page-backdrop .hero-noise {
+  opacity: 0;
 }
 
 [data-appearance="light"] .hero {
@@ -57,64 +71,82 @@ html {
 [data-appearance="light"] .app--continuous-hero .site-header.scrolled,
 [data-appearance="light"] .site-header.scrolled {
   color: hsl(var(--foreground));
-  background: hsl(var(--background) / 0.88);
+  background: hsl(var(--background) / 0.92);
   border-bottom: 1px solid hsl(var(--border));
 }
 
 [data-appearance="light"] .hero-gradient {
   background:
-    linear-gradient(105deg, hsl(var(--background) / 0.94) 0%, hsl(var(--background) / 0.72) 42%, transparent 68%),
-    linear-gradient(to top, hsl(var(--background) / 0.98) 0%, transparent 45%),
-    radial-gradient(ellipse 80% 60% at 70% 40%, hsl(var(--accent) / 0.14), transparent 60%);
+    radial-gradient(ellipse 75% 55% at 78% 12%, hsl(18 42% 46% / 0.1), transparent 58%),
+    linear-gradient(180deg, hsl(38 24% 96%) 0%, hsl(38 24% 94%) 52%, hsl(36 20% 91%) 100%);
 }
 
 [data-appearance="light"] .hero-grid,
 [data-appearance="light"] .app--continuous-hero .section-grid {
-  opacity: 0.1;
+  opacity: 0.045;
   background-image:
-    linear-gradient(hsl(var(--accent) / 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, hsl(var(--accent) / 0.22) 1px, transparent 1px);
+    linear-gradient(hsl(18 42% 46% / 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(18 42% 46% / 0.18) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 95% 80% at 50% 35%, black 15%, transparent 78%);
 }
 
-[data-appearance="light"] .hero-chrome-row--meta {
-  color: hsl(var(--accent) / 0.75);
+[data-appearance="light"] .hero-corner {
+  border-color: hsl(var(--accent) / 0.35);
 }
 
-[data-appearance="light"] .page-backdrop .hero-canvas {
-  mix-blend-mode: multiply;
-  opacity: 0.28;
+[data-appearance="light"] .hero-hud,
+[data-appearance="light"] .hero-badge {
+  color: hsl(var(--accent-deep));
+  background: hsl(var(--card));
+  border-color: hsl(var(--border));
+  box-shadow: 0 4px 18px hsl(var(--foreground) / 0.04);
 }
 
-[data-appearance="light"] .hero-scanlines {
-  opacity: 0.18;
+[data-appearance="light"] .hero-chrome-row--meta,
+[data-appearance="light"] .hero-meta,
+[data-appearance="light"] .scroll-cue {
+  color: hsl(var(--accent) / 0.8);
+}
+
+[data-appearance="light"] .hero-lead p {
+  color: hsl(var(--surface-muted));
+}
+
+[data-appearance="light"] .hero-metrics .mono-label {
+  color: hsl(var(--surface-muted));
 }
 
 [data-appearance="light"] .app--continuous-hero .exp-icon {
-  background: hsl(var(--background) / 0.85);
+  background: hsl(var(--card));
   border-color: hsl(var(--border));
-  box-shadow: 0 4px 14px hsl(var(--foreground) / 0.06);
+  box-shadow: 0 4px 14px hsl(var(--foreground) / 0.05);
 }
 
 [data-appearance="light"] .app--continuous-hero .experience-item.open {
-  box-shadow: 0 8px 24px hsl(var(--foreground) / 0.05);
+  background: hsl(var(--card));
+  box-shadow: 0 8px 24px hsl(var(--foreground) / 0.04);
 }
 
 [data-appearance="light"] .app--continuous-hero .floating-link,
 [data-appearance="light"] .app--continuous-hero .floating-trigger {
-  background: hsl(var(--background) / 0.94);
+  background: hsl(var(--card));
   color: hsl(var(--foreground));
   border-color: hsl(var(--border));
-  box-shadow: 0 12px 32px hsl(var(--foreground) / 0.08);
+  box-shadow: 0 12px 28px hsl(var(--foreground) / 0.07);
 }
 
 [data-appearance="light"] .app--continuous-hero .portrait-frame {
-  background: hsl(var(--background) / 0.72);
-  border-color: hsl(var(--accent) / 0.35);
-  box-shadow: 0 10px 32px hsl(var(--foreground) / 0.08);
+  background: hsl(var(--card));
+  border-color: hsl(var(--accent) / 0.28);
+  box-shadow: 0 10px 28px hsl(var(--foreground) / 0.06);
+}
+
+[data-appearance="light"] .app--continuous-hero .experience::before {
+  background: radial-gradient(ellipse 60% 40% at 100% 0%, hsl(var(--accent) / 0.08), transparent 60%);
 }
 
 [data-appearance="light"] .owner-tool-link {
   color: hsl(var(--foreground));
-  background: hsl(var(--background) / 0.88);
+  background: hsl(var(--card));
   border-color: hsl(var(--border));
 }
