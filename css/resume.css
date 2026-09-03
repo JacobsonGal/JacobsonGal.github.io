@@ -85,9 +85,8 @@ body.resume-page {
   width: 3.5rem;
   height: 3.5rem;
   flex-shrink: 0;
-  background: hsl(var(--accent));
-  mask: url("../assets/images/logo.webp") center / contain no-repeat;
-  -webkit-mask: url("../assets/images/logo.webp") center / contain no-repeat;
+  object-fit: contain;
+  display: block;
 }
 
 .resume-section { margin-bottom: 1.75rem; }

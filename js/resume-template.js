@@ -69,7 +69,7 @@ export function renderResumeHtml(profile) {
             ${profile.urls?.github ? ` · GitHub` : ''}
           </p>
         </div>
-        <div class="resume-mark" aria-hidden="true"></div>
+        <img class="resume-mark" src="assets/images/logo.png" alt="" width="56" height="56" />
       </header>
 
       <section class="resume-section">

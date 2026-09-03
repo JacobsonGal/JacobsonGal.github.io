@@ -10,7 +10,7 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 - **Edit (local only):** run the site locally, then open [local/edit-resume.html](http://localhost:8080/local/edit-resume.html). Export JSON and commit to `data/profile.json` to publish. The editor is not linked or available on the live GitHub Pages site.
 - **Print to PDF:** open the resume page and use **Print / Save PDF**.
 
-The floating action menu links to **Resume** (with your logo in accent colors, not blue).
+The floating action menu links to **Resume** with your full logo mark.
 
 ## Update content
 

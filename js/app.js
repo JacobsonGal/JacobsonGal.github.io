@@ -1,4 +1,4 @@
-import { iconMarkup } from './icons.js';
+import { iconMarkup, brandLogoMarkup } from './icons.js';
 import { initMotion, initRevealAnimations } from './motion.js';
 
 const CHEVRON = '<svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -78,7 +78,7 @@ function renderFloatingLinks(profile) {
   const resumeHref = asset(profile.urls.cv || 'resume.html');
   const links = [
     { label: 'LinkedIn', href: profile.urls.linkedin, icon: iconMarkup('linkedin'), external: true },
-    { label: 'Resume', href: resumeHref, icon: 'brand', external: false },
+    { label: 'Resume', href: resumeHref, icon: brandLogoMarkup(asset('assets/images/logo.png'), 'brand-logo brand-logo--sm', 16), external: false },
     { label: 'GitHub', href: profile.urls.github, icon: iconMarkup('github'), external: true },
     { label: 'Instagram', href: profile.urls.instagram, icon: iconMarkup('instagram'), external: true },
     { label: 'Email', href: `mailto:${profile.email}`, icon: iconMarkup('mail'), external: true },
@@ -86,9 +86,7 @@ function renderFloatingLinks(profile) {
 
   return links.map((link) => `
     <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
-      <span class="floating-link-icon ${link.icon === 'brand' ? 'floating-link-icon--brand' : ''}" aria-hidden="true">
-        ${link.icon === 'brand' ? '' : link.icon}
-      </span>
+      <span class="floating-link-icon" aria-hidden="true">${link.icon}</span>
       <span>${link.label}</span>
     </a>
   `).join('');
