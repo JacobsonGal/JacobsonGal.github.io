@@ -5,6 +5,7 @@ import {
   signOut,
   startDeviceFlow,
 } from './github-auth.js';
+import { isOwnerAuthConfigured, unlockWithOwnerCode } from './owner-auth.js';
 import { mountThemePicker } from './theme-picker.js';
 
 function el(tag, className, text) {
@@ -68,6 +69,10 @@ export async function mountResumeAuthToolbar(toolbarActions) {
   return null;
 }
 
+function isUnlockConfigured() {
+  return isOwnerAuthConfigured() || isAuthConfigured();
+}
+
 export async function requireResumeEditorAuth(root) {
   const user = await getAuthorizedUser();
   if (user) return user;
@@ -75,30 +80,38 @@ export async function requireResumeEditorAuth(root) {
   root.replaceChildren();
   const gate = el('section', 'auth-gate');
   const title = el('h1', 'auth-gate-title', 'Edit resume');
-  const copy = el('p', 'auth-gate-copy', 'Sign in with GitHub to edit your resume. Only the site owner can access the editor.');
+  const copy = el('p', 'auth-gate-copy', 'Unlock the editor with your private owner code.');
 
   gate.append(title, copy);
 
-  if (!isAuthConfigured()) {
-    const setup = el('p', 'auth-gate-error', 'GitHub OAuth is not configured. Add your OAuth App Client ID to js/auth-config.js.');
+  if (!isUnlockConfigured()) {
+    const setup = el('p', 'auth-gate-error', 'Owner unlock is not configured. Set OWNER_UNLOCK_HASH in js/auth-config.js.');
     gate.append(setup);
     root.append(gate);
     return null;
   }
 
-  const signInBtn = el('button', 'resume-btn resume-btn--primary', 'Sign in with GitHub');
-  signInBtn.type = 'button';
-  signInBtn.addEventListener('click', () => {
-    promptGitHubSignIn(async () => {
-      const authed = await getAuthorizedUser({ forceRefresh: true });
-      if (authed) window.location.reload();
+  gate.append(createOwnerUnlockForm(async () => {
+    const authed = await getAuthorizedUser();
+    if (authed) window.location.reload();
+  }));
+
+  if (isAuthConfigured()) {
+    const githubBtn = el('button', 'resume-btn', 'Sign in with GitHub instead');
+    githubBtn.type = 'button';
+    githubBtn.addEventListener('click', () => {
+      promptGitHubSignIn(async () => {
+        const authed = await getAuthorizedUser({ forceRefresh: true });
+        if (authed) window.location.reload();
+      });
     });
-  });
+    gate.append(githubBtn);
+  }
 
   const back = el('a', 'resume-btn', '← Back to resume');
   back.href = 'resume.html';
 
-  gate.append(signInBtn, back);
+  gate.append(back);
   root.append(gate);
   return null;
 }
@@ -111,11 +124,11 @@ export async function openResumeEditorFlow({ redirectTo = 'edit-resume.html', on
     return user;
   }
 
-  if (!isAuthConfigured()) return null;
+  if (!isUnlockConfigured()) return null;
 
   return new Promise((resolve) => {
-    promptGitHubSignIn(async () => {
-      const authed = await getAuthorizedUser({ forceRefresh: true });
+    promptOwnerUnlock(async () => {
+      const authed = await getAuthorizedUser();
       if (!authed) {
         resolve(null);
         return;
@@ -125,6 +138,74 @@ export async function openResumeEditorFlow({ redirectTo = 'edit-resume.html', on
       resolve(authed);
     });
   });
+}
+
+function createOwnerUnlockForm(onSuccess) {
+  const form = el('form', 'auth-unlock-form');
+  const label = el('label', 'auth-unlock-label', 'Owner code');
+  const input = el('input', 'auth-unlock-input');
+  input.type = 'password';
+  input.name = 'ownerCode';
+  input.autocomplete = 'off';
+  input.required = true;
+  label.append(input);
+
+  const status = el('p', 'auth-dialog-status', '');
+  const submit = el('button', 'resume-btn resume-btn--primary', 'Unlock editor');
+  submit.type = 'submit';
+
+  form.append(label, status, submit);
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    status.textContent = '';
+    try {
+      await unlockWithOwnerCode(input.value);
+      if (onSuccess) await onSuccess();
+    } catch (error) {
+      status.textContent = error.message || 'Unlock failed.';
+    }
+  });
+
+  return form;
+}
+
+export function promptOwnerUnlock(onSuccess) {
+  const overlay = el('div', 'auth-overlay');
+  const dialog = el('div', 'auth-dialog');
+  const title = el('h2', 'auth-dialog-title', 'Owner access');
+  const copy = el('p', 'auth-dialog-status', 'Enter your private owner code to edit the resume.');
+  const actions = el('div', 'auth-dialog-actions');
+  const cancelBtn = el('button', 'resume-btn', 'Cancel');
+  cancelBtn.type = 'button';
+  cancelBtn.addEventListener('click', () => overlay.remove());
+
+  const form = createOwnerUnlockForm(async () => {
+    overlay.remove();
+    if (onSuccess) await onSuccess();
+  });
+
+  actions.append(cancelBtn);
+  dialog.append(title, copy, form);
+
+  if (isAuthConfigured()) {
+    const githubBtn = el('button', 'resume-btn', 'Sign in with GitHub instead');
+    githubBtn.type = 'button';
+    githubBtn.addEventListener('click', () => {
+      overlay.remove();
+      promptGitHubSignIn(onSuccess);
+    });
+    actions.prepend(githubBtn);
+  }
+
+  dialog.append(actions);
+  overlay.append(dialog);
+  document.body.append(overlay);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) overlay.remove();
+  });
+
+  form.querySelector('.auth-unlock-input')?.focus();
 }
 
 export function promptGitHubSignIn(onSuccess) {

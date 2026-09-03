@@ -1,6 +1,15 @@
-import { ALLOWED_GITHUB_USERNAME, GITHUB_CLIENT_ID } from './auth-config.js';
+import { ALLOWED_GITHUB_USERNAME, GITHUB_AUTH_PROXY_URL, GITHUB_CLIENT_ID } from './auth-config.js';
+import { clearOwnerSession, getOwnerSession } from './owner-auth.js';
 
-const STORAGE_KEY = 'portfolio_github_session';
+const STORAGE_KEY = 'portfolio_auth_session';
+const LEGACY_STORAGE_KEY = 'portfolio_github_session';
+
+function deviceFlowBase() {
+  if (GITHUB_AUTH_PROXY_URL) {
+    return GITHUB_AUTH_PROXY_URL.replace(/\/$/, '');
+  }
+  return 'https://github.com';
+}
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -10,7 +19,10 @@ function sleep(ms) {
 
 function readSession() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || sessionStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY)
+      || sessionStorage.getItem(STORAGE_KEY)
+      || localStorage.getItem(LEGACY_STORAGE_KEY)
+      || sessionStorage.getItem(LEGACY_STORAGE_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -20,15 +32,19 @@ function readSession() {
 function writeSession(session) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
   sessionStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(LEGACY_STORAGE_KEY);
+  sessionStorage.removeItem(LEGACY_STORAGE_KEY);
 }
 
 function clearSession() {
   localStorage.removeItem(STORAGE_KEY);
   sessionStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(LEGACY_STORAGE_KEY);
+  sessionStorage.removeItem(LEGACY_STORAGE_KEY);
 }
 
 export function isAuthConfigured() {
-  return Boolean(GITHUB_CLIENT_ID);
+  return Boolean(GITHUB_CLIENT_ID && GITHUB_AUTH_PROXY_URL);
 }
 
 export function getStoredSession() {
@@ -51,7 +67,15 @@ async function fetchGitHubUser(token) {
 }
 
 export async function getAuthorizedUser({ forceRefresh = false } = {}) {
-  if (!isAuthConfigured()) return null;
+  const ownerSession = getOwnerSession();
+  if (ownerSession) {
+    return {
+      login: ownerSession.login,
+      method: 'owner',
+    };
+  }
+
+  if (!GITHUB_CLIENT_ID) return null;
 
   const session = readSession();
   if (!session?.token) return null;
@@ -69,6 +93,7 @@ export async function getAuthorizedUser({ forceRefresh = false } = {}) {
     }
 
     const nextSession = {
+      method: 'github',
       token: session.token,
       login: user.login,
       avatarUrl: user.avatar_url,
@@ -81,22 +106,25 @@ export async function getAuthorizedUser({ forceRefresh = false } = {}) {
   }
 }
 
-export async function startDeviceFlow() {
-  if (!isAuthConfigured()) {
-    throw new Error('GitHub OAuth is not configured yet. Add your Client ID to js/auth-config.js.');
-  }
+async function postDeviceFlow(path, body) {
+  const url = `${deviceFlowBase()}${path}`;
+  let response;
 
-  const response = await fetch('https://github.com/login/device/code', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      client_id: GITHUB_CLIENT_ID,
-      scope: 'read:user',
-    }),
-  });
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  } catch (error) {
+    if (!GITHUB_AUTH_PROXY_URL) {
+      throw new Error('GitHub sign-in cannot run directly in the browser. Use owner code unlock, or deploy the GitHub auth proxy.');
+    }
+    throw new Error(error.message || 'Could not reach the GitHub auth proxy.');
+  }
 
   if (!response.ok) {
     throw new Error('Could not start GitHub sign-in.');
@@ -105,26 +133,28 @@ export async function startDeviceFlow() {
   return response.json();
 }
 
+export async function startDeviceFlow() {
+  if (!isAuthConfigured()) {
+    throw new Error('GitHub sign-in is not configured for browser use yet.');
+  }
+
+  return postDeviceFlow('/login/device/code', {
+    client_id: GITHUB_CLIENT_ID,
+    scope: 'read:user',
+  });
+}
+
 export async function pollDeviceFlow(deviceCode, intervalSeconds = 5) {
   let interval = intervalSeconds;
 
   while (true) {
     await sleep(interval * 1000);
 
-    const response = await fetch('https://github.com/login/oauth/access_token', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_CLIENT_ID,
-        device_code: deviceCode,
-        grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
-      }),
+    const data = await postDeviceFlow('/login/oauth/access_token', {
+      client_id: GITHUB_CLIENT_ID,
+      device_code: deviceCode,
+      grant_type: 'urn:ietf:params:oauth:grant-type:device_code',
     });
-
-    const data = await response.json();
 
     if (data.access_token) {
       const user = await fetchGitHubUser(data.access_token);
@@ -133,6 +163,7 @@ export async function pollDeviceFlow(deviceCode, intervalSeconds = 5) {
       }
 
       const session = {
+        method: 'github',
         token: data.access_token,
         login: user.login,
         avatarUrl: user.avatar_url,
@@ -155,5 +186,6 @@ export async function pollDeviceFlow(deviceCode, intervalSeconds = 5) {
 }
 
 export function signOut() {
+  clearOwnerSession();
   clearSession();
 }
