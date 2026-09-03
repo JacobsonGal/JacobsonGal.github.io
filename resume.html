@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="base-path" content="/" />
+  <title>Gal Jacobson — Resume</title>
+  <link rel="icon" href="assets/images/logo.webp" type="image/webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/resume.css" />
+</head>
+<body class="resume-page">
+  <div class="resume-toolbar">
+    <a class="resume-btn" href="index.html">← Portfolio</a>
+    <div class="resume-toolbar-actions">
+      <a class="resume-btn" href="edit-resume.html">Edit resume</a>
+      <button class="resume-btn resume-btn--primary" type="button" id="print-resume">Print / Save PDF</button>
+    </div>
+  </div>
+  <main class="resume-stage">
+    <div id="resume-root"></div>
+  </main>
+  <script type="module">
+    import { loadProfile } from './js/profile-store.js';
+    import { renderResumeHtml } from './js/resume-template.js';
+
+    const root = document.getElementById('resume-root');
+    const profile = await loadProfile();
+    document.title = `${profile.name} — Resume`;
+    root.innerHTML = renderResumeHtml(profile);
+
+    document.getElementById('print-resume').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>

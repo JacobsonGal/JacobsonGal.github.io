@@ -1,0 +1,11 @@
+:root {
+  --background: 38 24% 94%;
+  --foreground: 24 10% 10%;
+  --accent: 18 42% 46%;
+  --border: 30 12% 82%;
+  --muted: 30 8% 42%;
+  --header-height: 88px;
+  --font-heading: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter Tight", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}

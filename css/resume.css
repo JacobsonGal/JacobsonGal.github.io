@@ -1,0 +1,178 @@
+@import url("./tokens.css");
+
+body.resume-page {
+  margin: 0;
+  font-family: var(--font-body);
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+.resume-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: hsl(var(--background) / 0.95);
+  border-bottom: 1px solid hsl(var(--border));
+  backdrop-filter: blur(8px);
+}
+
+.resume-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.resume-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.65rem 1rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.resume-btn:hover { background: hsl(var(--foreground)); color: hsl(var(--background)); }
+.resume-btn--primary {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  border-color: hsl(var(--foreground));
+}
+.resume-btn--primary:hover { background: hsl(var(--accent)); border-color: hsl(var(--accent)); }
+
+.resume-stage {
+  padding: 2rem 1rem 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.resume-sheet {
+  width: min(210mm, 100%);
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  padding: 2rem 2.25rem;
+  box-shadow: 0 24px 60px hsl(var(--foreground) / 0.08);
+}
+
+.resume-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  border-bottom: 2px solid hsl(var(--accent));
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.resume-kicker { color: hsl(var(--accent)); margin: 0 0 0.5rem; }
+.resume-name {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+.resume-contact, .resume-links { margin: 0.5rem 0 0; color: hsl(var(--muted)); }
+
+.resume-mark {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  background: hsl(var(--accent));
+  mask: url("../assets/images/logo.webp") center / contain no-repeat;
+  -webkit-mask: url("../assets/images/logo.webp") center / contain no-repeat;
+}
+
+.resume-section { margin-bottom: 1.75rem; }
+.resume-section h2 {
+  color: hsl(var(--accent));
+  margin: 0 0 0.75rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+}
+
+.resume-overview p {
+  margin: 0 0 0.75rem;
+  color: hsl(var(--muted));
+  line-height: 1.55;
+}
+
+.resume-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem 1.25rem;
+}
+.resume-skill-group h4 {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--foreground));
+}
+.resume-skill-group p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: hsl(var(--muted));
+  line-height: 1.45;
+}
+.resume-soft, .resume-lang { margin-top: 0.75rem; color: hsl(var(--muted)); }
+
+.resume-role {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+.resume-role:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+.resume-role-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+.resume-role h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+}
+.resume-dates { color: hsl(var(--muted)); white-space: nowrap; }
+.resume-company { margin: 0.25rem 0 0.5rem; }
+.resume-role p, .resume-role li { color: hsl(var(--muted)); font-size: 0.92rem; }
+.resume-stack { margin-top: 0.5rem; }
+
+.resume-edu-item {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+.resume-edu-item:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+.resume-edu-item h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media print {
+  .resume-toolbar { display: none; }
+  .resume-stage { padding: 0; }
+  .resume-sheet {
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+}

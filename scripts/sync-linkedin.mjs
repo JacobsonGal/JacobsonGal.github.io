@@ -40,7 +40,7 @@ async function main() {
 
   const res = await fetch(LINKEDIN_URL, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0; +https://JacobsonGal.github.io/Portfolio/)',
+      'User-Agent': 'Mozilla/5.0 (compatible; PortfolioBot/1.0; +https://JacobsonGal.github.io/)',
       'Accept-Language': 'en-US,en;q=0.9',
     },
   });

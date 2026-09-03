@@ -1,7 +1,9 @@
+import { iconMarkup } from './icons.js';
+
 const BASE_PATH = document.querySelector('meta[name="base-path"]')?.content || '/';
 const PROFILE_PATHS = [
   `${BASE_PATH}data/profile.json`,
-  'https://raw.githubusercontent.com/JacobsonGal/Portfolio/main/data/profile.json',
+  'https://raw.githubusercontent.com/JacobsonGal/JacobsonGal.github.io/main/data/profile.json',
 ];
 
 const LINKEDIN_PROFILE_URL = 'https://www.linkedin.com/in/jacobsongal';
@@ -57,17 +59,21 @@ function renderEducationItem(item) {
 }
 
 function renderFloatingLinks(profile) {
+  const resumeHref = asset(profile.urls.cv || 'resume.html');
   const links = [
-    { label: 'LinkedIn', href: profile.urls.linkedin },
-    { label: 'CV', href: asset(profile.urls.cv || 'cv/gal-jacobson-cv.pdf'), download: true },
-    { label: 'GitHub', href: profile.urls.github },
-    { label: 'Instagram', href: profile.urls.instagram },
-    { label: 'Email', href: `mailto:${profile.email}` },
+    { label: 'LinkedIn', href: profile.urls.linkedin, icon: iconMarkup('linkedin'), external: true },
+    { label: 'Resume', href: resumeHref, icon: 'brand', external: false },
+    { label: 'GitHub', href: profile.urls.github, icon: iconMarkup('github'), external: true },
+    { label: 'Instagram', href: profile.urls.instagram, icon: iconMarkup('instagram'), external: true },
+    { label: 'Email', href: `mailto:${profile.email}`, icon: iconMarkup('mail'), external: true },
   ];
 
   return links.map((link) => `
-    <a class="floating-link mono-label" href="${link.href}" target="_blank" rel="noopener noreferrer" ${link.download ? 'download' : ''}>
-      ${link.label}
+    <a class="floating-link mono-label" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+      <span class="floating-link-icon ${link.icon === 'brand' ? 'floating-link-icon--brand' : ''}" aria-hidden="true">
+        ${link.icon === 'brand' ? '' : link.icon}
+      </span>
+      <span>${link.label}</span>
     </a>
   `).join('');
 }

@@ -6,11 +6,11 @@
   "location": "Tel Aviv, Israel",
   "email": "jacobsongal@gmail.com",
   "urls": {
-    "portfolio": "https://JacobsonGal.github.io/Portfolio/",
+    "portfolio": "https://JacobsonGal.github.io/",
     "linkedin": "https://www.linkedin.com/in/jacobsongal",
     "github": "https://github.com/JacobsonGal",
     "instagram": "https://www.instagram.com/jacobsongal/",
-    "cv": "cv/gal-jacobson-cv.pdf"
+    "cv": "resume.html"
   },
   "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
   "about": [
@@ -27,6 +27,24 @@
     "BS · Computer Science",
     "MBA · Entrepreneurship"
   ],
+  "resume": {
+    "phone": "052-3565689",
+    "skills": {
+      "Back End": ["Java", "C/C++/C#", "Python"],
+      "Front End": ["JavaScript", "React.js", "HTML", "CSS", "React Native", "Flutter"],
+      "Databases": ["PostgreSQL", "GraphQL", "MongoDB", "MSSQL"],
+      "Frameworks": ["Node.js", "Express.js", "Apollo", "Sequelize", "GCP", "AWS"],
+      "Tools & Cloud": ["Git", "Docker", "Redux", "Grafana", "Redash", "Jenkins", "CircleCI", "Jira", "pgAdmin"]
+    },
+    "softSkills": [
+      "Organized & Thorough",
+      "Proactive Learner",
+      "Adaptable & Multitasker",
+      "Feature Ownership",
+      "Effective communicator"
+    ],
+    "languages": ["Hebrew — Native", "English — Professional proficiency"]
+  },
   "experience": [
     {
       "id": "houzz",

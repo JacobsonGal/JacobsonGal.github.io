@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="base-path" content="/" />
+  <title>Gal Jacobson — Edit Resume</title>
+  <link rel="icon" href="assets/images/logo.webp" type="image/webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/resume.css" />
+  <link rel="stylesheet" href="css/edit-resume.css" />
+</head>
+<body class="edit-resume-page">
+  <div class="edit-layout">
+    <aside class="edit-panel">
+      <h1>Edit resume</h1>
+      <p class="edit-hint">Changes save in this browser. Export JSON and push to GitHub to publish for everyone.</p>
+      <form class="edit-form" id="edit-form">
+        <label>Name<input name="name" required /></label>
+        <label>Headline<input name="headline" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Phone (resume only)<input name="phone" /></label>
+        <label>Location<input name="location" /></label>
+        <label>Overview (one paragraph per line)<textarea name="about" rows="6"></textarea></label>
+        <label>Portfolio URL<input name="portfolio" /></label>
+        <label>LinkedIn URL<input name="linkedin" /></label>
+        <label>GitHub URL<input name="github" /></label>
+        <div class="edit-actions">
+          <button class="resume-btn resume-btn--primary" type="submit">Save draft</button>
+          <button class="resume-btn" type="button" id="reset-draft">Reset to site</button>
+          <button class="resume-btn" type="button" id="export-json">Export JSON</button>
+          <a class="resume-btn" href="resume.html" target="_blank" rel="noopener">Open resume</a>
+        </div>
+      </form>
+    </aside>
+    <section class="edit-preview">
+      <iframe id="preview-frame" title="Resume preview"></iframe>
+    </section>
+  </div>
+  <script type="module">
+    import {
+      loadProfile,
+      saveDraft,
+      clearDraft,
+      downloadJson,
+      fetchServerProfile,
+    } from './js/profile-store.js';
+    import { renderResumeHtml } from './js/resume-template.js';
+
+    const form = document.getElementById('edit-form');
+    const frame = document.getElementById('preview-frame');
+    let profile = await loadProfile();
+
+    function profileToForm(p) {
+      form.name.value = p.name || '';
+      form.headline.value = p.headline || '';
+      form.email.value = p.email || '';
+      form.phone.value = p.resume?.phone || '';
+      form.location.value = p.location || '';
+      form.about.value = (p.about || []).join('\n');
+      form.portfolio.value = p.urls?.portfolio || '';
+      form.linkedin.value = p.urls?.linkedin || '';
+      form.github.value = p.urls?.github || '';
+    }
+
+    function formToProfile(base) {
+      return {
+        ...base,
+        updatedAt: new Date().toISOString(),
+        name: form.name.value.trim(),
+        headline: form.headline.value.trim(),
+        email: form.email.value.trim(),
+        location: form.location.value.trim(),
+        about: form.about.value.split('\n').map((l) => l.trim()).filter(Boolean),
+        urls: {
+          ...base.urls,
+          portfolio: form.portfolio.value.trim(),
+          linkedin: form.linkedin.value.trim(),
+          github: form.github.value.trim(),
+        },
+        resume: {
+          ...base.resume,
+          phone: form.phone.value.trim(),
+        },
+      };
+    }
+
+    function renderPreview(p) {
+      const doc = `<!DOCTYPE html><html><head><link rel="stylesheet" href="css/resume.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
+      frame.srcdoc = doc;
+    }
+
+    profileToForm(profile);
+    renderPreview(profile);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      profile = formToProfile(profile);
+      saveDraft(profile);
+      renderPreview(profile);
+    });
+
+    form.addEventListener('input', () => {
+      renderPreview(formToProfile(profile));
+    });
+
+    document.getElementById('reset-draft').addEventListener('click', async () => {
+      clearDraft();
+      profile = await fetchServerProfile();
+      profileToForm(profile);
+      renderPreview(profile);
+    });
+
+    document.getElementById('export-json').addEventListener('click', () => {
+      downloadJson(formToProfile(profile));
+    });
+  </script>
+</body>
+</html>
