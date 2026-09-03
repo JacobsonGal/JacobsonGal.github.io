@@ -26,6 +26,9 @@ export function applyAppearance() {
   const appearance = resolveAppearance();
   document.documentElement.dataset.appearance = appearance;
   document.documentElement.style.colorScheme = appearance;
+  document.querySelectorAll('[data-appearance-label]').forEach((node) => {
+    node.textContent = appearance === 'light' ? 'Editorial' : 'Arctic';
+  });
   document.dispatchEvent(new CustomEvent('appearancechange', { detail: { appearance } }));
 }
 

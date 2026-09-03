@@ -26,4 +26,7 @@
 
   root.dataset.appearance = appearance;
   root.style.colorScheme = appearance;
+
+  const label = document.querySelector('[data-appearance-label]');
+  if (label) label.textContent = appearance === 'light' ? 'Editorial' : 'Arctic';
 }());
