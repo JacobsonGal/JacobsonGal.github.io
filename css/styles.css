@@ -456,33 +456,47 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
 .current-post { margin: 0; }
 .current-company { margin: 0.25rem 0 0; color: hsl(var(--muted)); }
 
-.portrait-wrap { margin: 0; }
+.portrait-wrap {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+}
 .portrait-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 12rem;
   margin-top: 1rem;
 }
 .portrait-caption { margin: 0; }
 .portrait-frame {
   position: relative;
-  aspect-ratio: 4 / 5;
+  width: min(10.5rem, 38vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
   overflow: hidden;
   background: hsl(var(--muted) / 0.15);
+  border: 2px solid hsl(var(--accent) / 0.35);
+  box-shadow: 0 10px 32px hsl(var(--foreground) / 0.12);
 }
 .portrait-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 40%;
+  object-position: 50% 35%;
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .portrait-wrap:hover .portrait-image {
   transform: scale(1.03);
 }
 .portrait-mark {
-  width: 3rem;
-  height: 3rem;
+  width: 2.25rem;
+  height: 2.25rem;
   flex-shrink: 0;
   object-fit: contain;
   display: block;
@@ -741,8 +755,9 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
     gap: 2.5rem;
   }
   .about-body-grid {
-    grid-template-columns: 5fr 6fr;
+    grid-template-columns: auto 1fr;
     align-items: start;
+    gap: clamp(2rem, 4vw, 3.5rem);
   }
   .experience-toggle {
     grid-template-columns: 1fr 4fr 3fr 3fr auto;
