@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/animations.css" />
 </head>
 <body>
   <div id="app" class="app" aria-live="polite">
@@ -71,39 +72,77 @@
 
       <section id="about" class="section about">
         <div class="section-grid"></div>
-        <div class="container about-grid">
-          <div class="about-copy">
-            <p class="section-index mono-label">01 / About</p>
-            <h2 class="section-title">Senior Software Engineer designing resilient, high-throughput systems — translating ambiguous requirements into clean architecture, reliable infrastructure, and interfaces people genuinely enjoy using.</h2>
-            <div class="about-paragraphs" data-list="about"></div>
-            <div class="about-edu mono-label" data-list="educationSummary"></div>
-            <div class="current-post">
-              <p class="mono-label">Current post</p>
-              <p class="current-title" data-field="currentRole.title"></p>
-              <p class="current-company">@ <span data-field="currentRole.company"></span></p>
+        <div class="container about-container">
+          <div class="about-header-grid">
+            <div class="about-label-col" data-reveal>
+              <p class="section-index mono-label">01 / About</p>
+              <span class="datum-line" aria-hidden="true"></span>
+            </div>
+            <div class="about-headline-col" data-reveal data-reveal-delay="100">
+              <h2 class="about-headline display-heading">
+                Senior Software Engineer designing resilient, high-throughput systems —
+                <span class="text-muted">translating ambiguous requirements into clean architecture, reliable infrastructure, and interfaces people genuinely enjoy using.</span>
+              </h2>
             </div>
           </div>
-          <figure class="portrait-wrap">
-            <p class="mono-label portrait-caption">Fig. 01 — Portrait</p>
-            <div class="portrait-frame">
-              <img src="assets/images/portrait.webp" alt="Portrait of Gal Jacobson" class="portrait-image" width="160" height="160" />
+          <div class="about-body-grid">
+            <figure class="portrait-wrap" data-reveal data-reveal-delay="100">
+              <div class="portrait-frame">
+                <img src="assets/images/portrait.webp" alt="Portrait of Gal Jacobson" class="portrait-image" width="480" height="600" />
+              </div>
+              <div class="portrait-meta">
+                <p class="mono-label portrait-caption">Fig. 01 — Portrait</p>
+                <span class="portrait-mark" aria-hidden="true"></span>
+              </div>
+            </figure>
+            <div class="about-detail-col">
+              <div class="about-paragraphs numbered-list" data-list="about"></div>
+              <div class="about-footer-grid" data-reveal data-reveal-delay="300">
+                <span class="datum-line datum-line--wide" aria-hidden="true"></span>
+                <div class="about-footer-cols">
+                  <div>
+                    <p class="mono-label">Education</p>
+                    <div class="about-edu" data-list="educationSummary"></div>
+                  </div>
+                  <div class="current-post">
+                    <p class="mono-label">Current post</p>
+                    <p class="current-title" data-field="currentRole.title"></p>
+                    <p class="current-company">@ <span data-field="currentRole.company"></span></p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </figure>
+          </div>
         </div>
       </section>
 
       <section id="experience" class="section experience">
         <div class="container">
-          <p class="section-index mono-label">02 / Experience</p>
-          <h2 class="section-heading">Selected experience</h2>
-          <p class="section-intro">A chronological archive of roles — each a structural volume in the practice. Expand any entry to read the technical readout.</p>
+          <div class="section-header-grid">
+            <div data-reveal>
+              <p class="section-index mono-label">02 / Experience</p>
+              <span class="datum-line" aria-hidden="true"></span>
+            </div>
+            <div data-reveal data-reveal-delay="100">
+              <h2 class="section-heading display-heading">Selected<span class="text-muted"> experience</span></h2>
+              <p class="section-intro">A chronological archive of roles — each a structural volume in the practice. Expand any entry to read the technical readout.</p>
+            </div>
+          </div>
           <div class="experience-list" data-list="experience" data-template="experience"></div>
         </div>
       </section>
 
-      <section id="education" class="section education">
+      <section id="education" class="section education section-inverted">
         <div class="container">
-          <p class="section-index mono-label">03 / Education</p>
+          <div class="section-header-grid">
+            <div data-reveal>
+              <p class="section-index mono-label">03 / Education</p>
+              <span class="datum-line datum-line--inverted" aria-hidden="true"></span>
+            </div>
+            <div data-reveal data-reveal-delay="100">
+              <h2 class="section-heading display-heading">Foundations</h2>
+            </div>
+          </div>
           <div class="education-list" data-list="education" data-template="education"></div>
         </div>
       </section>

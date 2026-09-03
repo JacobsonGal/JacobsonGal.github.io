@@ -1,4 +1,7 @@
 import { iconMarkup } from './icons.js';
+import { initMotion, initRevealAnimations } from './motion.js';
+
+const CHEVRON = '<svg class="exp-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
 const BASE_PATH = document.querySelector('meta[name="base-path"]')?.content || '/';
 const PROFILE_PATHS = [
@@ -18,42 +21,55 @@ function getNested(obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj);
 }
 
-function renderExperienceItem(item) {
+function renderExperienceItem(item, index) {
   const stackTags = (item.stack || []).map((s) => `<span class="tag">${s}</span>`).join('');
   const highlightTags = (item.highlights || []).map((h) => `<span class="tag">${h}</span>`).join('');
-  const bullets = (item.bullets || []).map((b) => `<li>${b}</li>`).join('');
+  const bullets = (item.bullets || []).map((b) => `<li><span class="mono-label">—</span><span>${b}</span></li>`).join('');
 
   return `
-    <article class="experience-item" data-id="${item.id}">
+    <article class="experience-item" data-id="${item.id}" data-reveal data-reveal-delay="${index * 80}">
       <button class="experience-toggle" type="button" aria-expanded="false">
         <span class="mono-label">${item.letter}</span>
         <div>
           <h3 class="exp-title">${item.title}</h3>
           <div class="exp-meta">
             <span class="mono-label">${item.company}</span>
-            <span class="mono-label">${item.location}</span>
-            <span class="mono-label">${item.dates}</span>
+            <span class="mono-label exp-meta-mobile">${item.location}</span>
+            <span class="mono-label exp-meta-mobile">${item.dates}</span>
           </div>
         </div>
-        <span class="mono-label">+</span>
+        <span class="mono-label exp-meta-inline">${item.location}</span>
+        <span class="mono-label exp-meta-inline">${item.dates}</span>
+        ${CHEVRON}
       </button>
-      <div class="experience-panel">
-        <p>${item.summary}</p>
-        ${bullets ? `<ul>${bullets}</ul>` : ''}
-        ${highlightTags ? `<div class="tag-row">${highlightTags}</div>` : ''}
-        ${stackTags ? `<div class="tag-row">${stackTags}</div>` : ''}
+      <div class="experience-panel-wrap">
+        <div class="experience-panel">
+          <div class="experience-panel-inner">
+            <div>
+              <p>${item.summary}</p>
+              ${bullets ? `<ul>${bullets}</ul>` : ''}
+            </div>
+            <div>
+              ${highlightTags ? `<p class="mono-label panel-label">Key Features</p><div class="tag-row">${highlightTags}</div>` : ''}
+              ${stackTags ? `<p class="mono-label panel-label">Skills</p><div class="tag-row">${stackTags}</div>` : ''}
+            </div>
+          </div>
+        </div>
       </div>
     </article>
   `;
 }
 
-function renderEducationItem(item) {
+function renderEducationItem(item, index) {
   return `
-    <article class="education-item">
+    <article class="education-item" data-reveal data-reveal-delay="${index * 100}">
+      <span class="mono-label">0${index + 1}</span>
       <h3>${item.degree}</h3>
-      <p>${item.field}</p>
-      <p class="mono-label">${item.school} · ${item.location}</p>
-      <p class="mono-label">${item.dates}</p>
+      <p>${item.school}</p>
+      <div class="education-item-footer">
+        <span class="mono-label">${item.field}</span>
+        <span class="mono-label">${item.dates}</span>
+      </div>
     </article>
   `;
 }
@@ -69,7 +85,7 @@ function renderFloatingLinks(profile) {
   ];
 
   return links.map((link) => `
-    <a class="floating-link mono-label" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+    <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
       <span class="floating-link-icon ${link.icon === 'brand' ? 'floating-link-icon--brand' : ''}" aria-hidden="true">
         ${link.icon === 'brand' ? '' : link.icon}
       </span>
@@ -88,7 +104,12 @@ function applyProfile(profile) {
 
   const aboutList = document.querySelector('[data-list="about"]');
   if (aboutList && profile.about) {
-    aboutList.innerHTML = profile.about.map((p) => `<p>${p}</p>`).join('');
+    aboutList.innerHTML = profile.about.map((p, index) => `
+      <div class="numbered-item" data-reveal data-reveal-delay="${200 + index * 80}">
+        <span class="mono-label numbered-index">0${index + 1}</span>
+        <p>${p}</p>
+      </div>
+    `).join('');
   }
 
   const eduSummary = document.querySelector('[data-list="educationSummary"]');
@@ -98,7 +119,10 @@ function applyProfile(profile) {
 
   const experienceList = document.querySelector('[data-list="experience"]');
   if (experienceList && profile.experience) {
-    experienceList.innerHTML = profile.experience.map(renderExperienceItem).join('');
+    experienceList.innerHTML = profile.experience
+      .filter((item) => !item.webOnly)
+      .map((item, index) => renderExperienceItem(item, index))
+      .join('');
     bindExperienceToggles();
   }
 
@@ -115,6 +139,8 @@ function applyProfile(profile) {
     const when = new Date(profile.syncedAt).toLocaleString();
     syncStatus.textContent = `Profile synced ${when}${profile.source ? ` · ${profile.source}` : ''}`;
   }
+
+  initRevealAnimations();
 }
 
 function bindExperienceToggles() {
@@ -123,7 +149,6 @@ function bindExperienceToggles() {
       const item = btn.closest('.experience-item');
       const isOpen = item.classList.toggle('open');
       btn.setAttribute('aria-expanded', String(isOpen));
-      btn.querySelector('.mono-label:last-child').textContent = isOpen ? '−' : '+';
     });
   });
 }
@@ -152,14 +177,6 @@ function bindUi() {
   toggle?.addEventListener('click', openMenu);
   closeBtn?.addEventListener('click', closeMenu);
   menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMenu));
-
-  const cta = document.getElementById('floating-cta');
-  const trigger = cta?.querySelector('.floating-trigger');
-  trigger?.addEventListener('click', () => {
-    const open = cta.classList.toggle('open');
-    trigger.setAttribute('aria-expanded', String(open));
-    document.getElementById('floating-links')?.setAttribute('aria-hidden', String(!open));
-  });
 
   const buildDate = document.querySelector('[data-build-date]');
   if (buildDate) {
@@ -198,6 +215,7 @@ async function refreshLinkedInOverlay(profile) {
 
 async function init() {
   bindUi();
+  initMotion();
   const profile = await loadProfile();
   applyProfile(profile);
   refreshLinkedInOverlay(profile);
