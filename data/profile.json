@@ -1,8 +1,8 @@
 {
-  "syncedAt": "2026-09-03T14:30:00.000Z",
-  "source": "seed",
+  "syncedAt": "2026-09-04T10:48:08.900Z",
+  "source": "linkedin-action",
   "name": "Gal Jacobson",
-  "headline": "Senior Software Engineer",
+  "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
   "location": "Tel Aviv, Israel",
   "email": "jacobsongal@gmail.com",
   "urls": {
@@ -14,7 +14,7 @@
   },
   "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
   "about": [
-    "Experienced Full-Stack Engineer building scalable, robust, and high-performance software solutions using Node.js, React, Docker, PostgreSQL, Apollo, cloud platforms (AWS, GCP), and more.",
+    "‏",
     "Proven record of delivering large-scale features and optimizing performance across distributed systems, with hands-on experience leading development from planning to production while collaborating with global cross-functional teams and demonstrating excellent communication skills.",
     "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
   ],
@@ -38,13 +38,55 @@
       "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
     ],
     "skills": {
-      "Back End": ["Java", "C/C++/C#", "Python"],
-      "Front End": ["JavaScript", "React.js", "HTML", "CSS", "React Native", "Flutter"],
-      "Databases": ["PostgreSQL", "GraphQL", "MongoDB", "MSSQL"],
-      "Frameworks": ["Node.js", "Express.js", "Apollo", "Sequelize", "GCP", "AWS"],
-      "Tools & Cloud": ["Git", "Docker", "Redux", "Grafana", "Redash", "Jenkins", "CircleCI", "Jira", "pgAdmin"],
-      "Fundamentals": ["OOP", "Networking", "Data Structures", "Algorithms"],
-      "Operating Systems": ["MacOS", "Linux", "Windows"]
+      "Back End": [
+        "Java",
+        "C/C++/C#",
+        "Python"
+      ],
+      "Front End": [
+        "JavaScript",
+        "React.js",
+        "HTML",
+        "CSS",
+        "React Native",
+        "Flutter"
+      ],
+      "Databases": [
+        "PostgreSQL",
+        "GraphQL",
+        "MongoDB",
+        "MSSQL"
+      ],
+      "Frameworks": [
+        "Node.js",
+        "Express.js",
+        "Apollo",
+        "Sequelize",
+        "GCP",
+        "AWS"
+      ],
+      "Tools & Cloud": [
+        "Git",
+        "Docker",
+        "Redux",
+        "Grafana",
+        "Redash",
+        "Jenkins",
+        "CircleCI",
+        "Jira",
+        "pgAdmin"
+      ],
+      "Fundamentals": [
+        "OOP",
+        "Networking",
+        "Data Structures",
+        "Algorithms"
+      ],
+      "Operating Systems": [
+        "MacOS",
+        "Linux",
+        "Windows"
+      ]
     },
     "softSkills": [
       "Organized & Thorough",
@@ -54,8 +96,14 @@
       "Effective communicator"
     ],
     "languages": [
-      { "name": "Hebrew", "level": "Native" },
-      { "name": "English", "level": "Professional proficiency" }
+      {
+        "name": "Hebrew",
+        "level": "Native"
+      },
+      {
+        "name": "English",
+        "level": "Professional proficiency"
+      }
     ]
   },
   "experience": [
@@ -73,8 +121,21 @@
         "Upgraded existing software systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
         "Managed large-scale projects and collaborated closely with cross-functional teams to analyze and derive technical software design and performance requirements."
       ],
-      "highlights": ["Contracts", "Credit Memos", "Automation", "Houzz Pro Rebranding"],
-      "stack": ["Node.js", "React", "GraphQL", "Docker", "Apollo", "CI/CD", "SQL"],
+      "highlights": [
+        "Contracts",
+        "Credit Memos",
+        "Automation",
+        "Houzz Pro Rebranding"
+      ],
+      "stack": [
+        "Node.js",
+        "React",
+        "GraphQL",
+        "Docker",
+        "Apollo",
+        "CI/CD",
+        "SQL"
+      ],
       "webOnly": false
     },
     {
@@ -91,8 +152,20 @@
         "Advanced Web Application Development.",
         "Advanced Mobile Application Development."
       ],
-      "highlights": ["Teaching", "Curriculum", "Mentorship"],
-      "stack": ["JavaScript", "ASP.NET", "jQuery", "AJAX", "HTML", "CSS", "Full-Stack"],
+      "highlights": [
+        "Teaching",
+        "Curriculum",
+        "Mentorship"
+      ],
+      "stack": [
+        "JavaScript",
+        "ASP.NET",
+        "jQuery",
+        "AJAX",
+        "HTML",
+        "CSS",
+        "Full-Stack"
+      ],
       "webOnly": false,
       "resumeOnly": true
     },
@@ -107,7 +180,11 @@
       "bullets": [
         "Express.js, React, Firebase, Redux, AWS."
       ],
-      "highlights": ["Medical Platform", "Real-time Data", "Scalable Architecture"],
+      "highlights": [
+        "Medical Platform",
+        "Real-time Data",
+        "Scalable Architecture"
+      ],
       "stack": [],
       "webOnly": false
     },
