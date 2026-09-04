@@ -175,9 +175,25 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .page-backdrop .hero-image--editorial {
-  opacity: 0.5;
+  opacity: 0.82;
   visibility: visible;
-  filter: saturate(0.92) contrast(1.03);
+  filter: saturate(0.96) contrast(1.04) brightness(1.02);
+  object-position: center 40%;
+  /* Keep the Base44 photo strong in the hero, then fade into the cream page */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 72%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 52%,
+    rgba(0, 0, 0, 0.55) 72%,
+    transparent 100%
+  );
 }
 
 [data-appearance="light"] .hero {
@@ -233,9 +249,23 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .hero-gradient {
+  /* Soft wash over the Base44 architectural photo — readable type, visible image */
   background:
-    radial-gradient(ellipse 70% 50% at 82% 8%, hsl(18 42% 46% / 0.07), transparent 55%),
-    linear-gradient(180deg, hsl(38 24% 97%) 0%, hsl(38 24% 94%) 100%);
+    linear-gradient(
+      to top,
+      hsl(38 24% 94%) 0%,
+      hsl(38 24% 94% / 0.78) 16%,
+      hsl(38 24% 94% / 0.28) 42%,
+      hsl(38 24% 97% / 0.22) 70%,
+      hsl(38 24% 97% / 0.38) 100%
+    ),
+    linear-gradient(
+      112deg,
+      hsl(38 24% 94% / 0.62) 0%,
+      hsl(38 24% 94% / 0.18) 36%,
+      transparent 64%
+    ),
+    radial-gradient(ellipse 70% 50% at 82% 8%, hsl(18 42% 46% / 0.08), transparent 55%);
 }
 
 [data-appearance="light"] .hero-grid,
