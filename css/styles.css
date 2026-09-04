@@ -662,7 +662,7 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   width: max-content;
   padding: 0.75rem 0;
   color: hsl(205 68% 62% / 0.7);
-  animation: rail-scroll 28s linear infinite;
+  animation: rail-scroll var(--rail-duration, 28s) linear infinite;
 }
 .hero-rail-track span { flex-shrink: 0; }
 .hero-meta {

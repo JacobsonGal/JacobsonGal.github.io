@@ -127,6 +127,43 @@ function renderFloatingLinks(profile) {
   `).join('');
 }
 
+function collectHardSkills(profile) {
+  const skillsByCategory = profile.resume?.skills;
+  if (!skillsByCategory) return [];
+
+  const seen = new Set();
+  const skills = [];
+
+  Object.values(skillsByCategory).forEach((group) => {
+    group.forEach((skill) => {
+      const key = skill.trim().toLowerCase();
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      skills.push(skill);
+    });
+  });
+
+  return skills;
+}
+
+function renderHeroRailTrack(skills) {
+  const segment = skills.flatMap((skill) => [
+    `<span>${skill.toUpperCase()}</span>`,
+    '<span>·</span>',
+  ]).join('');
+
+  return segment.repeat(2);
+}
+
+function applyHeroRail(profile) {
+  const heroRail = document.querySelector('[data-hero-rail]');
+  const hardSkills = collectHardSkills(profile);
+  if (!heroRail || !hardSkills.length) return;
+
+  heroRail.innerHTML = renderHeroRailTrack(hardSkills);
+  heroRail.style.setProperty('--rail-duration', `${Math.max(28, hardSkills.length * 1.8)}s`);
+}
+
 function applyProfile(profile) {
   document.title = profile.name;
 
@@ -174,6 +211,8 @@ function applyProfile(profile) {
 
   const floatingLinks = document.getElementById('floating-links');
   if (floatingLinks) floatingLinks.innerHTML = renderFloatingLinks(profile);
+
+  applyHeroRail(profile);
 
   initRevealAnimations();
 }
