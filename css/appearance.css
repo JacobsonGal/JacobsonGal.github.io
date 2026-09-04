@@ -166,6 +166,15 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
   color: hsl(var(--muted));
 }
 
+[data-appearance="light"] .hero .mono-label,
+[data-appearance="light"] .hero-chrome .mono-label,
+[data-appearance="light"] .hero-badge,
+[data-appearance="light"] .hero-kicker,
+[data-appearance="light"] .hero-fact-label,
+[data-appearance="light"] .scroll-cue {
+  color: hsl(38 24% 96% / 0.72);
+}
+
 [data-appearance="light"] .page-backdrop .hero-image--arctic,
 [data-appearance="light"] .page-backdrop .hero-canvas,
 [data-appearance="light"] .page-backdrop .hero-scanlines,
@@ -175,29 +184,28 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .page-backdrop .hero-image--editorial {
-  opacity: 0.82;
+  opacity: 0.88;
   visibility: visible;
-  filter: saturate(0.96) contrast(1.04) brightness(1.02);
-  object-position: center 40%;
-  /* Keep the Base44 photo strong in the hero, then fade into the cream page */
+  filter: none;
+  object-position: center 42%;
+  /* Strong through the first viewport, then dissolve into the cream page */
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0%,
-    #000 52%,
-    rgba(0, 0, 0, 0.55) 72%,
-    transparent 100%
+    #000 min(72vh, 720px),
+    transparent min(115vh, 1100px)
   );
   mask-image: linear-gradient(
     to bottom,
     #000 0%,
-    #000 52%,
-    rgba(0, 0, 0, 0.55) 72%,
-    transparent 100%
+    #000 min(72vh, 720px),
+    transparent min(115vh, 1100px)
   );
 }
 
 [data-appearance="light"] .hero {
-  color: hsl(var(--foreground));
+  /* Match Base44: light type over the architectural photo */
+  color: hsl(38 24% 96%);
 }
 
 [data-appearance="light"] .nav-pill {
@@ -249,26 +257,33 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .hero-gradient {
-  /* Soft wash over the Base44 architectural photo — readable type, visible image */
+  /* Base44-style dark wash over the photo + cream handoff below the fold */
   background:
     linear-gradient(
       to top,
-      hsl(38 24% 94%) 0%,
-      hsl(38 24% 94% / 0.78) 16%,
-      hsl(38 24% 94% / 0.28) 42%,
-      hsl(38 24% 97% / 0.22) 70%,
-      hsl(38 24% 97% / 0.38) 100%
+      hsl(24 10% 8% / 0.82) 0%,
+      hsl(24 10% 8% / 0.22) 42%,
+      hsl(24 10% 8% / 0.4) 100%
     ),
     linear-gradient(
-      112deg,
-      hsl(38 24% 94% / 0.62) 0%,
-      hsl(38 24% 94% / 0.18) 36%,
-      transparent 64%
-    ),
-    radial-gradient(ellipse 70% 50% at 82% 8%, hsl(18 42% 46% / 0.08), transparent 55%);
+      to bottom,
+      transparent 0%,
+      transparent min(78vh, 780px),
+      hsl(38 24% 94% / 0.55) min(95vh, 960px),
+      hsl(38 24% 94%) min(115vh, 1120px)
+    );
 }
 
-[data-appearance="light"] .hero-grid,
+[data-appearance="light"] .hero-grid {
+  opacity: 0.07;
+  background-image:
+    linear-gradient(hsl(38 24% 96% / 0.55) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(38 24% 96% / 0.55) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+}
+
 [data-appearance="light"] .app--continuous-hero .section-grid {
   opacity: 0.035;
   background-image:
@@ -276,76 +291,91 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
     linear-gradient(90deg, hsl(30 12% 82%) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: none;
+  -webkit-mask-image: none;
 }
 
 [data-appearance="light"] .hero-frame,
-[data-appearance="light"] .hero-chrome,
 [data-appearance="light"] .hero-hud--bl {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
+[data-appearance="light"] .hero-chrome {
+  opacity: 1;
+  visibility: visible;
+  color: hsl(38 24% 96% / 0.72);
+}
+
+[data-appearance="light"] .hero-chrome .mono-label {
+  color: hsl(38 24% 96% / 0.72);
+}
+
 [data-appearance="light"] .hero-kicker {
-  color: hsl(var(--accent));
+  color: hsl(38 24% 96% / 0.72);
 }
 
 [data-appearance="light"] .hero-title {
-  text-shadow: none;
-  color: hsl(var(--foreground));
+  text-shadow: 0 12px 40px hsl(24 10% 8% / 0.35);
+  color: hsl(38 24% 97%);
 }
 
 [data-appearance="light"] .hero-title-line--accent {
   background: none;
   -webkit-background-clip: unset;
   background-clip: unset;
-  color: hsl(var(--foreground));
+  color: hsl(38 24% 97%);
 }
 
 [data-appearance="light"] .hero-title-line--accent .accent {
-  color: hsl(var(--accent));
+  color: hsl(18 42% 62%);
 }
 
 [data-appearance="light"] .hero-badge {
-  color: hsl(var(--accent-deep));
-  background: hsl(var(--card));
-  border-color: hsl(var(--border));
+  color: hsl(38 24% 96% / 0.88);
+  background: hsl(24 10% 8% / 0.28);
+  border-color: hsl(38 24% 96% / 0.22);
   box-shadow: none;
+  backdrop-filter: blur(8px);
+}
+
+[data-appearance="light"] .hero-badge-dot {
+  background: hsl(18 42% 62%);
 }
 
 [data-appearance="light"] .hero-fact-label {
-  color: hsl(var(--muted));
+  color: hsl(38 24% 96% / 0.62);
 }
 
 [data-appearance="light"] .hero-fact-line,
 [data-appearance="light"] .hero-fact-title {
-  color: hsl(var(--foreground));
+  color: hsl(38 24% 97%);
 }
 
 [data-appearance="light"] .hero-fact-title [data-hero-company] {
-  color: hsl(var(--muted));
+  color: hsl(38 24% 96% / 0.7);
 }
 
 [data-appearance="light"] .hero-line {
-  background: linear-gradient(90deg, hsl(var(--accent)), transparent);
+  background: linear-gradient(90deg, hsl(18 42% 62%), transparent);
 }
 
 [data-appearance="light"] .hero-lead p {
-  color: hsl(var(--muted));
+  color: hsl(38 24% 96% / 0.78);
 }
 
 [data-appearance="light"] .hero-rail {
-  background: hsl(var(--card));
-  border-top-color: hsl(var(--border));
-  backdrop-filter: none;
+  background: hsl(24 10% 8% / 0.45);
+  border-top-color: hsl(38 24% 96% / 0.14);
+  backdrop-filter: blur(10px);
 }
 
 [data-appearance="light"] .hero-rail-track {
-  color: hsl(var(--muted));
+  color: hsl(38 24% 96% / 0.72);
 }
 
 [data-appearance="light"] .scroll-cue {
-  color: hsl(var(--muted));
+  color: hsl(38 24% 96% / 0.7);
 }
 
 [data-appearance="light"] .app--continuous-hero .text-muted {
