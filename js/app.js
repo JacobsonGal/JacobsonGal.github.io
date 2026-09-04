@@ -147,12 +147,12 @@ function collectHardSkills(profile) {
 }
 
 function renderHeroRailTrack(skills) {
-  const segment = skills.flatMap((skill) => [
-    `<span>${skill.toUpperCase()}</span>`,
-    '<span>·</span>',
-  ]).join('');
+  const items = skills
+    .map((skill) => `<span>${skill.toUpperCase()}</span>`)
+    .join('<span class="hero-rail-sep" aria-hidden="true">·</span>');
 
-  return segment.repeat(2);
+  const set = `<div class="hero-rail-set">${items}</div>`;
+  return `${set}<div class="hero-rail-set" aria-hidden="true">${items}</div>`;
 }
 
 function applyHeroRail(profile) {

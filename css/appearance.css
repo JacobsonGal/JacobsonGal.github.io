@@ -97,8 +97,9 @@ html.appearance-animate .mono-label {
 .app--continuous-hero .experience::before {
   transition:
     opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1),
     background 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    filter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hero-frame,
@@ -165,11 +166,18 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
   color: hsl(var(--muted));
 }
 
-[data-appearance="light"] .page-backdrop .hero-image,
+[data-appearance="light"] .page-backdrop .hero-image--arctic,
 [data-appearance="light"] .page-backdrop .hero-canvas,
 [data-appearance="light"] .page-backdrop .hero-scanlines,
 [data-appearance="light"] .page-backdrop .hero-noise {
   opacity: 0;
+  visibility: hidden;
+}
+
+[data-appearance="light"] .page-backdrop .hero-image--editorial {
+  opacity: 0.5;
+  visibility: visible;
+  filter: saturate(0.92) contrast(1.03);
 }
 
 [data-appearance="light"] .hero {
