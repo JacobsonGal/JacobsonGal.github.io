@@ -150,7 +150,7 @@ html[data-appearance="light"]:has(body.edit-resume-page) {
 
 html[data-appearance="light"]:has(.app--continuous-hero) body,
 [data-appearance="light"] .page-backdrop {
-  background: hsl(var(--background));
+  background: hsl(38 24% 94%);
 }
 
 [data-appearance="light"] .app--continuous-hero {
@@ -183,24 +183,27 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
   visibility: hidden;
 }
 
+/* Keep the Base44 photo inside the hero only — never behind About/Experience */
+[data-appearance="light"] .page-backdrop .hero-media,
+[data-appearance="light"] .page-backdrop .hero-gradient,
+[data-appearance="light"] .page-backdrop .hero-grid {
+  inset: 0 0 auto;
+  height: 100svh;
+  max-height: 100svh;
+}
+
 [data-appearance="light"] .page-backdrop .hero-image--editorial {
-  opacity: 0.88;
+  opacity: 0.9;
   visibility: visible;
   filter: none;
   object-position: center 42%;
-  /* Strong through the first viewport, then dissolve into the cream page */
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 min(72vh, 720px),
-    transparent min(115vh, 1100px)
-  );
-  mask-image: linear-gradient(
-    to bottom,
-    #000 0%,
-    #000 min(72vh, 720px),
-    transparent min(115vh, 1100px)
-  );
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+[data-appearance="light"] .app--continuous-hero .section,
+[data-appearance="light"] .app--continuous-hero .site-footer {
+  background: hsl(38 24% 94%);
 }
 
 [data-appearance="light"] .hero {
@@ -257,20 +260,14 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
 }
 
 [data-appearance="light"] .hero-gradient {
-  /* Base44-style dark wash over the photo + cream handoff below the fold */
+  /* Base44 dark wash inside the hero, soft cream edge into sections */
   background:
     linear-gradient(
       to top,
-      hsl(24 10% 8% / 0.82) 0%,
-      hsl(24 10% 8% / 0.22) 42%,
+      hsl(38 24% 94%) 0%,
+      hsl(24 10% 8% / 0.78) 12%,
+      hsl(24 10% 8% / 0.22) 48%,
       hsl(24 10% 8% / 0.4) 100%
-    ),
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      transparent min(78vh, 780px),
-      hsl(38 24% 94% / 0.55) min(95vh, 960px),
-      hsl(38 24% 94%) min(115vh, 1120px)
     );
 }
 
@@ -280,8 +277,8 @@ html[data-appearance="light"]:has(.app--continuous-hero) body,
     linear-gradient(hsl(38 24% 96% / 0.55) 1px, transparent 1px),
     linear-gradient(90deg, hsl(38 24% 96% / 0.55) 1px, transparent 1px);
   background-size: 64px 64px;
-  mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%);
+  mask-image: none;
+  -webkit-mask-image: none;
 }
 
 [data-appearance="light"] .app--continuous-hero .section-grid {
