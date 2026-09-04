@@ -100,6 +100,25 @@ export function closeSiteMenus() {
   menu?.setAttribute('aria-hidden', 'true');
 }
 
+function scrollToHash(hash, { behavior = 'smooth' } = {}) {
+  if (!hash) return;
+  requestAnimationFrame(() => {
+    document.querySelector(hash)?.scrollIntoView({ behavior });
+  });
+}
+
+function pushHistory(page, hash, { replace = false } = {}) {
+  const historyPath = page === 'home' ? '/' : '/resume.html';
+  const historyUrl = `${historyPath}${hash}`;
+  const state = { page };
+
+  if (replace) {
+    history.replaceState(state, '', historyUrl);
+  } else {
+    history.pushState(state, '', historyUrl);
+  }
+}
+
 export async function navigateTo(href, { replace = false, initial = false } = {}) {
   const url = resolveUrl(href);
   const nextPage = normalizePage(url.pathname);
@@ -109,11 +128,17 @@ export async function navigateTo(href, { replace = false, initial = false } = {}
     return;
   }
 
-  const samePage = nextPage === activePage
-    && normalizePage(window.location.pathname) === nextPage
-    && !url.hash;
+  const pathnamePage = normalizePage(window.location.pathname);
+  const isSamePage = nextPage === activePage && pathnamePage === nextPage;
 
-  if (samePage && !initial) {
+  if (isSamePage && url.hash && !initial) {
+    closeSiteMenus();
+    pushHistory(nextPage, url.hash, { replace });
+    scrollToHash(url.hash);
+    return;
+  }
+
+  if (isSamePage && !url.hash && !initial) {
     closeSiteMenus();
     return;
   }
@@ -124,11 +149,12 @@ export async function navigateTo(href, { replace = false, initial = false } = {}
   try {
     closeSiteMenus();
 
-    if (activePage && activePage !== nextPage) {
+    if (activePage) {
       await destroyPage(activePage);
     }
 
-    if (!initial || normalizePage(window.location.pathname) !== nextPage) {
+    const needsTemplate = !initial || pathnamePage !== nextPage;
+    if (needsTemplate) {
       await applyPageTemplate(nextPage);
     } else {
       syncStylesheets(nextPage);
@@ -136,21 +162,10 @@ export async function navigateTo(href, { replace = false, initial = false } = {}
 
     await mountPage(nextPage);
 
-    const historyPath = nextPage === 'home' ? '/' : '/resume.html';
-    const historyUrl = `${historyPath}${url.hash}`;
-
-    if (initial) {
-      history.replaceState({ page: nextPage }, '', historyUrl);
-    } else if (replace) {
-      history.replaceState({ page: nextPage }, '', historyUrl);
-    } else {
-      history.pushState({ page: nextPage }, '', historyUrl);
-    }
+    pushHistory(nextPage, url.hash, { replace: initial || replace });
 
     if (url.hash) {
-      requestAnimationFrame(() => {
-        document.querySelector(url.hash)?.scrollIntoView({ behavior: 'smooth' });
-      });
+      scrollToHash(url.hash);
     } else {
       window.scrollTo(0, 0);
     }
@@ -182,7 +197,12 @@ export function initSiteRouter() {
     const targetPage = normalizePage(url.pathname);
 
     if (currentPage === targetPage) {
-      if (url.hash) closeSiteMenus();
+      event.preventDefault();
+      if (url.hash) {
+        navigateTo(url.href).catch(() => {
+          window.location.assign(url.href);
+        });
+      }
       return;
     }
 
@@ -196,5 +216,6 @@ export function initSiteRouter() {
 export function bootCurrentPage() {
   const page = normalizePage(window.location.pathname) || 'home';
   activePage = null;
-  return navigateTo(page === 'home' ? '/' : '/resume.html', { replace: true, initial: true });
+  const path = page === 'home' ? '/' : '/resume.html';
+  return navigateTo(`${path}${window.location.hash}`, { replace: true, initial: true });
 }

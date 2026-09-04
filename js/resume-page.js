@@ -9,7 +9,9 @@ import './theme-init.js';
 let resumeCleanup = null;
 
 export async function mountResumePage() {
-  if (resumeCleanup) return;
+  if (resumeCleanup) {
+    destroyResumePage();
+  }
 
   const root = document.getElementById('resume-root');
   const toolbarActions = document.querySelector('.resume-toolbar-actions');

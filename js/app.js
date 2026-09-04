@@ -297,7 +297,9 @@ async function refreshOwnerUi() {
 let homeCleanup = null;
 
 export async function mountHomePage() {
-  if (homeCleanup) return;
+  if (homeCleanup) {
+    destroyHomePage();
+  }
 
   const cleanup = [];
   bindUi(cleanup);
