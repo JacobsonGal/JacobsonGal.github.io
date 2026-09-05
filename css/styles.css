@@ -1343,6 +1343,19 @@ a.tag:hover {
   transform: translateY(0);
   pointer-events: auto;
 }
+.floating-cta.context-open .floating-links {
+  position: fixed;
+  top: var(--ctx-y, 0);
+  left: var(--ctx-x, 0);
+  right: auto;
+  bottom: auto;
+  z-index: 60;
+  align-items: stretch;
+  transform: none;
+}
+.floating-cta.context-open .floating-trigger {
+  transform: none;
+}
 .floating-link {
   display: inline-flex;
   align-items: center;
