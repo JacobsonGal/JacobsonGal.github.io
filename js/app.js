@@ -1,6 +1,6 @@
 import { iconMarkup } from './icons.js';
 import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
-import { initMotion, initRevealAnimations } from './motion.js';
+import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=ctx-menu-2';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle } from './appearance.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
@@ -361,6 +361,7 @@ export async function mountHomePage() {
   });
 
   homeCleanup = () => {
+    destroyMotion();
     cleanup.forEach((fn) => fn());
     homeCleanup = null;
   };

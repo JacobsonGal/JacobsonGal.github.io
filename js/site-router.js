@@ -37,10 +37,17 @@ async function fetchPageTemplate(path) {
 }
 
 function syncStylesheets(page) {
-  const homeSheets = ['css/styles.css', 'css/animations.css'];
-  const resumeSheets = ['css/resume.css'];
+  const version = 'ctx-menu-2';
+  const homeSheets = [`css/styles.css?v=${version}`, `css/animations.css?v=${version}`];
+  const resumeSheets = [`css/resume.css?v=${version}`];
   const wanted = new Set(page === 'home' ? homeSheets : resumeSheets);
   const allSheets = [...homeSheets, ...resumeSheets];
+
+  // Also sweep unversioned sheets left from older deploys / SPA swaps.
+  const bare = ['css/styles.css', 'css/animations.css', 'css/resume.css'];
+  bare.forEach((href) => {
+    document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`).forEach((link) => link.remove());
+  });
 
   allSheets.forEach((href) => {
     const existing = [...document.querySelectorAll(`link[rel="stylesheet"][href="${href}"]`)];
@@ -69,10 +76,10 @@ async function applyPageTemplate(page) {
 
 async function mountPage(page) {
   if (page === 'home') {
-    const { mountHomePage } = await import('./app.js');
+    const { mountHomePage } = await import('./app.js?v=ctx-menu-2');
     await mountHomePage();
   } else {
-    const { mountResumePage } = await import('./resume-page.js');
+    const { mountResumePage } = await import('./resume-page.js?v=ctx-menu-2');
     await mountResumePage();
   }
   activePage = page;
@@ -80,10 +87,10 @@ async function mountPage(page) {
 
 async function destroyPage(page) {
   if (page === 'home') {
-    const { destroyHomePage } = await import('./app.js');
+    const { destroyHomePage } = await import('./app.js?v=ctx-menu-2');
     destroyHomePage();
   } else if (page === 'resume') {
-    const { destroyResumePage } = await import('./resume-page.js');
+    const { destroyResumePage } = await import('./resume-page.js?v=ctx-menu-2');
     destroyResumePage();
   }
 }

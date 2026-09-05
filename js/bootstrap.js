@@ -1,4 +1,6 @@
-import { bootCurrentPage, initSiteRouter } from './site-router.js';
+import { ASSET_VERSION } from './asset-version.js';
+
+const { bootCurrentPage, initSiteRouter } = await import(`./site-router.js?v=${ASSET_VERSION}`);
 
 initSiteRouter();
 
