@@ -41,18 +41,29 @@ html[data-appearance="light"] body.admin-page {
   display: grid;
   grid-template-columns: 16.5rem minmax(0, 1fr);
   min-height: 100svh;
+  transition: grid-template-columns 0.22s ease;
+}
+
+.admin-shell.is-nav-collapsed:not([hidden]) {
+  grid-template-columns: 4.75rem minmax(0, 1fr);
 }
 
 .admin-nav {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1.25rem 1rem;
+  gap: 1.25rem;
+  padding: 1.1rem 0.75rem;
   border-right: 1px solid hsl(var(--border));
   background: hsl(var(--card) / 0.92);
   position: sticky;
   top: 0;
   height: 100svh;
+  overflow: hidden;
+}
+
+.admin-nav-top {
+  display: grid;
+  gap: 0.55rem;
 }
 
 .admin-nav-brand {
@@ -64,6 +75,7 @@ html[data-appearance="light"] body.admin-page {
   font-family: "Space Grotesk", sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
+  min-width: 0;
 }
 
 .admin-nav-brand img {
@@ -71,6 +83,51 @@ html[data-appearance="light"] body.admin-page {
   height: 2.25rem;
   border-radius: 0.55rem;
   object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.admin-nav-toggle,
+.admin-nav-link,
+.admin-btn,
+.admin-signout {
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.7rem;
+  background: transparent;
+  color: inherit;
+  padding: 0.55rem 0.65rem;
+  opacity: 0.88;
+}
+
+.admin-nav-toggle:hover {
+  background: hsl(var(--foreground) / 0.08);
+  opacity: 1;
+}
+
+.admin-nav-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 auto;
+}
+
+.admin-nav-toggle .admin-nav-icon--collapse {
+  display: none;
+}
+
+.admin-shell:not(.is-nav-collapsed) .admin-nav-toggle .admin-nav-icon--expand {
+  display: none;
+}
+
+.admin-shell:not(.is-nav-collapsed) .admin-nav-toggle .admin-nav-icon--collapse {
+  display: block;
 }
 
 .admin-nav-links {
@@ -80,20 +137,18 @@ html[data-appearance="light"] body.admin-page {
   flex: 1;
 }
 
-.admin-nav-link,
-.admin-btn,
-.admin-signout {
-  font: inherit;
-  cursor: pointer;
-}
-
 .admin-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
   border: 0;
   border-radius: 0.65rem;
   background: transparent;
   color: inherit;
   text-align: left;
-  padding: 0.7rem 0.85rem;
+  padding: 0.7rem 0.75rem;
   opacity: 0.78;
 }
 
@@ -101,6 +156,60 @@ html[data-appearance="light"] body.admin-page {
 .admin-nav-link.is-active {
   background: hsl(var(--foreground) / 0.08);
   opacity: 1;
+}
+
+.admin-nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-shell.is-nav-collapsed .admin-nav {
+  padding-inline: 0.55rem;
+  align-items: stretch;
+}
+
+.admin-shell.is-nav-collapsed .admin-nav-brand,
+.admin-shell.is-nav-collapsed .admin-nav-toggle,
+.admin-shell.is-nav-collapsed .admin-nav-link,
+.admin-shell.is-nav-collapsed .admin-signout {
+  justify-content: center;
+  gap: 0;
+  padding-inline: 0.55rem;
+}
+
+.admin-shell.is-nav-collapsed .admin-nav-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.admin-shell.is-nav-collapsed .admin-user {
+  justify-content: center;
+}
+
+.admin-shell.is-nav-collapsed .admin-user-meta {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.admin-shell.is-nav-collapsed .admin-appearance {
+  justify-content: center;
+}
+
+.admin-shell.is-nav-collapsed .admin-appearance .appearance-toggle-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  justify-content: center;
+  border-radius: 0.7rem;
 }
 
 .admin-nav-footer {
@@ -120,6 +229,7 @@ html[data-appearance="light"] body.admin-page {
   border-radius: 999px;
   object-fit: cover;
   border: 1px solid hsl(var(--border));
+  flex: 0 0 auto;
 }
 
 .admin-user-meta {
@@ -136,6 +246,9 @@ html[data-appearance="light"] body.admin-page {
 }
 
 .admin-signout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   border: 0;
   background: transparent;
   color: hsl(var(--muted));
@@ -143,6 +256,28 @@ html[data-appearance="light"] body.admin-page {
   text-align: left;
   font-size: 0.8rem;
 }
+
+.admin-signout .admin-nav-icon--signout {
+  display: none;
+}
+
+.admin-shell.is-nav-collapsed .admin-signout .admin-nav-icon--signout {
+  display: block;
+}
+
+.admin-shell.is-nav-collapsed .admin-signout {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.45rem;
+  border-radius: 0.65rem;
+}
+
+.admin-shell.is-nav-collapsed .admin-signout:hover {
+  background: hsl(var(--foreground) / 0.08);
+  color: hsl(var(--foreground));
+}
+
 
 .admin-appearance {
   display: flex;
@@ -437,7 +572,8 @@ html[data-appearance="light"] body.admin-page {
 }
 
 @media (max-width: 900px) {
-  .admin-shell:not([hidden]) {
+  .admin-shell:not([hidden]),
+  .admin-shell.is-nav-collapsed:not([hidden]) {
     grid-template-columns: 1fr;
   }
 
@@ -446,11 +582,45 @@ html[data-appearance="light"] body.admin-page {
     height: auto;
     border-right: 0;
     border-bottom: 1px solid hsl(var(--border));
+    overflow: visible;
+  }
+
+  .admin-nav-top {
+    grid-template-columns: 1fr auto;
+    align-items: center;
   }
 
   .admin-nav-links {
     flex-direction: row;
     overflow-x: auto;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-nav-links {
+    display: flex;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-nav-label {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip: auto;
+    overflow: visible;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-nav-brand,
+  .admin-shell.is-nav-collapsed .admin-nav-toggle,
+  .admin-shell.is-nav-collapsed .admin-nav-link {
+    justify-content: flex-start;
+    gap: 0.65rem;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-user-meta {
+    display: grid;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-signout {
+    display: inline-flex;
   }
 
   .jobs-layout {

@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=admin-5" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-5" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-5" />
-  <link rel="stylesheet" href="css/admin.css?v=admin-5" />
+  <link rel="stylesheet" href="css/styles.css?v=admin-6" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-6" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-6" />
+  <link rel="stylesheet" href="css/admin.css?v=admin-6" />
   <style>
     /* Critical first-paint styles so the unlock gate is never an empty screen.
        Follow data-appearance so bright mode matches the public site. */
@@ -76,17 +76,53 @@
     </section>
   </div>
 
-  <div id="admin-shell" class="admin-shell" hidden>
+  <div id="admin-shell" class="admin-shell is-nav-collapsed" hidden>
     <aside class="admin-nav" aria-label="Admin">
-      <a class="admin-nav-brand" href="index.html" target="_blank" rel="noopener noreferrer" title="Open public site">
-        <img src="assets/images/logo.png" alt="Gal Jacobson" width="36" height="36" />
-        <span>Admin</span>
-      </a>
+      <div class="admin-nav-top">
+        <a class="admin-nav-brand" href="index.html" target="_blank" rel="noopener noreferrer" title="Open public site">
+          <img src="assets/images/logo.png" alt="Gal Jacobson" width="36" height="36" />
+          <span class="admin-nav-label">Admin</span>
+        </a>
+        <button
+          type="button"
+          class="admin-nav-toggle"
+          id="admin-nav-toggle"
+          aria-expanded="false"
+          aria-controls="admin-nav-links"
+          title="Expand menu"
+        >
+          <svg class="admin-nav-icon admin-nav-icon--expand" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7h16M4 12h10M4 17h16" />
+          </svg>
+          <svg class="admin-nav-icon admin-nav-icon--collapse" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+          <span class="admin-nav-label">Menu</span>
+        </button>
+      </div>
 
-      <nav class="admin-nav-links">
-        <button type="button" class="admin-nav-link is-active" data-admin-section="analytics">Analytics</button>
-        <button type="button" class="admin-nav-link" data-admin-section="jobs">Job search</button>
-        <button type="button" class="admin-nav-link" data-admin-section="resume">Edit resume</button>
+      <nav class="admin-nav-links" id="admin-nav-links">
+        <button type="button" class="admin-nav-link is-active" data-admin-section="analytics" title="Analytics" aria-label="Analytics">
+          <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19V5M10 19V9M16 19v-6M22 19H2" />
+          </svg>
+          <span class="admin-nav-label">Analytics</span>
+        </button>
+        <button type="button" class="admin-nav-link" data-admin-section="jobs" title="Job search" aria-label="Job search">
+          <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 7V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" />
+            <rect x="3" y="7" width="18" height="13" rx="2" />
+            <path d="M3 12h18" />
+          </svg>
+          <span class="admin-nav-label">Job search</span>
+        </button>
+        <button type="button" class="admin-nav-link" data-admin-section="resume" title="Edit resume" aria-label="Edit resume">
+          <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+            <path d="M14 3v5h5M9 13h6M9 17h6" />
+          </svg>
+          <span class="admin-nav-label">Edit resume</span>
+        </button>
       </nav>
 
       <div class="admin-nav-footer">
@@ -94,8 +130,14 @@
         <div class="admin-user">
           <img class="admin-user-photo" src="assets/images/portrait.webp" alt="" width="40" height="40" />
           <div class="admin-user-meta">
-            <strong data-admin-name>Gal Jacobson</strong>
-            <button type="button" class="admin-signout" id="admin-signout">Sign out</button>
+            <strong class="admin-nav-label" data-admin-name>Gal Jacobson</strong>
+            <button type="button" class="admin-signout" id="admin-signout" title="Sign out" aria-label="Sign out">
+              <svg class="admin-nav-icon admin-nav-icon--signout" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 7V6a2 2 0 0 1 2-2h7v16h-7a2 2 0 0 1-2-2v-1" />
+                <path d="M15 12H3m0 0 3-3m-3 3 3 3" />
+              </svg>
+              <span class="admin-nav-label">Sign out</span>
+            </button>
           </div>
         </div>
       </div>
@@ -164,6 +206,6 @@
     </main>
   </div>
 
-  <script type="module" src="js/admin-app.js?v=admin-5"></script>
+  <script type="module" src="js/admin-app.js?v=admin-6"></script>
 </body>
 </html>

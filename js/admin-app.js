@@ -19,6 +19,7 @@ import './theme-init.js';
 
 const LOCAL_JOBS_KEY = 'portfolio_admin_jobs_v1';
 const LOCAL_STATS_KEY = 'portfolio_admin_stats_v1';
+const NAV_COLLAPSED_KEY = 'portfolio_admin_nav_collapsed';
 
 const gate = document.getElementById('admin-gate');
 const shell = document.getElementById('admin-shell');
@@ -456,8 +457,47 @@ async function editApplication(app) {
   await patchApplication(app.id, payload);
 }
 
+function readNavCollapsed() {
+  try {
+    const stored = localStorage.getItem(NAV_COLLAPSED_KEY);
+    if (stored === '0') return false;
+    if (stored === '1') return true;
+  } catch {
+    // ignore storage errors
+  }
+  return true; // collapsed by default
+}
+
+function writeNavCollapsed(collapsed) {
+  try {
+    localStorage.setItem(NAV_COLLAPSED_KEY, collapsed ? '1' : '0');
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function applyNavCollapsed(collapsed) {
+  if (!shell) return;
+  shell.classList.toggle('is-nav-collapsed', collapsed);
+  const toggle = document.getElementById('admin-nav-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    toggle.title = collapsed ? 'Expand menu' : 'Collapse menu';
+  }
+}
+
+function bindNavCollapse() {
+  applyNavCollapsed(readNavCollapsed());
+  document.getElementById('admin-nav-toggle')?.addEventListener('click', () => {
+    const next = !shell.classList.contains('is-nav-collapsed');
+    applyNavCollapsed(next);
+    writeNavCollapsed(next);
+  });
+}
+
 function bindShell() {
   mountAppearanceToggle(document.getElementById('appearance-tools'));
+  bindNavCollapse();
 
   sectionButtons().forEach((btn) => {
     btn.addEventListener('click', () => showSection(btn.dataset.adminSection));
