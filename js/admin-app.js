@@ -668,9 +668,9 @@ async function boot() {
 
   // Show the shell immediately — never block analytics behind an optional code dialog.
   bindShell();
-  const hash = location.hash || '#analytics';
+  const hash = location.hash || '#resume';
   const initial = hash.replace('#', '').split('?')[0];
-  showSection(['analytics', 'jobs', 'resume'].includes(initial) ? initial : 'analytics');
+  showSection(['analytics', 'jobs', 'resume'].includes(initial) ? initial : 'resume');
 
   if (getOwnerSession() && !getOwnerCodeForPublish() && isAdminApiConfigured()) {
     const values = await promptDialog({

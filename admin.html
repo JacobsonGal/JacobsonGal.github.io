@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=admin-7" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-7" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-7" />
-  <link rel="stylesheet" href="css/admin.css?v=admin-7" />
+  <link rel="stylesheet" href="css/styles.css?v=admin-8" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-8" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-8" />
+  <link rel="stylesheet" href="css/admin.css?v=admin-8" />
   <style>
     /* Critical first-paint styles so the unlock gate is never an empty screen.
        Follow data-appearance so bright mode matches the public site. */
@@ -96,11 +96,12 @@
       </div>
 
       <nav class="admin-nav-links" id="admin-nav-links">
-        <button type="button" class="admin-nav-link is-active" data-admin-section="analytics" title="Analytics" aria-label="Analytics">
+        <button type="button" class="admin-nav-link is-active" data-admin-section="resume" title="Edit resume" aria-label="Edit resume">
           <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19V5M10 19V9M16 19v-6M22 19H2" />
+            <path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+            <path d="M14 3v5h5M9 13h6M9 17h6" />
           </svg>
-          <span class="admin-nav-label">Analytics</span>
+          <span class="admin-nav-label">Edit resume</span>
         </button>
         <button type="button" class="admin-nav-link" data-admin-section="jobs" title="Job search" aria-label="Job search">
           <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -110,12 +111,11 @@
           </svg>
           <span class="admin-nav-label">Job search</span>
         </button>
-        <button type="button" class="admin-nav-link" data-admin-section="resume" title="Edit resume" aria-label="Edit resume">
+        <button type="button" class="admin-nav-link" data-admin-section="analytics" title="Analytics" aria-label="Analytics">
           <svg class="admin-nav-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-            <path d="M14 3v5h5M9 13h6M9 17h6" />
+            <path d="M4 19V5M10 19V9M16 19v-6M22 19H2" />
           </svg>
-          <span class="admin-nav-label">Edit resume</span>
+          <span class="admin-nav-label">Analytics</span>
         </button>
       </nav>
 
@@ -200,6 +200,6 @@
     </main>
   </div>
 
-  <script type="module" src="js/admin-app.js?v=admin-7"></script>
+  <script type="module" src="js/admin-app.js?v=admin-8"></script>
 </body>
 </html>
