@@ -1,7 +1,28 @@
 import { ALLOWED_GITHUB_USERNAME, OWNER_UNLOCK_HASH } from './auth-config.js';
 
 const STORAGE_KEY = 'portfolio_auth_session';
+const OWNER_CODE_SESSION_KEY = 'portfolio_owner_code';
 let cachedOwnerCode = null;
+
+function readCachedOwnerCode() {
+  if (cachedOwnerCode) return cachedOwnerCode;
+  try {
+    cachedOwnerCode = sessionStorage.getItem(OWNER_CODE_SESSION_KEY);
+  } catch {
+    cachedOwnerCode = null;
+  }
+  return cachedOwnerCode;
+}
+
+function writeCachedOwnerCode(code) {
+  cachedOwnerCode = code;
+  try {
+    if (code) sessionStorage.setItem(OWNER_CODE_SESSION_KEY, code);
+    else sessionStorage.removeItem(OWNER_CODE_SESSION_KEY);
+  } catch {
+    // ignore
+  }
+}
 
 async function sha256Hex(text) {
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -51,7 +72,7 @@ export async function unlockWithOwnerCode(code) {
     method: 'owner',
     login: ALLOWED_GITHUB_USERNAME,
   };
-  cachedOwnerCode = normalized;
+  writeCachedOwnerCode(normalized);
   writeSession(session);
   return session;
 }
@@ -59,11 +80,11 @@ export async function unlockWithOwnerCode(code) {
 export function getOwnerCodeForPublish() {
   const session = getOwnerSession();
   if (!session) return null;
-  return cachedOwnerCode;
+  return readCachedOwnerCode();
 }
 
 export function clearOwnerSession() {
-  cachedOwnerCode = null;
+  writeCachedOwnerCode(null);
   const session = readSession();
   if (session?.method === 'owner') {
     localStorage.removeItem(STORAGE_KEY);

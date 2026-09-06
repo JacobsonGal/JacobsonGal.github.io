@@ -15,6 +15,7 @@ export const GITHUB_CLIENT_ID = '';
 /**
  * Cloudflare Worker URL from workers/github-auth-proxy (optional).
  * Leave empty to use owner-code unlock only.
+ * Required for GitHub publish, live analytics, job boards, and Google sync.
  */
 export const GITHUB_AUTH_PROXY_URL = '';
 

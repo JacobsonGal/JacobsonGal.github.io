@@ -83,6 +83,13 @@ async function mountPage(page) {
     await mountResumePage();
   }
   activePage = page;
+
+  try {
+    const { initAnalyticsBeacon } = await import('./analytics-beacon.js?v=admin-1');
+    initAnalyticsBeacon();
+  } catch (error) {
+    console.warn('Analytics beacon skipped', error);
+  }
 }
 
 async function destroyPage(page) {

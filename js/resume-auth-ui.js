@@ -19,8 +19,8 @@ function mountOwnerActions(container, { onSignOut } = {}) {
 
   const editLink = el('a', 'owner-tool-link resume-btn');
   editLink.dataset.authUi = 'true';
-  editLink.href = 'edit-resume.html';
-  editLink.textContent = 'Edit Resume';
+  editLink.href = 'admin.html';
+  editLink.textContent = 'Admin';
 
   const signOutBtn = el('button', 'owner-tool-link resume-btn resume-btn--ghost', 'Sign out');
   signOutBtn.dataset.authUi = 'true';
@@ -114,7 +114,7 @@ export async function requireResumeEditorAuth(root) {
   return null;
 }
 
-export async function openResumeEditorFlow({ redirectTo = 'edit-resume.html', onAuthed } = {}) {
+export async function openResumeEditorFlow({ redirectTo = 'admin.html', onAuthed } = {}) {
   const user = await getAuthorizedUser();
   if (user) {
     if (onAuthed) await onAuthed(user);

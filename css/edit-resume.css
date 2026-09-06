@@ -220,3 +220,12 @@ body.edit-resume-page {
     justify-content: flex-start;
   }
 }
+
+body.edit-resume-page--embed .edit-panel-head a[href="resume.html"] {
+  display: none;
+}
+
+body.edit-resume-page--embed {
+  /* Fill the admin iframe cleanly */
+  min-height: 100%;
+}

@@ -1,14 +1,30 @@
 name = "gal-github-auth-proxy"
 main = "worker.js"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-09-01"
 
 [vars]
-ALLOWED_ORIGINS = "https://jacobsongal.github.io,http://localhost:8080,http://127.0.0.1:8080"
+ALLOWED_ORIGINS = "https://jacobsongal.github.io,http://localhost:8080,http://127.0.0.1:8080,http://localhost:8766,http://127.0.0.1:8766"
 GITHUB_REPO_OWNER = "JacobsonGal"
 GITHUB_REPO_NAME = "JacobsonGal.github.io"
 GITHUB_REPO_BRANCH = "main"
 PROFILE_PATH = "data/profile.json"
+# Set after creating the OAuth client:
+# GOOGLE_REDIRECT_URI = "https://<your-worker>.workers.dev/google/oauth/callback"
 
-# Set secrets before deploy:
+# Secrets:
 # wrangler secret put GITHUB_TOKEN
 # wrangler secret put OWNER_UNLOCK_HASH
+# wrangler secret put GOOGLE_CLIENT_ID
+# wrangler secret put GOOGLE_CLIENT_SECRET
+
+# Optional vars:
+# ADMIN_SITE_URL = "https://jacobsongal.github.io"
+# GOOGLE_REDIRECT_URI = "https://<your-worker>.workers.dev/google/oauth/callback"
+
+# KV:
+# wrangler kv namespace create ADMIN_KV
+# then paste the id below
+[[kv_namespaces]]
+binding = "ADMIN_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_KV_PREVIEW_ID"

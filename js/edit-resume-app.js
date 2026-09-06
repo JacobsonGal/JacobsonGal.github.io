@@ -9,11 +9,26 @@ import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import { isPublishConfigured, publishProfile } from './github-publish.js';
 import './theme-init.js';
 
+const params = new URLSearchParams(window.location.search);
+const isEmbed = params.get('embed') === '1';
+
+if (!isEmbed) {
+  window.location.replace('admin.html#resume');
+}
+
+if (isEmbed) {
+  document.body.classList.add('edit-resume-page--embed');
+  const backLink = document.querySelector('.edit-panel-head a[href="resume.html"]');
+  if (backLink) backLink.hidden = true;
+}
+
 const gateRoot = document.getElementById('editor-gate');
 const editorRoot = document.getElementById('editor-root');
 
-const user = await requireResumeEditorAuth(gateRoot);
-if (!user) {
+const user = isEmbed ? await requireResumeEditorAuth(gateRoot) : null;
+if (!isEmbed) {
+  // Redirecting to admin — skip editor boot.
+} else if (!user) {
   editorRoot.hidden = true;
 } else {
   gateRoot.hidden = true;

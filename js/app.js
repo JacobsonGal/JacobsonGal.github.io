@@ -320,10 +320,10 @@ function ensureMobileEditLink() {
   if (!mobileNav || mobileNav.querySelector('[data-owner-edit]')) return;
 
   const editLink = document.createElement('a');
-  editLink.href = 'edit-resume.html';
+  editLink.href = 'admin.html';
   editLink.className = 'nav-menu-link';
   editLink.dataset.ownerEdit = 'true';
-  editLink.innerHTML = '<span>Edit Resume</span><span class="mono-label">05</span>';
+  editLink.innerHTML = '<span>Admin</span><span class="mono-label">05</span>';
   mobileNav.append(editLink);
 }
 

@@ -1,0 +1,435 @@
+.admin-page {
+  margin: 0;
+  min-height: 100svh;
+  background: hsl(var(--background, 215 58% 6%));
+  color: hsl(var(--foreground, 210 40% 97%));
+  font-family: "Inter Tight", system-ui, sans-serif;
+}
+
+.admin-gate {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 16.5rem minmax(0, 1fr);
+  min-height: 100svh;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.25rem 1rem;
+  border-right: 1px solid hsl(var(--border, 215 30% 22%));
+  background: hsl(var(--card, 215 58% 10%) / 0.92);
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+
+.admin-nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: inherit;
+  text-decoration: none;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.admin-nav-brand img {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.55rem;
+  object-fit: cover;
+}
+
+.admin-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.admin-nav-link,
+.admin-btn,
+.admin-signout {
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-nav-link {
+  border: 0;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  padding: 0.7rem 0.85rem;
+  opacity: 0.78;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.is-active {
+  background: hsl(var(--foreground, 210 40% 97%) / 0.08);
+  opacity: 1;
+}
+
+.admin-nav-footer {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-user-photo {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+}
+
+.admin-user-meta {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.admin-user-meta strong {
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-signout {
+  border: 0;
+  background: transparent;
+  color: hsl(var(--muted, 210 20% 68%));
+  padding: 0;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.admin-appearance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.admin-main {
+  padding: 1.5rem clamp(1rem, 3vw, 2rem) 3rem;
+  min-width: 0;
+}
+
+.admin-section {
+  min-width: 0;
+}
+
+.jobs-board-wrap {
+  min-width: 0;
+}
+
+.admin-section-head h1,
+.jobs-board-toolbar h2,
+.jobs-calendar h3,
+.jobs-gmail h3 {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.35rem;
+}
+
+.admin-section-head p,
+.admin-hint {
+  margin: 0;
+  color: hsl(var(--muted, 210 20% 68%));
+}
+
+.admin-section-head {
+  margin-bottom: 1.5rem;
+}
+
+.admin-section-head--split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.admin-section-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-btn {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  background: hsl(var(--card, 215 58% 12%));
+  color: inherit;
+  border-radius: 999px;
+  padding: 0.55rem 0.95rem;
+}
+
+.admin-btn--primary {
+  background: hsl(var(--accent, 205 68% 52%));
+  border-color: transparent;
+  color: #041018;
+  font-weight: 600;
+}
+
+.admin-btn--ghost {
+  background: transparent;
+}
+
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 0.85rem;
+}
+
+.admin-stat {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border-radius: 1rem;
+  padding: 1rem 1.1rem;
+  background: hsl(var(--card, 215 58% 12%) / 0.7);
+  display: grid;
+  gap: 0.45rem;
+}
+
+.admin-stat-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: hsl(var(--muted, 210 20% 68%));
+}
+
+.admin-stat strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  letter-spacing: -0.04em;
+}
+
+.admin-toast {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: hsl(18 42% 46% / 0.16);
+  border: 1px solid hsl(18 42% 46% / 0.35);
+}
+
+.jobs-layout {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.jobs-campaigns {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.jobs-campaign {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  background: transparent;
+  color: inherit;
+  border-radius: 0.8rem;
+  padding: 0.8rem 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.jobs-campaign.is-active {
+  border-color: hsl(var(--accent, 205 68% 52%));
+  background: hsl(var(--accent, 205 68% 52%) / 0.1);
+}
+
+.jobs-board-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.jobs-board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(12rem, 1fr));
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.jobs-column {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border-radius: 0.9rem;
+  background: hsl(var(--card, 215 58% 12%) / 0.45);
+  min-height: 18rem;
+  padding: 0.7rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.6rem;
+}
+
+.jobs-column h3 {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(var(--muted, 210 20% 68%));
+}
+
+.jobs-column-cards {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.job-card {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border-radius: 0.75rem;
+  padding: 0.7rem;
+  background: hsl(var(--background, 215 58% 6%));
+  display: grid;
+  gap: 0.35rem;
+}
+
+.job-card strong {
+  font-size: 0.95rem;
+}
+
+.job-card span,
+.job-card small {
+  color: hsl(var(--muted, 210 20% 68%));
+  font-size: 0.8rem;
+}
+
+.job-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.job-card-actions select,
+.job-card-actions button,
+.admin-dialog input,
+.admin-dialog textarea,
+.admin-dialog select {
+  font: inherit;
+}
+
+.job-card-actions select,
+.job-card-actions button {
+  border-radius: 999px;
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  background: transparent;
+  color: inherit;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.jobs-calendar,
+.jobs-gmail {
+  margin-top: 1.25rem;
+  border-top: 1px solid hsl(var(--border, 215 30% 22%));
+  padding-top: 1rem;
+}
+
+.jobs-calendar-list,
+.jobs-gmail-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.jobs-calendar-item,
+.jobs-gmail-item {
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.admin-resume-frame {
+  width: 100%;
+  min-height: calc(100svh - 8rem);
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.admin-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: hsl(215 58% 4% / 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  z-index: 80;
+}
+
+.admin-dialog {
+  width: min(28rem, 100%);
+  border-radius: 1rem;
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  background: hsl(var(--card, 215 58% 12%));
+  color: inherit;
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-dialog label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+}
+
+.admin-dialog input,
+.admin-dialog textarea,
+.admin-dialog select {
+  border-radius: 0.55rem;
+  border: 1px solid hsl(var(--border, 215 30% 22%));
+  background: hsl(var(--background, 215 58% 6%));
+  color: inherit;
+  padding: 0.55rem 0.65rem;
+}
+
+.admin-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-nav {
+    position: sticky;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid hsl(var(--border, 215 30% 22%));
+  }
+
+  .admin-nav-links {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .jobs-layout {
+    grid-template-columns: 1fr;
+  }
+}

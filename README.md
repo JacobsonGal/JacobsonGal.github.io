@@ -7,7 +7,8 @@ Static HTML/CSS/JS — no Base44, no build step. Profile data lives in `data/pro
 ## Resume
 
 - **View / print (public):** [resume.html](resume.html) — uses the site palette (`css/themes.css`, default **Arctic** to match the logo).
-- **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [edit-resume.html](edit-resume.html), then unlock with your **owner code**. After unlocking, **Edit resume** appears in the header and resume toolbar.
+- **Edit (owner only):** triple-click a hidden spot on the site (see below) or open [admin.html](admin.html), then unlock with your **owner code**. After unlocking, **Admin** appears in the header and resume toolbar.
+- **Admin console:** [admin.html](admin.html) — analytics, job-search boards, Gmail/Calendar hooks, and the resume editor.
 - **Publish to GitHub:** enable **Publish to GitHub immediately** in the editor to commit `data/profile.json` without exporting JSON. Requires the Cloudflare worker below.
 - **Color palette:** resume and editor always use **Arctic** (icy blues). The portfolio homepage still supports light/dark appearance via the header toggle.
 - **Download PDF:** [resume.html](resume.html) — opens the print dialog with the Arctic CV layout. Choose **Save as PDF**; links stay clickable and text stays sharp (vector output). Default filename: `Gal Jacobson | CV.pdf`.
@@ -56,7 +57,22 @@ wrangler deploy
 ```
 
 3. Set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js` to the worker URL (for example `https://gal-github-auth-proxy.<your-subdomain>.workers.dev`).
-4. Open [edit-resume.html](edit-resume.html), unlock with your owner code, keep **Publish to GitHub immediately** checked, and edit. Changes publish after a short pause or when you click **Save & publish**.
+4. Open [admin.html](admin.html), unlock with your owner code, open **Edit resume**, keep **Publish to GitHub immediately** checked, and edit. Changes publish after a short pause or when you click **Save & publish**.
+
+### Admin Worker extras (analytics, jobs, Google)
+
+After the base worker deploy above:
+
+1. Create KV and bind it as `ADMIN_KV` in `workers/github-auth-proxy/wrangler.toml`.
+2. Redeploy the worker.
+3. Optional Google: create an OAuth client, set redirect URI to `https://<your-worker>.workers.dev/google/oauth/callback`, then:
+   ```bash
+   wrangler secret put GOOGLE_CLIENT_ID
+   wrangler secret put GOOGLE_CLIENT_SECRET
+   ```
+4. Set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js` to the worker URL.
+
+Public pages send analytics hits automatically (owner/localhost visits are excluded). Jobs and Gmail/Calendar features live under **Admin → Job search**.
 
 GitHub sign-in with `public_repo` scope can also publish directly from the browser once the auth proxy is configured for device flow.
 
