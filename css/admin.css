@@ -1,8 +1,8 @@
 .admin-page {
   margin: 0;
   min-height: 100svh;
-  background: hsl(var(--background, 215 58% 6%));
-  color: hsl(var(--foreground, 210 40% 97%));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
   font-family: "Inter Tight", system-ui, sans-serif;
 }
 
@@ -35,8 +35,8 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 1.25rem 1rem;
-  border-right: 1px solid hsl(var(--border, 215 30% 22%));
-  background: hsl(var(--card, 215 58% 10%) / 0.92);
+  border-right: 1px solid hsl(var(--border));
+  background: hsl(var(--card) / 0.92);
   position: sticky;
   top: 0;
   height: 100svh;
@@ -86,7 +86,7 @@
 
 .admin-nav-link:hover,
 .admin-nav-link.is-active {
-  background: hsl(var(--foreground, 210 40% 97%) / 0.08);
+  background: hsl(var(--foreground) / 0.08);
   opacity: 1;
 }
 
@@ -106,7 +106,7 @@
   height: 2.5rem;
   border-radius: 999px;
   object-fit: cover;
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
 }
 
 .admin-user-meta {
@@ -125,7 +125,7 @@
 .admin-signout {
   border: 0;
   background: transparent;
-  color: hsl(var(--muted, 210 20% 68%));
+  color: hsl(var(--muted));
   padding: 0;
   text-align: left;
   font-size: 0.8rem;
@@ -162,7 +162,7 @@
 .admin-section-head p,
 .admin-hint {
   margin: 0;
-  color: hsl(var(--muted, 210 20% 68%));
+  color: hsl(var(--muted));
 }
 
 .admin-section-head {
@@ -184,17 +184,17 @@
 }
 
 .admin-btn {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
-  background: hsl(var(--card, 215 58% 12%));
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
   color: inherit;
   border-radius: 999px;
   padding: 0.55rem 0.95rem;
 }
 
 .admin-btn--primary {
-  background: hsl(var(--accent, 205 68% 52%));
+  background: hsl(var(--accent));
   border-color: transparent;
-  color: #041018;
+  color: hsl(var(--background));
   font-weight: 600;
 }
 
@@ -209,10 +209,10 @@
 }
 
 .admin-stat {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   border-radius: 1rem;
   padding: 1rem 1.1rem;
-  background: hsl(var(--card, 215 58% 12%) / 0.7);
+  background: hsl(var(--card) / 0.7);
   display: grid;
   gap: 0.45rem;
 }
@@ -221,7 +221,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: hsl(var(--muted, 210 20% 68%));
+  color: hsl(var(--muted));
 }
 
 .admin-stat strong {
@@ -251,7 +251,7 @@
 }
 
 .jobs-campaign {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   background: transparent;
   color: inherit;
   border-radius: 0.8rem;
@@ -261,8 +261,8 @@
 }
 
 .jobs-campaign.is-active {
-  border-color: hsl(var(--accent, 205 68% 52%));
-  background: hsl(var(--accent, 205 68% 52%) / 0.1);
+  border-color: hsl(var(--accent));
+  background: hsl(var(--accent) / 0.1);
 }
 
 .jobs-board-toolbar {
@@ -282,9 +282,9 @@
 }
 
 .jobs-column {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   border-radius: 0.9rem;
-  background: hsl(var(--card, 215 58% 12%) / 0.45);
+  background: hsl(var(--card) / 0.45);
   min-height: 18rem;
   padding: 0.7rem;
   display: grid;
@@ -297,7 +297,7 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: hsl(var(--muted, 210 20% 68%));
+  color: hsl(var(--muted));
 }
 
 .jobs-column-cards {
@@ -307,10 +307,10 @@
 }
 
 .job-card {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   border-radius: 0.75rem;
   padding: 0.7rem;
-  background: hsl(var(--background, 215 58% 6%));
+  background: hsl(var(--background));
   display: grid;
   gap: 0.35rem;
 }
@@ -321,7 +321,7 @@
 
 .job-card span,
 .job-card small {
-  color: hsl(var(--muted, 210 20% 68%));
+  color: hsl(var(--muted));
   font-size: 0.8rem;
 }
 
@@ -342,7 +342,7 @@
 .job-card-actions select,
 .job-card-actions button {
   border-radius: 999px;
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   background: transparent;
   color: inherit;
   padding: 0.25rem 0.55rem;
@@ -353,7 +353,7 @@
 .jobs-calendar,
 .jobs-gmail {
   margin-top: 1.25rem;
-  border-top: 1px solid hsl(var(--border, 215 30% 22%));
+  border-top: 1px solid hsl(var(--border));
   padding-top: 1rem;
 }
 
@@ -365,7 +365,7 @@
 
 .jobs-calendar-item,
 .jobs-gmail-item {
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   border-radius: 0.75rem;
   padding: 0.75rem 0.9rem;
   display: grid;
@@ -375,7 +375,7 @@
 .admin-resume-frame {
   width: 100%;
   min-height: calc(100svh - 8rem);
-  border: 1px solid hsl(var(--border, 215 30% 22%));
+  border: 1px solid hsl(var(--border));
   border-radius: 1rem;
   background: #fff;
 }
@@ -383,7 +383,7 @@
 .admin-dialog-backdrop {
   position: fixed;
   inset: 0;
-  background: hsl(215 58% 4% / 0.55);
+  background: hsl(var(--foreground) / 0.28);
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -393,8 +393,8 @@
 .admin-dialog {
   width: min(28rem, 100%);
   border-radius: 1rem;
-  border: 1px solid hsl(var(--border, 215 30% 22%));
-  background: hsl(var(--card, 215 58% 12%));
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
   color: inherit;
   padding: 1.1rem;
   display: grid;
@@ -411,8 +411,8 @@
 .admin-dialog textarea,
 .admin-dialog select {
   border-radius: 0.55rem;
-  border: 1px solid hsl(var(--border, 215 30% 22%));
-  background: hsl(var(--background, 215 58% 6%));
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
   color: inherit;
   padding: 0.55rem 0.65rem;
 }
@@ -432,7 +432,7 @@
     position: sticky;
     height: auto;
     border-right: 0;
-    border-bottom: 1px solid hsl(var(--border, 215 30% 22%));
+    border-bottom: 1px solid hsl(var(--border));
   }
 
   .admin-nav-links {
@@ -443,4 +443,13 @@
   .jobs-layout {
     grid-template-columns: 1fr;
   }
+}
+
+/* Bright mode polish — keep surfaces aligned with the public site */
+html[data-appearance="light"] .admin-nav {
+  background: hsl(var(--card) / 0.96);
+}
+
+html[data-appearance="light"] .admin-btn--primary {
+  color: hsl(38 24% 96%);
 }

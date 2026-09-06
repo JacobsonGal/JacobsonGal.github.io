@@ -150,10 +150,11 @@ html.appearance-animate .mono-label {
   --card: 24 12% 14%;
 }
 
-/* Bright mode — editorial / Base44 warm palette (homepage + resume pages) */
+/* Bright mode — editorial / Base44 warm palette (homepage + resume + admin) */
 html[data-appearance="light"]:has(.app--continuous-hero),
 html[data-appearance="light"]:has(body.resume-page),
-html[data-appearance="light"]:has(body.edit-resume-page) {
+html[data-appearance="light"]:has(body.edit-resume-page),
+html[data-appearance="light"]:has(body.admin-page) {
   --background: 38 24% 94%;
   --foreground: 24 10% 10%;
   --accent: 18 42% 46%;
@@ -164,6 +165,7 @@ html[data-appearance="light"]:has(body.edit-resume-page) {
 }
 
 html[data-appearance="light"]:has(.app--continuous-hero) body,
+html[data-appearance="light"]:has(body.admin-page) body,
 [data-appearance="light"] .page-backdrop {
   background: hsl(38 24% 94%);
 }
