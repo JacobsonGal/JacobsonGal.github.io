@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/resume.css" />
-  <link rel="stylesheet" href="css/edit-resume.css" />
+  <link rel="stylesheet" href="css/resume.css?v=publish-live-1" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=publish-live-1" />
 </head>
 <body class="edit-resume-page">
   <div id="editor-gate"></div>
@@ -44,14 +44,15 @@
       </div>
       <div class="publish-token-panel" id="publish-token-panel" hidden>
         <p class="publish-token-copy">
-          To make resume edits live on GitHub Pages, paste a fine-grained token with
-          <strong>Contents: Read and write</strong> on this repository.
+          One-time setup: paste a fine-grained GitHub token with
+          <strong>Contents: Read and write</strong> on <code>JacobsonGal/JacobsonGal.github.io</code>.
+          It is stored in this browser so every edit commits live to GitHub Pages.
           <a id="publish-token-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create token</a>
         </p>
         <label class="publish-token-label" for="publish-token-input">GitHub publish token</label>
         <div class="publish-token-row">
           <input id="publish-token-input" class="publish-token-input" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" />
-          <button type="button" class="resume-btn resume-btn--primary" id="publish-token-save">Save &amp; publish</button>
+          <button type="button" class="resume-btn resume-btn--primary" id="publish-token-save">Save &amp; go live</button>
         </div>
       </div>
       <form class="edit-form" id="edit-form">
@@ -72,6 +73,6 @@
       <iframe id="preview-frame" title="Resume preview"></iframe>
     </section>
   </div>
-  <script type="module" src="js/edit-resume-app.js"></script>
+  <script type="module" src="js/edit-resume-app.js?v=publish-live-1"></script>
 </body>
 </html>

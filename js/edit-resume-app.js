@@ -7,8 +7,12 @@ import {
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
+  GITHUB_PROFILE_PATH,
+  GITHUB_REPO,
+} from './auth-config.js';
+import {
   isPublishConfigured,
-  isProxyPublishConfigured,
+  hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
 } from './github-publish.js';
@@ -16,6 +20,7 @@ import {
   getSessionPublishToken,
   setSessionPublishToken,
   publishTokenSetupUrl,
+  validatePublishToken,
 } from './publish-token.js';
 import './theme-init.js';
 
@@ -87,19 +92,23 @@ function initEditor(user) {
   const tokenSave = document.getElementById('publish-token-save');
   const tokenLink = document.getElementById('publish-token-link');
 
-  // Authenticated owners publish by default. Credentials may come from GitHub
-  // OAuth, a session PAT, or owner-code + auth proxy.
+  // Publish on by default so edits become live commits.
   let publishOnSave = isPublishConfigured();
   let profile;
   let publishTimer;
   let publishInFlight = false;
+  let pendingPublishProfile = null;
   let awaitingToken = false;
+
+  function canPublishNow() {
+    return hasPublishCredentials(user);
+  }
 
   function syncPublishToggleUi() {
     publishToggle.setAttribute('aria-pressed', String(publishOnSave));
     publishToggle.title = publishOnSave
-      ? 'Publish to GitHub on save (on)'
-      : 'Publish to GitHub on save (off — draft only)';
+      ? 'Publish to GitHub on edit (on)'
+      : 'Publish to GitHub on edit (off — local draft only)';
   }
 
   function showTokenPanel(visible) {
@@ -116,9 +125,10 @@ function initEditor(user) {
     tokenLink.href = publishTokenSetupUrl();
   }
 
-  const hasGithubToken = Boolean(user?.token);
-  if (!isProxyPublishConfigured() && !getSessionPublishToken() && !hasGithubToken) {
+  // One-time setup: without proxy / GitHub OAuth token, ask for a PAT.
+  if (!canPublishNow()) {
     showTokenPanel(true);
+    setStatus('Add a publish token once — then every edit commits live to GitHub.', 'info');
   }
 
   syncPublishToggleUi();
@@ -129,17 +139,29 @@ function initEditor(user) {
     if (publishOnSave) schedulePublish();
   });
 
-  tokenSave?.addEventListener('click', () => {
-    const token = setSessionPublishToken(tokenInput?.value || '');
-    if (!token) {
-      setStatus('Paste a GitHub fine-grained token with Contents: Read and write.', 'error');
-      return;
+  tokenSave?.addEventListener('click', async () => {
+    const raw = tokenInput?.value || '';
+    tokenSave.disabled = true;
+    setStatus('Checking GitHub token…', 'info');
+    try {
+      await validatePublishToken(raw, {
+        owner: GITHUB_REPO.owner,
+        repo: GITHUB_REPO.name,
+        path: GITHUB_PROFILE_PATH,
+        branch: GITHUB_REPO.branch,
+      });
+      setSessionPublishToken(raw);
+      showTokenPanel(false);
+      publishOnSave = true;
+      syncPublishToggleUi();
+      setStatus('Publish token saved. Publishing current resume…', 'info');
+      await persistProfile(formToProfile(profile), { publish: true });
+    } catch (error) {
+      showTokenPanel(true);
+      setStatus(error.message || 'Could not save publish token.', 'error');
+    } finally {
+      tokenSave.disabled = false;
     }
-    showTokenPanel(false);
-    setStatus('Publish token saved for this browser session. Publishing…', 'info');
-    publishOnSave = true;
-    syncPublishToggleUi();
-    persistProfile(formToProfile(profile), { publish: true }).catch(() => {});
   });
 
   function shouldPublish() {
@@ -162,6 +184,9 @@ function initEditor(user) {
     profile = await loadProfile({ preferDraft: true });
     profileToForm(profile);
     renderPreview(profile);
+    if (canPublishNow() && publishOnSave) {
+      setStatus('Live publish is on — edits commit to GitHub automatically.', 'info');
+    }
   }
 
   function profileToForm(p) {
@@ -218,20 +243,35 @@ function initEditor(user) {
       return profile;
     }
 
+    if (!canPublishNow()) {
+      showTokenPanel(true);
+      setStatus('Add a GitHub publish token to make this change live.', 'error');
+      return profile;
+    }
+
+    pendingPublishProfile = profile;
     if (publishInFlight) return profile;
 
     publishInFlight = true;
     setStatus('Publishing to GitHub…', 'info');
 
     try {
-      const published = await publishProfile(profile);
-      profile = published;
-      clearDraft();
-      saveDraft(profile);
-      showTokenPanel(false);
-      setStatus('Published to GitHub. Live on the site in about a minute.', 'success');
+      while (pendingPublishProfile) {
+        const toPublish = pendingPublishProfile;
+        pendingPublishProfile = null;
+        const published = await publishProfile(toPublish);
+        // Prefer any newer edit queued while this request was in flight.
+        if (!pendingPublishProfile) {
+          profile = published;
+          clearDraft();
+          saveDraft(profile);
+          showTokenPanel(false);
+          setStatus('Published to GitHub. Live on the site in about a minute.', 'success');
+        }
+      }
       return profile;
     } catch (error) {
+      pendingPublishProfile = null;
       if (error instanceof PublishAuthRequiredError || error?.code === 'publish_auth_required') {
         showTokenPanel(true);
       }
@@ -244,14 +284,14 @@ function initEditor(user) {
 
   function schedulePublish() {
     if (!shouldPublish()) return;
-    if (awaitingToken && !getSessionPublishToken() && !user?.token) {
+    if (!canPublishNow()) {
       showTokenPanel(true);
       return;
     }
     window.clearTimeout(publishTimer);
     publishTimer = window.setTimeout(() => {
       persistProfile(formToProfile(profile), { publish: true }).catch(() => {});
-    }, 1200);
+    }, 900);
   }
 
   function previewShellAttrs() {
@@ -269,7 +309,7 @@ function initEditor(user) {
     try {
       await persistProfile(formToProfile(profile), {
         publish: shouldPublish(),
-        statusMessage: shouldPublish() ? undefined : 'Draft saved in this browser.',
+        statusMessage: shouldPublish() ? undefined : 'Draft saved in this browser only.',
       });
     } catch {
       // status already set

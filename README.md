@@ -46,7 +46,7 @@ Default code shipped in this repo (change it after first deploy):
 
 Edits in **Edit resume** are meant to go live immediately. With **Publish** on (default), each change commits `data/profile.json` to `main` so GitHub Pages updates within about a minute.
 
-**Fastest path (no worker):** unlock with your owner code, then paste a fine-grained GitHub PAT once when prompted. The token stays in `sessionStorage` for that browser session only. Create one at [GitHub → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new) with **Contents: Read and write** on `JacobsonGal/JacobsonGal.github.io`.
+**Fastest path (no worker):** unlock with your owner code, then paste a fine-grained GitHub PAT once when prompted. The token is stored in this browser (`localStorage`) so later edits keep publishing live. Create one at [GitHub → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new) with **Contents: Read and write** on `JacobsonGal/JacobsonGal.github.io`.
 
 **Optional worker path** (also powers analytics / job boards): deploy `workers/github-auth-proxy`, set secrets, then set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js`. Owner-code publish then works without pasting a PAT.
 

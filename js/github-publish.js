@@ -23,10 +23,17 @@ export function isProxyPublishConfigured() {
 
 /**
  * Publish is always available to authenticated owners: via proxy, GitHub sign-in,
- * or a fine-grained PAT stored for this browser session.
+ * or a fine-grained PAT stored in this browser.
  */
 export function isPublishConfigured() {
   return true;
+}
+
+export function hasPublishCredentials(user) {
+  if (user?.token) return true;
+  if (getSessionPublishToken()) return true;
+  if (getOwnerCodeForPublish() && GITHUB_AUTH_PROXY_URL) return true;
+  return false;
 }
 
 export function prepareProfileForPublish(profile) {
@@ -82,7 +89,7 @@ async function publishWithToken(profile, token) {
       'X-GitHub-Api-Version': '2022-11-28',
     },
     body: JSON.stringify({
-      message: 'Update profile from resume editor',
+      message: `Update profile from resume editor (${payload.syncedAt})`,
       content: encodeBase64Utf8(content),
       sha,
       branch: GITHUB_REPO.branch,
@@ -132,9 +139,9 @@ export async function publishProfile(profile) {
     return publishWithToken(profile, user.token);
   }
 
-  const sessionToken = getSessionPublishToken();
-  if (sessionToken) {
-    return publishWithToken(profile, sessionToken);
+  const storedToken = getSessionPublishToken();
+  if (storedToken) {
+    return publishWithToken(profile, storedToken);
   }
 
   const ownerCode = getOwnerCodeForPublish();
