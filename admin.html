@@ -13,13 +13,51 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=admin-1" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-1" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-1" />
-  <link rel="stylesheet" href="css/admin.css?v=admin-1" />
+  <link rel="stylesheet" href="css/styles.css?v=admin-2" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-2" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-2" />
+  <link rel="stylesheet" href="css/admin.css?v=admin-2" />
+  <style>
+    /* Critical first-paint styles so the unlock gate is never an empty screen. */
+    body.admin-page {
+      margin: 0;
+      min-height: 100svh;
+      background: #0a1018;
+      color: #f2f5f8;
+      font-family: "Inter Tight", system-ui, sans-serif;
+    }
+    #admin-gate:not([hidden]) {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+    }
+    #admin-gate .auth-gate,
+    #admin-gate .admin-boot-fallback {
+      width: min(28rem, 100%);
+      padding: 1.5rem;
+      border: 1px solid rgba(242, 245, 248, 0.18);
+      border-radius: 1rem;
+      background: #121a24;
+    }
+    #admin-gate h1 {
+      margin: 0 0 0.75rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.75rem;
+    }
+    #admin-gate p { margin: 0 0 1rem; color: rgba(242, 245, 248, 0.72); line-height: 1.5; }
+    #admin-gate .admin-boot-error { color: #ffb4a8; }
+  </style>
 </head>
 <body class="admin-page">
-  <div id="admin-gate" class="admin-gate"></div>
+  <div id="admin-gate" class="admin-gate">
+    <section class="admin-boot-fallback" data-admin-fallback>
+      <h1>Admin</h1>
+      <p>Loading unlock… If this stays blank, hard-refresh (Ctrl/Cmd+Shift+R) or check the browser console.</p>
+      <p class="admin-boot-error" id="admin-boot-error" hidden></p>
+      <noscript><p class="admin-boot-error">JavaScript is required for the admin console.</p></noscript>
+    </section>
+  </div>
 
   <div id="admin-shell" class="admin-shell" hidden>
     <aside class="admin-nav" aria-label="Admin">
@@ -109,6 +147,6 @@
     </main>
   </div>
 
-  <script type="module" src="js/admin-app.js?v=admin-1"></script>
+  <script type="module" src="js/admin-app.js?v=admin-2"></script>
 </body>
 </html>

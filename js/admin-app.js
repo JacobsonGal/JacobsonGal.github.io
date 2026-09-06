@@ -577,14 +577,36 @@ function bindShell() {
   });
 }
 
+function showBootError(message) {
+  const errorEl = document.getElementById('admin-boot-error');
+  const fallback = gate?.querySelector('[data-admin-fallback]');
+  if (fallback) fallback.hidden = false;
+  if (errorEl) {
+    errorEl.hidden = false;
+    errorEl.textContent = message;
+  }
+  if (gate) {
+    gate.hidden = false;
+    if (!gate.querySelector('.auth-gate') && !fallback) {
+      gate.innerHTML = `<section class="admin-boot-fallback"><h1>Admin</h1><p class="admin-boot-error">${message}</p></section>`;
+    }
+  }
+  console.error(message);
+}
+
 async function boot() {
-  // Gate copy is customized after requireResumeEditorAuth builds the default UI when needed.
+  if (!gate || !shell) {
+    throw new Error('Admin markup is missing #admin-gate or #admin-shell.');
+  }
+
   const user = await requireResumeEditorAuth(gate);
   if (!user) {
-    const title = gate.querySelector('.auth-gate-title');
-    const copy = gate.querySelector('.auth-gate-copy');
+    const title = gate.querySelector('.auth-gate-title, .auth-gate-title');
+    const copy = gate.querySelector('.auth-gate-copy, .auth-gate-copy');
     if (title) title.textContent = 'Admin';
-    if (copy) copy.textContent = 'Enter your private owner code to open analytics, job search, and the resume editor.';
+    if (copy) {
+      copy.textContent = 'Enter your private owner code to open analytics, job search, and the resume editor.';
+    }
     return;
   }
 
@@ -623,6 +645,5 @@ async function boot() {
 }
 
 boot().catch((error) => {
-  console.error(error);
-  showToast(error.message || 'Admin failed to boot', true);
+  showBootError(error?.message || 'Admin failed to boot. Hard-refresh and check the console.');
 });
