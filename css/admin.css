@@ -6,6 +6,19 @@
   font-family: "Inter Tight", system-ui, sans-serif;
 }
 
+/* Match the public-site bright palette even if cached appearance.css is stale. */
+html[data-appearance="light"] body.admin-page {
+  --background: 38 24% 94%;
+  --foreground: 24 10% 10%;
+  --accent: 18 42% 46%;
+  --accent-deep: 18 35% 32%;
+  --border: 30 12% 82%;
+  --muted: 30 8% 42%;
+  --card: 36 20% 97%;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
 /* Must honor [hidden]: author `display` otherwise overrides the UA rule. */
 .admin-gate[hidden],
 .admin-shell[hidden],
