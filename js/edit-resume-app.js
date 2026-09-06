@@ -85,6 +85,26 @@ function parseSkillsFormText(text) {
 function initEditor(user) {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
+  const layout = document.getElementById('editor-root');
+
+  function bindMobilePaneTabs() {
+    if (!layout) return;
+    layout.dataset.mobilePane = layout.dataset.mobilePane || 'form';
+    const tabs = layout.querySelectorAll('[data-edit-pane]');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const pane = tab.dataset.editPane;
+        layout.dataset.mobilePane = pane;
+        tabs.forEach((node) => {
+          const active = node.dataset.editPane === pane;
+          node.classList.toggle('is-active', active);
+          node.setAttribute('aria-selected', String(active));
+        });
+      });
+    });
+  }
+
+  bindMobilePaneTabs();
   const publishToggle = document.getElementById('publish-option');
   const editStatus = document.getElementById('edit-status');
   const tokenPanel = document.getElementById('publish-token-panel');

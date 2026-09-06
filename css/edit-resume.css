@@ -39,7 +39,11 @@ body.edit-resume-page {
   gap: 0.75rem 1rem;
   margin-bottom: 0.25rem;
 }
-.edit-panel-head h1 { margin: 0; flex: 1 1 auto; }
+.edit-panel-head h1 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
 
 .edit-status {
   margin: 0 0 1rem;
@@ -281,4 +285,68 @@ body.edit-resume-page--embed .edit-panel-head a[href="resume.html"] {
 body.edit-resume-page--embed {
   /* Fill the admin iframe cleanly */
   min-height: 100%;
+  height: 100%;
+}
+
+.edit-mobile-tabs {
+  display: none;
+}
+
+.edit-mobile-tab {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid hsl(var(--border));
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.78rem;
+}
+
+.edit-mobile-tab.is-active {
+  background: hsl(var(--foreground));
+  border-color: transparent;
+  color: hsl(var(--background));
+}
+
+@media (max-width: 1099px) {
+  .edit-mobile-tabs {
+    display: inline-flex;
+    gap: 0.35rem;
+    margin-left: auto;
+  }
+
+  body.edit-resume-page--embed .edit-panel-head h1 {
+    font-size: 1.05rem;
+  }
+
+  body.edit-resume-page--embed .edit-layout {
+    grid-template-rows: minmax(0, 1fr);
+    height: 100%;
+  }
+
+  body.edit-resume-page--embed .edit-layout[data-mobile-pane="form"] .edit-preview,
+  body.edit-resume-page--embed .edit-layout[data-mobile-pane="preview"] .edit-panel {
+    display: none;
+  }
+
+  body.edit-resume-page--embed .edit-layout[data-mobile-pane="preview"] .edit-preview {
+    display: flex;
+    min-height: 0;
+    padding: 0.75rem;
+  }
+
+  body.edit-resume-page--embed .edit-layout[data-mobile-pane="preview"] .edit-preview iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    background: #fff;
+  }
+
+  body.edit-resume-page--embed .edit-panel {
+    border-bottom: 0;
+    padding-bottom: 1rem;
+  }
 }

@@ -316,6 +316,8 @@ html[data-appearance="light"] body.admin-page {
 .jobs-calendar h3,
 .jobs-gmail h3 {
   font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  line-height: 1.15;
   letter-spacing: -0.03em;
   margin: 0 0 0.35rem;
 }
@@ -324,6 +326,8 @@ html[data-appearance="light"] body.admin-page {
 .admin-hint {
   margin: 0;
   color: hsl(var(--muted));
+  font-size: 0.92rem;
+  line-height: 1.45;
 }
 
 .admin-section-head {
@@ -588,62 +592,273 @@ html[data-appearance="light"] body.admin-page {
   .admin-shell:not([hidden]),
   .admin-shell.is-nav-collapsed:not([hidden]) {
     grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
   }
 
   .admin-nav {
     position: sticky;
+    top: 0;
+    z-index: 40;
     height: auto;
+    gap: 0.55rem;
+    padding: 0.65rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
     border-right: 0;
     border-bottom: 1px solid hsl(var(--border));
     overflow: visible;
+    background: hsl(var(--card) / 0.97);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   .admin-nav-top {
-    grid-template-columns: 1fr auto;
-    align-items: center;
-  }
-
-  .admin-nav-links {
-    flex-direction: row;
-    overflow-x: auto;
-  }
-
-  .admin-shell.is-nav-collapsed .admin-nav-links {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
-  .admin-shell.is-nav-collapsed .admin-nav-brand,
-  .admin-shell.is-nav-collapsed .admin-nav-link {
+  .admin-nav-links,
+  .admin-shell.is-nav-collapsed .admin-nav-links {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    width: 100%;
+    flex: 0 0 auto;
+    overflow: visible;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-nav {
+    padding-inline: 0.75rem;
+    align-items: stretch;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-nav-top,
+  .admin-shell.is-nav-collapsed .admin-nav-footer {
+    width: 100%;
+    justify-items: stretch;
+  }
+
+  .admin-nav-brand,
+  .admin-shell.is-nav-collapsed .admin-nav-brand {
     width: auto;
     height: auto;
+    min-height: 2.5rem;
     justify-content: flex-start;
-    gap: 0.65rem;
-    padding: 0.55rem 0.7rem;
+    gap: 0.6rem;
+    padding: 0.15rem 0.25rem;
     margin-inline: 0;
   }
 
+  .admin-nav-link,
+  .admin-shell.is-nav-collapsed .admin-nav-link {
+    width: auto;
+    height: auto;
+    min-height: 3.15rem;
+    margin-inline: 0;
+    padding: 0.45rem 0.35rem;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.2rem;
+    border-radius: 0.75rem;
+    text-align: center;
+    font-size: 0.72rem;
+  }
+
+  .admin-nav-link .admin-nav-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    max-width: 100%;
+  }
+
+  .admin-nav-label,
+  .admin-nav-site,
   .admin-shell.is-nav-collapsed .admin-nav-label,
   .admin-shell.is-nav-collapsed .admin-nav-site {
     position: static;
     width: auto;
     height: auto;
     margin: 0;
+    padding: 0;
     clip: auto;
     overflow: visible;
+    white-space: nowrap;
   }
 
+  .admin-nav-site {
+    flex: 0 0 auto;
+    padding: 0.35rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--border));
+    font-size: 0.72rem;
+  }
+
+  .admin-nav-footer,
+  .admin-shell.is-nav-collapsed .admin-nav-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .admin-appearance,
+  .admin-shell.is-nav-collapsed .admin-appearance {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: auto;
+    min-height: 0;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-appearance .appearance-tools {
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-appearance .appearance-toggle-btn {
+    margin-inline: 0;
+  }
+
+  .admin-user,
+  .admin-shell.is-nav-collapsed .admin-user {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.55rem;
+    width: auto;
+    min-width: 0;
+  }
+
+  .admin-user-meta,
   .admin-shell.is-nav-collapsed .admin-user-meta {
     display: grid;
+    justify-items: end;
+    min-width: 0;
   }
 
-  .admin-shell.is-nav-collapsed .admin-nav-footer,
-  .admin-shell.is-nav-collapsed .admin-user,
-  .admin-shell.is-nav-collapsed .admin-appearance {
+  .admin-user-photo,
+  .admin-shell.is-nav-collapsed .admin-user-photo {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+
+  .admin-signout {
+    justify-content: flex-end;
+  }
+
+  .admin-main {
+    min-height: 0;
+    overflow: auto;
+    padding: 0.85rem 0.85rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .admin-section {
+    min-height: 0;
+  }
+
+  #section-resume:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  .admin-section-head {
+    margin-bottom: 0.85rem;
+  }
+
+  .admin-section-head h1 {
+    font-size: 1.35rem;
+  }
+
+  .admin-section-head--split {
+    flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .admin-section-actions {
+    width: 100%;
+  }
+
+  .admin-section-actions .admin-btn {
+    flex: 1 1 calc(50% - 0.35rem);
+  }
+
+  /* Resume editor fills the remaining viewport; drop duplicate page chrome. */
+  #section-resume .admin-section-head {
+    display: none;
+  }
+
+  .admin-resume-frame {
+    min-height: 0;
+    height: calc(100svh - 11.25rem);
+    border-radius: 0.85rem;
+  }
+
+  .admin-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .admin-stat {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .admin-stat strong {
+    font-size: 1.45rem;
   }
 
   .jobs-layout {
     grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .jobs-campaigns {
+    display: flex;
+    gap: 0.45rem;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .jobs-campaign {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .jobs-board-toolbar {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .jobs-board {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(16rem, 82vw);
+    gap: 0.65rem;
+    padding-bottom: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .jobs-column {
+    min-height: 14rem;
+  }
+
+  .job-card-actions {
+    gap: 0.45rem;
+  }
+
+  .job-card-actions select,
+  .job-card-actions button {
+    min-height: 2rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
   }
 }
 

@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/resume.css?v=publish-live-1" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=publish-live-1" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-1" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-1" />
 </head>
 <body class="edit-resume-page">
   <div id="editor-gate"></div>
@@ -30,6 +30,10 @@
     <aside class="edit-panel">
       <div class="edit-panel-head">
         <h1>Edit resume</h1>
+        <div class="edit-mobile-tabs" role="tablist" aria-label="Editor views">
+          <button type="button" class="edit-mobile-tab is-active" role="tab" aria-selected="true" data-edit-pane="form">Edit</button>
+          <button type="button" class="edit-mobile-tab" role="tab" aria-selected="false" data-edit-pane="preview">Preview</button>
+        </div>
         <a class="resume-btn" href="resume.html">← Resume</a>
       </div>
       <p class="edit-status" id="edit-status" hidden></p>
@@ -73,6 +77,6 @@
       <iframe id="preview-frame" title="Resume preview"></iframe>
     </section>
   </div>
-  <script type="module" src="js/edit-resume-app.js?v=publish-live-1"></script>
+  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-1"></script>
 </body>
 </html>

@@ -488,8 +488,22 @@ function applyNavCollapsed(collapsed) {
 }
 
 function bindNavCollapse() {
-  applyNavCollapsed(readNavCollapsed());
+  const mobileQuery = window.matchMedia('(max-width: 900px)');
+
+  const syncNavForViewport = () => {
+    if (mobileQuery.matches) {
+      // Mobile uses the compact top chrome; never keep the icon-rail collapsed mode.
+      applyNavCollapsed(false);
+      return;
+    }
+    applyNavCollapsed(readNavCollapsed());
+  };
+
+  syncNavForViewport();
+  mobileQuery.addEventListener('change', syncNavForViewport);
+
   document.getElementById('admin-nav-toggle')?.addEventListener('click', () => {
+    if (mobileQuery.matches) return;
     const next = !shell.classList.contains('is-nav-collapsed');
     applyNavCollapsed(next);
     writeNavCollapsed(next);
