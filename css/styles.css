@@ -461,6 +461,9 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   opacity: 1;
   filter: saturate(1.15) contrast(1.05);
 }
+/* Must beat `.page-backdrop .hero-image { opacity: 1 }` or bright→dark
+   animates editorial toward opacity 1 while visibility slowly hides it. */
+.page-backdrop .hero-image--editorial,
 .hero-image--editorial {
   opacity: 0;
   visibility: hidden;

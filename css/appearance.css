@@ -2,20 +2,21 @@ html {
   color-scheme: light dark;
 }
 
-/* Appearance switch — view transition (modern browsers) */
+/* Appearance switch — view transition (modern browsers).
+   Keep the outgoing (often bright) snapshot short so it does not linger. */
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-old(root) {
-    animation: appearance-exit 0.65s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: appearance-exit 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
     z-index: 1;
   }
 
   ::view-transition-new(root) {
-    animation: appearance-enter 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: appearance-enter 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
     z-index: 2;
   }
 
   ::view-transition-group(appearance-toggle) {
-    animation-duration: 0.65s;
+    animation-duration: 0.38s;
     z-index: 3;
   }
 
@@ -27,15 +28,15 @@ html {
 
     to {
       opacity: 0;
-      filter: brightness(1.06) blur(3px);
+      filter: brightness(1.02) blur(1px);
     }
   }
 
   @keyframes appearance-enter {
     from {
       opacity: 0;
-      filter: brightness(0.94) blur(4px);
-      transform: scale(1.008);
+      filter: brightness(0.97) blur(1.5px);
+      transform: scale(1.004);
     }
 
     to {
@@ -49,7 +50,7 @@ html {
 /* Fallback when View Transitions API is unavailable */
 html.appearance-animate {
   --appearance-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --appearance-duration: 0.65s;
+  --appearance-duration: 0.35s;
 }
 
 html.appearance-animate body,
@@ -96,10 +97,24 @@ html.appearance-animate .mono-label {
 .app--continuous-hero .section-grid,
 .app--continuous-hero .experience::before {
   transition:
-    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Bright photo must snap off when leaving light mode.
+   Any fade-out reads as the bright theme sticking for ~1s, and
+   View Transitions can capture a mid-fade "new" snapshot. */
+.page-backdrop .hero-image--editorial {
+  transition: none;
+}
+
+[data-appearance="light"] .page-backdrop .hero-image--editorial {
+  transition:
+    opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s,
+    filter 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .hero-frame,

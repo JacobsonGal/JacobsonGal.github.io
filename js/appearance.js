@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'gal-portfolio-appearance';
 const OVERRIDE_KEY = 'gal-portfolio-appearance-override';
-const APPEARANCE_TRANSITION_MS = 650;
+const APPEARANCE_TRANSITION_MS = 380;
 
 function getAppearanceLock() {
   const lock = document.querySelector('meta[name="appearance-lock"]')?.content;
