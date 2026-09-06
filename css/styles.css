@@ -1346,41 +1346,74 @@ a.tag:hover {
   transform: translateY(0);
   pointer-events: auto;
 }
-.floating-cta.context-open {
-  z-index: 200;
-}
-.floating-cta.context-open .floating-links {
-  position: fixed;
-  top: var(--ctx-y, 0);
-  left: var(--ctx-x, 0);
-  right: auto;
-  bottom: auto;
-  z-index: 200;
-  align-items: stretch;
-  transform: none;
-}
-.floating-cta.context-open .floating-trigger {
-  transform: none;
-}
 .floating-link {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  width: 11rem;
+  width: 12rem;
+  min-height: 2.5rem;
   padding: 0.65rem 1rem;
   background: hsl(var(--foreground));
   color: hsl(var(--background));
+  line-height: 1.2;
+  white-space: nowrap;
   transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .floating-link:hover {
   background: hsl(var(--accent));
   transform: translateX(-4px);
 }
-button.floating-link {
+button.floating-link,
+a.floating-link[role="button"] {
+  box-sizing: border-box;
   border: 0;
-  font: inherit;
+  margin: 0;
   cursor: pointer;
   text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Independent right-click menu — not nested inside the corner CTA. */
+.context-menu {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.context-menu.open,
+.context-menu:not([hidden]) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.context-menu[hidden] {
+  display: none !important;
+}
+.context-menu .floating-link {
+  width: 12rem;
+}
+.context-menu.open .stagger-item,
+.context-menu:not([hidden]) .stagger-item {
+  opacity: 1;
+  transform: translateY(0);
 }
 .floating-link-icon {
   width: 1rem;

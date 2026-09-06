@@ -1,6 +1,6 @@
 import { iconMarkup } from './icons.js';
 import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
-import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=rightclick-menu-4';
+import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=rightclick-menu-8';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle, resolveAppearance, setAppearance } from './appearance.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
@@ -128,6 +128,7 @@ function bindFloatingMenuActions(root) {
     const btn = event.target.closest?.('[data-floating-appearance]');
     if (!btn || !root.contains(btn)) return;
     event.preventDefault();
+    event.stopPropagation();
     setAppearance(resolveAppearance() === 'dark' ? 'light' : 'dark');
     syncFloatingAppearanceLabel(root);
   });
@@ -135,7 +136,7 @@ function bindFloatingMenuActions(root) {
   document.addEventListener('appearancechange', () => syncFloatingAppearanceLabel(root));
 }
 
-function renderFloatingLinks(profile) {
+function renderSocialLinkItems(profile) {
   const resumeHref = asset(profile.urls.cv || 'resume.html');
   const links = [
     { label: 'LinkedIn', href: profile.urls.linkedin, icon: iconMarkup('linkedin'), external: true },
@@ -145,25 +146,32 @@ function renderFloatingLinks(profile) {
     { label: 'Resume', href: resumeHref, icon: iconMarkup('resume'), external: false },
   ];
 
-  const social = links.map((link) => `
+  return links.map((link) => `
     <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
       <span class="floating-link-icon" aria-hidden="true">${link.icon}</span>
       <span>${link.label}</span>
     </a>
   `).join('');
+}
 
+/** Bottom-right hover CTA: social / resume only. */
+function renderFloatingLinks(profile) {
+  return renderSocialLinkItems(profile);
+}
+
+/** Right-click menu: social links plus Admin + appearance. */
+function renderContextMenuLinks(profile) {
   const extras = `
-    <button type="button" class="floating-link floating-link--action mono-label stagger-item" data-floating-appearance>
-      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
-      <span data-floating-appearance-label>Dark mode</span>
-    </button>
     <a class="floating-link mono-label stagger-item" href="${asset('admin.html')}">
       <span class="floating-link-icon" aria-hidden="true">${iconMarkup('admin')}</span>
       <span>Admin</span>
     </a>
+    <a class="floating-link mono-label stagger-item" href="#" data-floating-appearance role="button">
+      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
+      <span data-floating-appearance-label>Dark mode</span>
+    </a>
   `;
-
-  return social + extras;
+  return renderSocialLinkItems(profile) + extras;
 }
 
 function collectHardSkills(profile) {
@@ -251,8 +259,13 @@ function applyProfile(profile) {
   const floatingLinks = document.getElementById('floating-links');
   if (floatingLinks) {
     floatingLinks.innerHTML = renderFloatingLinks(profile);
-    bindFloatingMenuActions(floatingLinks);
-    syncFloatingAppearanceLabel(floatingLinks);
+  }
+
+  const contextMenu = document.getElementById('context-menu');
+  if (contextMenu) {
+    contextMenu.innerHTML = renderContextMenuLinks(profile);
+    bindFloatingMenuActions(contextMenu);
+    syncFloatingAppearanceLabel(contextMenu);
   }
 
   applyHeroRail(profile);

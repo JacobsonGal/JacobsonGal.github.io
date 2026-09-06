@@ -56,16 +56,12 @@ function eventElement(target) {
   return target?.parentElement ?? null;
 }
 
-function clearContextStyles(links) {
-  if (!links) return;
-  ['--ctx-x', '--ctx-y', 'position', 'top', 'left', 'right', 'bottom', 'z-index', 'opacity', 'transform', 'pointer-events', 'align-items']
-    .forEach((prop) => links.style.removeProperty(prop));
-}
-
 /**
- * Social actions menu: logo hover/click + right-click at the cursor.
- * Positions with inline styles so a stale CSS cache still shows the menu,
- * and rebinds cleanly across SPA remounts.
+ * Two separate menus:
+ * 1) #floating-cta / #floating-links — bottom-right hover/click social CTA
+ * 2) #context-menu — right-click menu (social + Admin + appearance)
+ *
+ * Separate DOM nodes so dismissing right-click never flashes the corner CTA.
  */
 export function initFloatingCta() {
   floatingCtaCleanup?.();
@@ -73,6 +69,7 @@ export function initFloatingCta() {
   const cta = document.getElementById('floating-cta');
   const trigger = cta?.querySelector('.floating-trigger');
   const links = document.getElementById('floating-links');
+  const contextMenu = document.getElementById('context-menu');
   if (!cta || !trigger || !links) {
     floatingCtaCleanup = null;
     return;
@@ -80,61 +77,48 @@ export function initFloatingCta() {
 
   const MENU_GAP = 8;
   const EDGE_PAD = 12;
-  let ignorePointerUntil = 0;
+  let ignoreHoverUntil = 0;
 
-  const isContextOpen = () => cta.classList.contains('context-open');
+  const isContextOpen = () => Boolean(contextMenu && !contextMenu.hidden);
 
-  const clearContextMode = () => {
-    cta.classList.remove('context-open');
-    cta.style.removeProperty('z-index');
-    clearContextStyles(links);
-  };
-
-  const setOpen = (open, { context = false } = {}) => {
-    if (!open) {
-      // Drop `open` before leaving context mode so the menu never flashes
-      // back to the bottom-right corner for a frame.
-      const wasContext = isContextOpen();
-      cta.classList.remove('open');
-      trigger.setAttribute('aria-expanded', 'false');
-      links.setAttribute('aria-hidden', 'true');
-      clearContextMode();
-      if (wasContext) ignorePointerUntil = performance.now() + 350;
+  const setHoverOpen = (open) => {
+    if (open) {
+      cta.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+      links.setAttribute('aria-hidden', 'false');
       return;
     }
-
-    if (!context) clearContextMode();
-    cta.classList.add('open');
-    trigger.setAttribute('aria-expanded', 'true');
-    links.setAttribute('aria-hidden', 'false');
+    cta.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+    links.setAttribute('aria-hidden', 'true');
   };
 
-  const placeAtCursor = (clientX, clientY) => {
-    if (!links.children.length) return false;
+  const closeContextMenu = () => {
+    if (!contextMenu || contextMenu.hidden) return;
+    contextMenu.hidden = true;
+    contextMenu.setAttribute('aria-hidden', 'true');
+    contextMenu.classList.remove('open');
+    contextMenu.style.removeProperty('left');
+    contextMenu.style.removeProperty('top');
+    // Avoid instantly reopening the corner CTA if the pointer is still over it.
+    ignoreHoverUntil = performance.now() + 400;
+  };
 
-    ignorePointerUntil = performance.now() + 500;
-    cta.classList.add('open', 'context-open');
-    cta.style.zIndex = '200';
-    trigger.setAttribute('aria-expanded', 'true');
-    links.setAttribute('aria-hidden', 'false');
+  const openContextMenu = (clientX, clientY) => {
+    if (!contextMenu || !contextMenu.children.length) return false;
 
-    // Inline styles beat stale cached CSS that lacks .context-open rules.
-    links.style.position = 'fixed';
-    links.style.right = 'auto';
-    links.style.bottom = 'auto';
-    links.style.zIndex = '200';
-    links.style.opacity = '1';
-    links.style.transform = 'none';
-    links.style.pointerEvents = 'auto';
-    links.style.alignItems = 'stretch';
-    links.style.left = `${clientX}px`;
-    links.style.top = `${clientY}px`;
-    links.style.setProperty('--ctx-x', `${clientX}px`);
-    links.style.setProperty('--ctx-y', `${clientY}px`);
+    setHoverOpen(false);
+    ignoreHoverUntil = performance.now() + 500;
+
+    contextMenu.hidden = false;
+    contextMenu.setAttribute('aria-hidden', 'false');
+    contextMenu.classList.add('open');
+    contextMenu.style.left = `${clientX}px`;
+    contextMenu.style.top = `${clientY}px`;
 
     requestAnimationFrame(() => {
-      if (!links.isConnected || !isContextOpen()) return;
-      const rect = links.getBoundingClientRect();
+      if (!contextMenu.isConnected || contextMenu.hidden) return;
+      const rect = contextMenu.getBoundingClientRect();
       let x = clientX + MENU_GAP;
       let y = clientY + MENU_GAP;
 
@@ -145,10 +129,8 @@ export function initFloatingCta() {
         y = Math.max(EDGE_PAD, clientY - rect.height - MENU_GAP);
       }
 
-      links.style.left = `${x}px`;
-      links.style.top = `${y}px`;
-      links.style.setProperty('--ctx-x', `${x}px`);
-      links.style.setProperty('--ctx-y', `${y}px`);
+      contextMenu.style.left = `${x}px`;
+      contextMenu.style.top = `${y}px`;
     });
 
     return true;
@@ -158,12 +140,12 @@ export function initFloatingCta() {
 
   const onMouseEnter = () => {
     if (isContextOpen()) return;
-    if (performance.now() < ignorePointerUntil) return;
-    setOpen(true);
+    if (performance.now() < ignoreHoverUntil) return;
+    setHoverOpen(true);
   };
   const onMouseLeave = () => {
     if (isContextOpen()) return;
-    setOpen(false);
+    setHoverOpen(false);
   };
 
   if (canHover) {
@@ -174,48 +156,64 @@ export function initFloatingCta() {
   const onTriggerClick = (event) => {
     event.stopPropagation();
     if (isContextOpen()) {
-      setOpen(false);
+      closeContextMenu();
       return;
     }
-    setOpen(!cta.classList.contains('open'));
+    setHoverOpen(!cta.classList.contains('open'));
   };
   trigger.addEventListener('click', onTriggerClick);
 
   const onLinksClick = (event) => {
     const el = eventElement(event.target);
-    if (el?.closest('a')) setOpen(false);
+    if (!el?.closest('a')) return;
+    setHoverOpen(false);
   };
   links.addEventListener('click', onLinksClick);
+
+  const onContextMenuClick = (event) => {
+    const el = eventElement(event.target);
+    if (!el?.closest('a')) return;
+    if (el.closest('[data-floating-appearance]')) return;
+    closeContextMenu();
+  };
+  contextMenu?.addEventListener('click', onContextMenuClick);
 
   const onContextMenu = (event) => {
     if (event.shiftKey) return;
     const el = eventElement(event.target);
     if (el?.closest('input, textarea, select, [contenteditable="true"]')) return;
-    if (!links.children.length) return;
+    if (!contextMenu?.children.length) return;
 
     event.preventDefault();
-    placeAtCursor(event.clientX, event.clientY);
+    openContextMenu(event.clientX, event.clientY);
   };
-  // Capture so SPA routers / nested handlers cannot swallow the gesture.
   document.addEventListener('contextmenu', onContextMenu, true);
 
   const onKeydown = (event) => {
-    if (event.key === 'Escape') setOpen(false);
+    if (event.key !== 'Escape') return;
+    closeContextMenu();
+    setHoverOpen(false);
   };
   document.addEventListener('keydown', onKeydown);
 
   const onPointerDown = (event) => {
-    // Right-button sequence must not dismiss the menu we just opened.
     if (event.button === 2) return;
-    if (performance.now() < ignorePointerUntil) return;
+
+    if (isContextOpen()) {
+      if (contextMenu.contains(event.target)) return;
+      closeContextMenu();
+      return;
+    }
+
+    if (performance.now() < ignoreHoverUntil) return;
     if (!cta.classList.contains('open')) return;
     if (cta.contains(event.target)) return;
-    setOpen(false);
+    setHoverOpen(false);
   };
   document.addEventListener('pointerdown', onPointerDown, true);
 
   const onScroll = () => {
-    if (isContextOpen()) setOpen(false);
+    closeContextMenu();
   };
   window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -226,11 +224,13 @@ export function initFloatingCta() {
     }
     trigger.removeEventListener('click', onTriggerClick);
     links.removeEventListener('click', onLinksClick);
+    contextMenu?.removeEventListener('click', onContextMenuClick);
     document.removeEventListener('contextmenu', onContextMenu, true);
     document.removeEventListener('keydown', onKeydown);
     document.removeEventListener('pointerdown', onPointerDown, true);
     window.removeEventListener('scroll', onScroll);
-    clearContextMode();
+    closeContextMenu();
+    setHoverOpen(false);
     floatingCtaCleanup = null;
   };
 }
