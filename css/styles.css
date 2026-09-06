@@ -1375,12 +1375,13 @@ a.tag:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  width: 11rem;
+  width: 12rem;
   min-height: 2.5rem;
   padding: 0.65rem 1rem;
   background: hsl(var(--foreground));
   color: hsl(var(--background));
   line-height: 1.2;
+  white-space: nowrap;
   transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .floating-link:hover {
