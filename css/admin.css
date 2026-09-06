@@ -598,13 +598,20 @@ html[data-appearance="light"] body.admin-page {
     overflow: hidden;
   }
 
-  .admin-nav {
+  .admin-nav,
+  .admin-shell.is-nav-collapsed .admin-nav {
     position: sticky;
     top: 0;
     z-index: 40;
     height: auto;
-    gap: 0.55rem;
-    padding: 0.65rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    grid-template-areas:
+      "brand appearance signout site"
+      "links links links links";
+    align-items: center;
+    gap: 0.55rem 0.45rem;
+    padding: 0.7rem 0.75rem 0.65rem;
     border-right: 0;
     border-bottom: 1px solid hsl(var(--border));
     overflow: visible;
@@ -613,71 +620,87 @@ html[data-appearance="light"] body.admin-page {
     -webkit-backdrop-filter: blur(12px);
   }
 
-  .admin-nav-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-  }
-
-  .admin-nav-links,
-  .admin-shell.is-nav-collapsed .admin-nav-links {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.35rem;
-    width: 100%;
-    flex: 0 0 auto;
-    overflow: visible;
-  }
-
-  .admin-shell.is-nav-collapsed .admin-nav {
-    padding-inline: 0.75rem;
-    align-items: stretch;
-  }
-
-  .admin-shell.is-nav-collapsed .admin-nav-top,
-  .admin-shell.is-nav-collapsed .admin-nav-footer {
-    width: 100%;
-    justify-items: stretch;
+  .admin-nav-top,
+  .admin-shell.is-nav-collapsed .admin-nav-top {
+    display: contents;
   }
 
   .admin-nav-brand,
   .admin-shell.is-nav-collapsed .admin-nav-brand {
+    grid-area: brand;
     width: auto;
     height: auto;
-    min-height: 2.5rem;
+    min-height: 2.25rem;
     justify-content: flex-start;
-    gap: 0.6rem;
-    padding: 0.15rem 0.25rem;
-    margin-inline: 0;
+    gap: 0.55rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .admin-nav-site,
+  .admin-shell.is-nav-collapsed .admin-nav-site {
+    grid-area: site;
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0.4rem 0.7rem;
+    clip: auto;
+    overflow: visible;
+    white-space: nowrap;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    font-size: 0.72rem;
+    line-height: 1;
+  }
+
+  .admin-appearance,
+  .admin-shell.is-nav-collapsed .admin-appearance {
+    grid-area: appearance;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 0;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-appearance .appearance-tools {
+    width: auto;
+    justify-content: center;
+  }
+
+  .admin-shell.is-nav-collapsed .admin-appearance .appearance-toggle-btn {
+    margin: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .admin-nav-links,
+  .admin-shell.is-nav-collapsed .admin-nav-links {
+    grid-area: links;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    width: 100%;
+    overflow: visible;
   }
 
   .admin-nav-link,
   .admin-shell.is-nav-collapsed .admin-nav-link {
     width: auto;
     height: auto;
-    min-height: 3.15rem;
-    margin-inline: 0;
-    padding: 0.45rem 0.35rem;
+    min-height: 3.35rem;
+    margin: 0;
+    padding: 0.45rem 0.3rem;
     justify-content: center;
     flex-direction: column;
-    gap: 0.2rem;
-    border-radius: 0.75rem;
+    gap: 0.25rem;
+    border-radius: 0.8rem;
     text-align: center;
-    font-size: 0.72rem;
-  }
-
-  .admin-nav-link .admin-nav-label {
-    font-size: 0.62rem;
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-    max-width: 100%;
   }
 
   .admin-nav-label,
-  .admin-nav-site,
-  .admin-shell.is-nav-collapsed .admin-nav-label,
-  .admin-shell.is-nav-collapsed .admin-nav-site {
+  .admin-shell.is-nav-collapsed .admin-nav-label {
     position: static;
     width: auto;
     height: auto;
@@ -688,68 +711,62 @@ html[data-appearance="light"] body.admin-page {
     white-space: nowrap;
   }
 
-  .admin-nav-site {
-    flex: 0 0 auto;
-    padding: 0.35rem 0.55rem;
-    border-radius: 999px;
-    border: 1px solid hsl(var(--border));
-    font-size: 0.72rem;
+  .admin-nav-link .admin-nav-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
+    max-width: 100%;
+  }
+
+  .admin-nav-icon {
+    width: 1.15rem;
+    height: 1.15rem;
   }
 
   .admin-nav-footer,
   .admin-shell.is-nav-collapsed .admin-nav-footer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    width: 100%;
-  }
-
-  .admin-appearance,
-  .admin-shell.is-nav-collapsed .admin-appearance {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: auto;
-    min-height: 0;
-  }
-
-  .admin-shell.is-nav-collapsed .admin-appearance .appearance-tools {
-    width: auto;
-    justify-content: flex-start;
-  }
-
-  .admin-shell.is-nav-collapsed .admin-appearance .appearance-toggle-btn {
-    margin-inline: 0;
+    display: contents;
   }
 
   .admin-user,
   .admin-shell.is-nav-collapsed .admin-user {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.55rem;
-    width: auto;
-    min-width: 0;
-  }
-
-  .admin-user-meta,
-  .admin-shell.is-nav-collapsed .admin-user-meta {
-    display: grid;
-    justify-items: end;
-    min-width: 0;
+    display: contents;
   }
 
   .admin-user-photo,
   .admin-shell.is-nav-collapsed .admin-user-photo {
-    width: 1.9rem;
-    height: 1.9rem;
+    display: none;
   }
 
-  .admin-signout {
-    justify-content: flex-end;
+  .admin-user-meta,
+  .admin-shell.is-nav-collapsed .admin-user-meta {
+    display: contents;
+  }
+
+  .admin-user-meta > .admin-nav-label,
+  .admin-shell.is-nav-collapsed .admin-user-meta > .admin-nav-label {
+    display: none;
+  }
+
+  .admin-signout,
+  .admin-shell.is-nav-collapsed .admin-signout {
+    grid-area: signout;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border-radius: 0.7rem;
+    border: 1px solid hsl(var(--border));
+  }
+
+  .admin-signout .admin-nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
   }
 
   .admin-main {
@@ -790,7 +807,6 @@ html[data-appearance="light"] body.admin-page {
     flex: 1 1 calc(50% - 0.35rem);
   }
 
-  /* Resume editor fills the remaining viewport; drop duplicate page chrome. */
   #section-resume .admin-section-head {
     display: none;
   }
@@ -798,7 +814,7 @@ html[data-appearance="light"] body.admin-page {
   .admin-resume-frame {
     min-height: 0;
     flex: 1 1 auto;
-    height: calc(100svh - 11.25rem);
+    height: calc(100svh - 8.75rem);
     border-radius: 0.85rem;
   }
 
