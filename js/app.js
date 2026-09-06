@@ -153,14 +153,14 @@ function renderFloatingLinks(profile) {
   `).join('');
 
   const extras = `
-    <button type="button" class="floating-link floating-link--action mono-label stagger-item" data-floating-appearance>
-      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
-      <span data-floating-appearance-label>Dark mode</span>
-    </button>
     <a class="floating-link mono-label stagger-item" href="${asset('admin.html')}">
       <span class="floating-link-icon" aria-hidden="true">${iconMarkup('admin')}</span>
       <span>Admin</span>
     </a>
+    <button type="button" class="floating-link mono-label stagger-item" data-floating-appearance>
+      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
+      <span data-floating-appearance-label>Dark mode</span>
+    </button>
   `;
 
   return social + extras;

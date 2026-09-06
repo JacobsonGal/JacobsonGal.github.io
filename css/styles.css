@@ -1377,10 +1377,13 @@ a.tag:hover {
   transform: translateX(-4px);
 }
 button.floating-link {
+  box-sizing: border-box;
   border: 0;
-  font: inherit;
+  /* Keep .mono-label typography — do not reset with font: inherit */
   cursor: pointer;
   text-align: left;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .floating-link-icon {
   width: 1rem;
