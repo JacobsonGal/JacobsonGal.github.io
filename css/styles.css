@@ -1346,31 +1346,6 @@ a.tag:hover {
   transform: translateY(0);
   pointer-events: auto;
 }
-.floating-cta.context-open {
-  z-index: 200;
-}
-.floating-cta.context-open .floating-links {
-  position: fixed;
-  top: var(--ctx-y, 0);
-  left: var(--ctx-x, 0);
-  right: auto;
-  bottom: auto;
-  z-index: 200;
-  align-items: stretch;
-  transform: none;
-}
-.floating-cta.context-open .floating-trigger {
-  transform: none;
-}
-/* Owner / appearance rows only appear in the right-click menu. */
-.floating-cta:not(.context-open) [data-floating-context-only] {
-  display: none;
-}
-.floating-cta.is-context-dismissing .floating-links {
-  transition: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
 .floating-link {
   display: inline-flex;
   align-items: center;
@@ -1402,6 +1377,43 @@ a.floating-link[role="button"] {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   line-height: 1.2;
+}
+
+/* Independent right-click menu — not nested inside the corner CTA. */
+.context-menu {
+  position: fixed;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition:
+    opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.context-menu.open,
+.context-menu:not([hidden]) {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+.context-menu[hidden] {
+  display: none !important;
+}
+.context-menu .floating-link {
+  width: 12rem;
+}
+.context-menu.open .stagger-item,
+.context-menu:not([hidden]) .stagger-item {
+  opacity: 1;
+  transform: translateY(0);
 }
 .floating-link-icon {
   width: 1rem;
