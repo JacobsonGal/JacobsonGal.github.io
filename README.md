@@ -44,10 +44,11 @@ Default code shipped in this repo (change it after first deploy):
 
 ### GitHub publish from the editor
 
-The editor can commit `data/profile.json` for you through the Cloudflare worker in `workers/github-auth-proxy`.
+Edits in **Edit resume** are meant to go live immediately. With **Publish** on (default), each change commits `data/profile.json` to `main` so GitHub Pages updates within about a minute.
 
-1. Create a fine-grained GitHub PAT with **Contents: Read and write** on `JacobsonGal/JacobsonGal.github.io`.
-2. Deploy the worker:
+**Fastest path (no worker):** unlock with your owner code, then paste a fine-grained GitHub PAT once when prompted. The token stays in `sessionStorage` for that browser session only. Create one at [GitHub → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new) with **Contents: Read and write** on `JacobsonGal/JacobsonGal.github.io`.
+
+**Optional worker path** (also powers analytics / job boards): deploy `workers/github-auth-proxy`, set secrets, then set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js`. Owner-code publish then works without pasting a PAT.
 
 ```bash
 cd workers/github-auth-proxy
@@ -56,8 +57,7 @@ wrangler secret put OWNER_UNLOCK_HASH
 wrangler deploy
 ```
 
-3. Set `GITHUB_AUTH_PROXY_URL` in `js/auth-config.js` to the worker URL (for example `https://gal-github-auth-proxy.<your-subdomain>.workers.dev`).
-4. Open [admin.html](admin.html), unlock with your owner code, open **Edit resume**, keep **Publish to GitHub immediately** checked, and edit. Changes publish after a short pause or when you click **Save & publish**.
+GitHub sign-in with a token can also publish directly when the auth proxy is configured for device flow.
 
 ### Admin Worker extras (analytics, jobs, Google)
 

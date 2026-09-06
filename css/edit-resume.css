@@ -55,6 +55,59 @@ body.edit-resume-page {
   color: hsl(var(--accent-deep, var(--accent)));
 }
 
+.publish-token-panel {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+}
+
+.publish-token-panel[hidden] {
+  display: none;
+}
+
+.publish-token-copy {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: hsl(var(--muted));
+}
+
+.publish-token-copy a {
+  color: hsl(var(--foreground));
+  text-underline-offset: 0.15em;
+}
+
+.publish-token-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: hsl(var(--muted));
+}
+
+.publish-token-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.publish-token-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font: inherit;
+}
+
+.publish-token-row .resume-btn {
+  flex: 0 0 auto;
+}
+
 .edit-publish-toggle {
   display: inline-flex;
   flex: none;

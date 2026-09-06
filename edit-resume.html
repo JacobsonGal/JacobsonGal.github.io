@@ -42,6 +42,18 @@
         <button class="resume-btn resume-btn--primary" type="submit" form="edit-form" id="save-resume">Save</button>
         <button class="resume-btn" type="button" id="reset-draft">Reset</button>
       </div>
+      <div class="publish-token-panel" id="publish-token-panel" hidden>
+        <p class="publish-token-copy">
+          To make resume edits live on GitHub Pages, paste a fine-grained token with
+          <strong>Contents: Read and write</strong> on this repository.
+          <a id="publish-token-link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Create token</a>
+        </p>
+        <label class="publish-token-label" for="publish-token-input">GitHub publish token</label>
+        <div class="publish-token-row">
+          <input id="publish-token-input" class="publish-token-input" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…" />
+          <button type="button" class="resume-btn resume-btn--primary" id="publish-token-save">Save &amp; publish</button>
+        </div>
+      </div>
       <form class="edit-form" id="edit-form">
         <label>Name<input name="name" required /></label>
         <label>Headline<input name="headline" required /></label>

@@ -5,6 +5,7 @@ import {
 } from './auth-config.js';
 import { getAuthorizedUser } from './github-auth.js';
 import { getOwnerCodeForPublish } from './owner-auth.js';
+import { getSessionPublishToken } from './publish-token.js';
 
 function encodeBase64Utf8(text) {
   const bytes = new TextEncoder().encode(text);
@@ -15,15 +16,26 @@ function encodeBase64Utf8(text) {
   return btoa(binary);
 }
 
-export function isPublishConfigured() {
+/** True when a proxy is deployed — owner-code publish can work without a PAT. */
+export function isProxyPublishConfigured() {
   return Boolean(GITHUB_AUTH_PROXY_URL);
+}
+
+/**
+ * Publish is always available to authenticated owners: via proxy, GitHub sign-in,
+ * or a fine-grained PAT stored for this browser session.
+ */
+export function isPublishConfigured() {
+  return true;
 }
 
 export function prepareProfileForPublish(profile) {
   const overview = profile.resume?.overview || profile.about || [];
+  const syncedAt = new Date().toISOString();
   return {
     ...profile,
-    syncedAt: new Date().toISOString(),
+    updatedAt: syncedAt,
+    syncedAt,
     about: overview.length ? overview : profile.about,
   };
 }
@@ -106,10 +118,23 @@ async function publishWithOwnerCode(profile, ownerCode) {
   return data.profile || prepareProfileForPublish(profile);
 }
 
+export class PublishAuthRequiredError extends Error {
+  constructor(message) {
+    super(message || 'A GitHub publish token is required.');
+    this.name = 'PublishAuthRequiredError';
+    this.code = 'publish_auth_required';
+  }
+}
+
 export async function publishProfile(profile) {
   const user = await getAuthorizedUser();
   if (user?.token) {
     return publishWithToken(profile, user.token);
+  }
+
+  const sessionToken = getSessionPublishToken();
+  if (sessionToken) {
+    return publishWithToken(profile, sessionToken);
   }
 
   const ownerCode = getOwnerCodeForPublish();
@@ -117,8 +142,10 @@ export async function publishProfile(profile) {
     return publishWithOwnerCode(profile, ownerCode);
   }
 
-  if (!GITHUB_AUTH_PROXY_URL) {
-    throw new Error('GitHub publish is not configured yet. Deploy the auth proxy and set GITHUB_AUTH_PROXY_URL in js/auth-config.js.');
+  if (ownerCode && !GITHUB_AUTH_PROXY_URL) {
+    throw new PublishAuthRequiredError(
+      'Add a GitHub token once to publish live. Create a fine-grained token with Contents: Read and write on this repo, then paste it below.',
+    );
   }
 
   throw new Error('Sign in with GitHub or unlock with your owner code to publish.');

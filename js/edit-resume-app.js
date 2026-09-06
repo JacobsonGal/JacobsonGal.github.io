@@ -6,7 +6,17 @@ import {
 } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
-import { isPublishConfigured, publishProfile } from './github-publish.js';
+import {
+  isPublishConfigured,
+  isProxyPublishConfigured,
+  publishProfile,
+  PublishAuthRequiredError,
+} from './github-publish.js';
+import {
+  getSessionPublishToken,
+  setSessionPublishToken,
+  publishTokenSetupUrl,
+} from './publish-token.js';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -33,7 +43,7 @@ if (!isEmbed) {
 } else {
   gateRoot.hidden = true;
   editorRoot.hidden = false;
-  initEditor();
+  initEditor(user);
 }
 
 function skillsToFormText(skills = {}) {
@@ -67,24 +77,48 @@ function parseSkillsFormText(text) {
   return skills;
 }
 
-function initEditor() {
+function initEditor(user) {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
   const publishToggle = document.getElementById('publish-option');
   const editStatus = document.getElementById('edit-status');
-  const publishEnabled = isPublishConfigured();
-  let publishOnSave = publishEnabled;
+  const tokenPanel = document.getElementById('publish-token-panel');
+  const tokenInput = document.getElementById('publish-token-input');
+  const tokenSave = document.getElementById('publish-token-save');
+  const tokenLink = document.getElementById('publish-token-link');
+
+  // Authenticated owners publish by default. Credentials may come from GitHub
+  // OAuth, a session PAT, or owner-code + auth proxy.
+  let publishOnSave = isPublishConfigured();
   let profile;
   let publishTimer;
   let publishInFlight = false;
+  let awaitingToken = false;
 
   function syncPublishToggleUi() {
     publishToggle.setAttribute('aria-pressed', String(publishOnSave));
+    publishToggle.title = publishOnSave
+      ? 'Publish to GitHub on save (on)'
+      : 'Publish to GitHub on save (off — draft only)';
   }
 
-  if (!publishEnabled) {
-    publishOnSave = false;
-    publishToggle.title = 'Publish to Github (not configured — saves draft locally)';
+  function showTokenPanel(visible) {
+    if (!tokenPanel) return;
+    tokenPanel.hidden = !visible;
+    awaitingToken = visible;
+    if (visible && tokenInput) {
+      tokenInput.value = getSessionPublishToken();
+      tokenInput.focus();
+    }
+  }
+
+  if (tokenLink) {
+    tokenLink.href = publishTokenSetupUrl();
+  }
+
+  const hasGithubToken = Boolean(user?.token);
+  if (!isProxyPublishConfigured() && !getSessionPublishToken() && !hasGithubToken) {
+    showTokenPanel(true);
   }
 
   syncPublishToggleUi();
@@ -92,10 +126,24 @@ function initEditor() {
   publishToggle.addEventListener('click', () => {
     publishOnSave = !publishOnSave;
     syncPublishToggleUi();
+    if (publishOnSave) schedulePublish();
+  });
+
+  tokenSave?.addEventListener('click', () => {
+    const token = setSessionPublishToken(tokenInput?.value || '');
+    if (!token) {
+      setStatus('Paste a GitHub fine-grained token with Contents: Read and write.', 'error');
+      return;
+    }
+    showTokenPanel(false);
+    setStatus('Publish token saved for this browser session. Publishing…', 'info');
+    publishOnSave = true;
+    syncPublishToggleUi();
+    persistProfile(formToProfile(profile), { publish: true }).catch(() => {});
   });
 
   function shouldPublish() {
-    return publishEnabled && publishOnSave;
+    return publishOnSave;
   }
 
   function setStatus(message, type = 'info') {
@@ -132,8 +180,8 @@ function initEditor() {
   }
 
   function formToProfile(base) {
-    const overview = form.about.value.split('\n').map((l) => l.trim()).filter(Boolean);
-    const softSkills = form.softSkills.value.split('\n').map((l) => l.trim()).filter(Boolean);
+    const overview = form.about.value.split('\n').map((line) => line.trim()).filter(Boolean);
+    const softSkills = form.softSkills.value.split('\n').map((line) => line.trim()).filter(Boolean);
     const skills = parseSkillsFormText(form.hardSkills.value);
 
     return {
@@ -180,9 +228,13 @@ function initEditor() {
       profile = published;
       clearDraft();
       saveDraft(profile);
-      setStatus('Published to GitHub. Site updates in about a minute.', 'success');
+      showTokenPanel(false);
+      setStatus('Published to GitHub. Live on the site in about a minute.', 'success');
       return profile;
     } catch (error) {
+      if (error instanceof PublishAuthRequiredError || error?.code === 'publish_auth_required') {
+        showTokenPanel(true);
+      }
       setStatus(error.message || 'Publish failed.', 'error');
       throw error;
     } finally {
@@ -192,10 +244,14 @@ function initEditor() {
 
   function schedulePublish() {
     if (!shouldPublish()) return;
+    if (awaitingToken && !getSessionPublishToken() && !user?.token) {
+      showTokenPanel(true);
+      return;
+    }
     window.clearTimeout(publishTimer);
     publishTimer = window.setTimeout(() => {
       persistProfile(formToProfile(profile), { publish: true }).catch(() => {});
-    }, 1500);
+    }, 1200);
   }
 
   function previewShellAttrs() {
@@ -208,8 +264,8 @@ function initEditor() {
     frame.srcdoc = doc;
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
     try {
       await persistProfile(formToProfile(profile), {
         publish: shouldPublish(),
