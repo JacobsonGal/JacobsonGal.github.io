@@ -424,7 +424,7 @@
 }
 
 @media (max-width: 900px) {
-  .admin-shell {
+  .admin-shell:not([hidden]) {
     grid-template-columns: 1fr;
   }
 
