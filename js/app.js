@@ -1,6 +1,6 @@
 import { iconMarkup } from './icons.js';
 import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
-import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=rightclick-menu-8';
+import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=rightclick-menu-9';
 import { getAuthorizedUser } from './github-auth.js';
 import { mountAppearanceToggle, resolveAppearance, setAppearance } from './appearance.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
