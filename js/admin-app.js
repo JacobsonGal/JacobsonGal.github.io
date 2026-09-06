@@ -483,6 +483,7 @@ function applyNavCollapsed(collapsed) {
   if (toggle) {
     toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
     toggle.title = collapsed ? 'Expand menu' : 'Collapse menu';
+    toggle.classList.toggle('is-spinning', !collapsed);
   }
 }
 
