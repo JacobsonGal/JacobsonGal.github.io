@@ -92,18 +92,33 @@ export function initFloatingCta() {
 
   const setOpen = (open, { context = false } = {}) => {
     if (!open) {
-      // Drop `open` before leaving context mode so the menu never flashes
-      // back to the bottom-right corner for a frame.
+      // Drop visibility at the cursor before clearing fixed positioning.
+      // Otherwise opacity/transform transitions play while the menu snaps
+      // back into the bottom-right CTA and looks like a connected flicker.
       const wasContext = isContextOpen();
+      if (wasContext) {
+        cta.classList.add('is-context-dismissing');
+        links.style.transition = 'none';
+        links.style.opacity = '0';
+        links.style.pointerEvents = 'none';
+        void links.offsetWidth;
+      }
       cta.classList.remove('open');
       trigger.setAttribute('aria-expanded', 'false');
       links.setAttribute('aria-hidden', 'true');
       clearContextMode();
-      if (wasContext) ignorePointerUntil = performance.now() + 350;
+      if (wasContext) {
+        ignorePointerUntil = performance.now() + 450;
+        requestAnimationFrame(() => {
+          cta.classList.remove('is-context-dismissing');
+          links.style.removeProperty('transition');
+        });
+      }
       return;
     }
 
     if (!context) clearContextMode();
+    cta.classList.remove('is-context-dismissing');
     cta.classList.add('open');
     trigger.setAttribute('aria-expanded', 'true');
     links.setAttribute('aria-hidden', 'false');
@@ -183,7 +198,9 @@ export function initFloatingCta() {
 
   const onLinksClick = (event) => {
     const el = eventElement(event.target);
-    if (el?.closest('a')) setOpen(false);
+    if (!el?.closest('a')) return;
+    if (el.closest('[data-floating-appearance]')) return;
+    setOpen(false);
   };
   links.addEventListener('click', onLinksClick);
 

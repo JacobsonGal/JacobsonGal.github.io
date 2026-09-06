@@ -128,6 +128,7 @@ function bindFloatingMenuActions(root) {
     const btn = event.target.closest?.('[data-floating-appearance]');
     if (!btn || !root.contains(btn)) return;
     event.preventDefault();
+    event.stopPropagation();
     setAppearance(resolveAppearance() === 'dark' ? 'light' : 'dark');
     syncFloatingAppearanceLabel(root);
   });
@@ -152,15 +153,16 @@ function renderFloatingLinks(profile) {
     </a>
   `).join('');
 
+  /* Admin + appearance only on right-click; hover CTA stays social links. */
   const extras = `
-    <a class="floating-link mono-label stagger-item" href="${asset('admin.html')}">
+    <a class="floating-link mono-label stagger-item" href="${asset('admin.html')}" data-floating-context-only>
       <span class="floating-link-icon" aria-hidden="true">${iconMarkup('admin')}</span>
       <span>Admin</span>
     </a>
-    <button type="button" class="floating-link mono-label stagger-item" data-floating-appearance>
+    <a class="floating-link mono-label stagger-item" href="#" data-floating-appearance data-floating-context-only role="button">
       <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
       <span data-floating-appearance-label>Dark mode</span>
-    </button>
+    </a>
   `;
 
   return social + extras;

@@ -1362,28 +1362,45 @@ a.tag:hover {
 .floating-cta.context-open .floating-trigger {
   transform: none;
 }
+/* Owner / appearance rows only appear in the right-click menu. */
+.floating-cta:not(.context-open) [data-floating-context-only] {
+  display: none;
+}
+.floating-cta.is-context-dismissing .floating-links {
+  transition: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 .floating-link {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   width: 11rem;
+  min-height: 2.5rem;
   padding: 0.65rem 1rem;
   background: hsl(var(--foreground));
   color: hsl(var(--background));
+  line-height: 1.2;
   transition: background 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .floating-link:hover {
   background: hsl(var(--accent));
   transform: translateX(-4px);
 }
-button.floating-link {
+button.floating-link,
+a.floating-link[role="button"] {
   box-sizing: border-box;
   border: 0;
-  /* Keep .mono-label typography — do not reset with font: inherit */
+  margin: 0;
   cursor: pointer;
   text-align: left;
   appearance: none;
   -webkit-appearance: none;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.2;
 }
 .floating-link-icon {
   width: 1rem;
