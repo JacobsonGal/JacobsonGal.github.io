@@ -72,7 +72,18 @@ function isUnlockConfigured() {
 }
 
 export async function requireResumeEditorAuth(root) {
-  const user = await getAuthorizedUser();
+  // Paint immediately so the page is never blank while auth is checked.
+  root.replaceChildren();
+  const pending = el('section', 'auth-gate');
+  pending.innerHTML = '<h1 class="auth-gate-title">Admin</h1><p class="auth-gate-copy">Checking access…</p>';
+  root.append(pending);
+
+  let user = null;
+  try {
+    user = await getAuthorizedUser();
+  } catch (error) {
+    console.warn('Auth check failed', error);
+  }
   if (user) return user;
 
   root.replaceChildren();

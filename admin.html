@@ -13,10 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=admin-2" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-2" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-2" />
-  <link rel="stylesheet" href="css/admin.css?v=admin-2" />
+  <link rel="stylesheet" href="css/styles.css?v=admin-3" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-3" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-3" />
+  <link rel="stylesheet" href="css/admin.css?v=admin-3" />
   <style>
     /* Critical first-paint styles so the unlock gate is never an empty screen. */
     body.admin-page {
@@ -25,6 +25,10 @@
       background: #0a1018;
       color: #f2f5f8;
       font-family: "Inter Tight", system-ui, sans-serif;
+    }
+    #admin-gate[hidden],
+    #admin-shell[hidden] {
+      display: none !important;
     }
     #admin-gate:not([hidden]) {
       min-height: 100svh;
@@ -147,6 +151,6 @@
     </main>
   </div>
 
-  <script type="module" src="js/admin-app.js?v=admin-2"></script>
+  <script type="module" src="js/admin-app.js?v=admin-3"></script>
 </body>
 </html>

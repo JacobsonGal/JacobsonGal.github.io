@@ -599,17 +599,24 @@ async function boot() {
     throw new Error('Admin markup is missing #admin-gate or #admin-shell.');
   }
 
-  const user = await requireResumeEditorAuth(gate);
+  // Prefer the fast local owner session — never block first paint on GitHub.
+  let user = getOwnerSession();
   if (!user) {
-    const title = gate.querySelector('.auth-gate-title, .auth-gate-title');
-    const copy = gate.querySelector('.auth-gate-copy, .auth-gate-copy');
+    user = await requireResumeEditorAuth(gate);
+  }
+  if (!user) {
+    const title = gate.querySelector('.auth-gate-title');
+    const copy = gate.querySelector('.auth-gate-copy');
     if (title) title.textContent = 'Admin';
     if (copy) {
       copy.textContent = 'Enter your private owner code to open analytics, job search, and the resume editor.';
     }
+    const fallback = gate.querySelector('[data-admin-fallback]');
+    if (fallback) fallback.remove();
     return;
   }
 
+  gate.replaceChildren();
   gate.hidden = true;
   shell.hidden = false;
 
@@ -618,7 +625,13 @@ async function boot() {
     node.textContent = name;
   });
 
-  if (getOwnerSession() && !getOwnerCodeForPublish()) {
+  // Show the shell immediately — never block analytics behind an optional code dialog.
+  bindShell();
+  const hash = location.hash || '#analytics';
+  const initial = hash.replace('#', '').split('?')[0];
+  showSection(['analytics', 'jobs', 'resume'].includes(initial) ? initial : 'analytics');
+
+  if (getOwnerSession() && !getOwnerCodeForPublish() && isAdminApiConfigured()) {
     const values = await promptDialog({
       title: 'Confirm owner code',
       confirmLabel: 'Unlock APIs',
@@ -627,16 +640,12 @@ async function boot() {
     if (values?.code) {
       try {
         await unlockWithOwnerCode(values.code);
+        showToast('Owner APIs unlocked');
       } catch (error) {
         showToast(error.message || 'Owner code rejected', true);
       }
     }
   }
-
-  bindShell();
-  const hash = location.hash || '#analytics';
-  const initial = hash.replace('#', '').split('?')[0];
-  showSection(['analytics', 'jobs', 'resume'].includes(initial) ? initial : 'analytics');
 
   if (hash.includes('google=connected') || new URLSearchParams(location.search).get('google') === 'connected') {
     showToast('Google connected');

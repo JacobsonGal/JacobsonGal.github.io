@@ -6,14 +6,25 @@
   font-family: "Inter Tight", system-ui, sans-serif;
 }
 
-.admin-gate {
+/* Must honor [hidden]: author `display` otherwise overrides the UA rule. */
+.admin-gate[hidden],
+.admin-shell[hidden],
+.admin-section[hidden],
+.admin-toast[hidden],
+.jobs-board-toolbar[hidden],
+.jobs-gmail[hidden],
+.admin-page [hidden] {
+  display: none !important;
+}
+
+.admin-gate:not([hidden]) {
   min-height: 100svh;
   display: grid;
   place-items: center;
   padding: 2rem;
 }
 
-.admin-shell {
+.admin-shell:not([hidden]) {
   display: grid;
   grid-template-columns: 16.5rem minmax(0, 1fr);
   min-height: 100svh;

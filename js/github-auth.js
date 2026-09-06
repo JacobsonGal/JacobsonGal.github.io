@@ -52,18 +52,30 @@ export function getStoredSession() {
 }
 
 async function fetchGitHubUser(token) {
-  const response = await fetch('https://api.github.com/user', {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch('https://api.github.com/user', {
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+      },
+      signal: controller.signal,
+    });
 
-  if (!response.ok) {
-    throw new Error('GitHub session expired. Sign in again.');
+    if (!response.ok) {
+      throw new Error('GitHub session expired. Sign in again.');
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error?.name === 'AbortError') {
+      throw new Error('GitHub session check timed out. Use owner code unlock.');
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timer);
   }
-
-  return response.json();
 }
 
 export async function getAuthorizedUser({ forceRefresh = false } = {}) {
