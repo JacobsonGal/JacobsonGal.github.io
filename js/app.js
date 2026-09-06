@@ -1,8 +1,8 @@
 import { iconMarkup } from './icons.js';
 import { companyIconMarkup, companyLinkMarkup, highlightLinkMarkup } from './experience-icons.js';
-import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=appearance-fade-3';
+import { destroyMotion, initMotion, initRevealAnimations } from './motion.js?v=rightclick-menu-4';
 import { getAuthorizedUser } from './github-auth.js';
-import { mountAppearanceToggle } from './appearance.js';
+import { mountAppearanceToggle, resolveAppearance, setAppearance } from './appearance.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
 import './theme-init.js';
 
@@ -109,6 +109,32 @@ function renderEducationItem(item, index) {
   `;
 }
 
+function syncFloatingAppearanceLabel(root = document) {
+  const label = root.querySelector('[data-floating-appearance-label]');
+  const btn = root.querySelector('[data-floating-appearance]');
+  if (!label || !btn) return;
+  const isDark = resolveAppearance() === 'dark';
+  label.textContent = isDark ? 'Bright mode' : 'Dark mode';
+  btn.setAttribute('aria-label', isDark ? 'Switch to bright mode' : 'Switch to dark mode');
+  const icon = btn.querySelector('.floating-link-icon');
+  if (icon) icon.innerHTML = iconMarkup(isDark ? 'sun' : 'moon');
+}
+
+function bindFloatingMenuActions(root) {
+  if (!root || root.dataset.floatingActionsBound === 'true') return;
+  root.dataset.floatingActionsBound = 'true';
+
+  root.addEventListener('click', (event) => {
+    const btn = event.target.closest?.('[data-floating-appearance]');
+    if (!btn || !root.contains(btn)) return;
+    event.preventDefault();
+    setAppearance(resolveAppearance() === 'dark' ? 'light' : 'dark');
+    syncFloatingAppearanceLabel(root);
+  });
+
+  document.addEventListener('appearancechange', () => syncFloatingAppearanceLabel(root));
+}
+
 function renderFloatingLinks(profile) {
   const resumeHref = asset(profile.urls.cv || 'resume.html');
   const links = [
@@ -119,12 +145,25 @@ function renderFloatingLinks(profile) {
     { label: 'Resume', href: resumeHref, icon: iconMarkup('resume'), external: false },
   ];
 
-  return links.map((link) => `
+  const social = links.map((link) => `
     <a class="floating-link mono-label stagger-item" href="${link.href}" ${link.external ? 'target="_blank" rel="noopener noreferrer"' : ''}>
       <span class="floating-link-icon" aria-hidden="true">${link.icon}</span>
       <span>${link.label}</span>
     </a>
   `).join('');
+
+  const extras = `
+    <button type="button" class="floating-link floating-link--action mono-label stagger-item" data-floating-appearance>
+      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('moon')}</span>
+      <span data-floating-appearance-label>Dark mode</span>
+    </button>
+    <a class="floating-link mono-label stagger-item" href="${asset('admin.html')}">
+      <span class="floating-link-icon" aria-hidden="true">${iconMarkup('admin')}</span>
+      <span>Admin</span>
+    </a>
+  `;
+
+  return social + extras;
 }
 
 function collectHardSkills(profile) {
@@ -210,7 +249,11 @@ function applyProfile(profile) {
   }
 
   const floatingLinks = document.getElementById('floating-links');
-  if (floatingLinks) floatingLinks.innerHTML = renderFloatingLinks(profile);
+  if (floatingLinks) {
+    floatingLinks.innerHTML = renderFloatingLinks(profile);
+    bindFloatingMenuActions(floatingLinks);
+    syncFloatingAppearanceLabel(floatingLinks);
+  }
 
   applyHeroRail(profile);
 

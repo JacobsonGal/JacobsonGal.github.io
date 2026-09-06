@@ -91,11 +91,22 @@ export function initFloatingCta() {
   };
 
   const setOpen = (open, { context = false } = {}) => {
-    if (!open || !context) clearContextMode();
+    if (!open) {
+      // Drop `open` before leaving context mode so the menu never flashes
+      // back to the bottom-right corner for a frame.
+      const wasContext = isContextOpen();
+      cta.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      links.setAttribute('aria-hidden', 'true');
+      clearContextMode();
+      if (wasContext) ignorePointerUntil = performance.now() + 350;
+      return;
+    }
 
-    cta.classList.toggle('open', open);
-    trigger.setAttribute('aria-expanded', String(open));
-    links.setAttribute('aria-hidden', String(!open));
+    if (!context) clearContextMode();
+    cta.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+    links.setAttribute('aria-hidden', 'false');
   };
 
   const placeAtCursor = (clientX, clientY) => {
@@ -147,6 +158,7 @@ export function initFloatingCta() {
 
   const onMouseEnter = () => {
     if (isContextOpen()) return;
+    if (performance.now() < ignorePointerUntil) return;
     setOpen(true);
   };
   const onMouseLeave = () => {
@@ -170,7 +182,8 @@ export function initFloatingCta() {
   trigger.addEventListener('click', onTriggerClick);
 
   const onLinksClick = (event) => {
-    if (eventElement(event.target)?.closest('a')) setOpen(false);
+    const el = eventElement(event.target);
+    if (el?.closest('a')) setOpen(false);
   };
   links.addEventListener('click', onLinksClick);
 

@@ -1376,6 +1376,12 @@ a.tag:hover {
   background: hsl(var(--accent));
   transform: translateX(-4px);
 }
+button.floating-link {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
 .floating-link-icon {
   width: 1rem;
   height: 1rem;
