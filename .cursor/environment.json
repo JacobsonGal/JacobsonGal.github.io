@@ -1,0 +1,17 @@
+{
+  "name": "Gal Jacobson Portfolio",
+  "install": "node --version && python3 --version",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "python3 -m http.server 8080",
+      "description": "Static preview server for the portfolio. Serves the repo root at http://localhost:8080/ (index.html, resume.html, admin.html)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 8080
+    }
+  ]
+}
