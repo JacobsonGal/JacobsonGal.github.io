@@ -442,6 +442,8 @@ html[data-appearance="light"]:has(body.admin-page) body,
 }
 
 [data-appearance="light"] .app--continuous-hero .floating-link,
+[data-appearance="light"] .app--continuous-hero button.floating-link,
+[data-appearance="light"] .app--continuous-hero a.floating-link[role="button"],
 [data-appearance="light"] .app--continuous-hero .floating-trigger {
   background: hsl(var(--card));
   color: hsl(var(--foreground));
