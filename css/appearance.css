@@ -442,13 +442,22 @@ html[data-appearance="light"]:has(body.admin-page) body,
 }
 
 [data-appearance="light"] .app--continuous-hero .floating-link,
+[data-appearance="light"] .app--continuous-hero .floating-link.mono-label,
 [data-appearance="light"] .app--continuous-hero button.floating-link,
 [data-appearance="light"] .app--continuous-hero a.floating-link[role="button"],
 [data-appearance="light"] .app--continuous-hero .floating-trigger {
   background: hsl(var(--card));
   color: hsl(var(--foreground));
-  border-color: hsl(var(--border));
+  border: 1px solid hsl(var(--border));
   box-shadow: 0 8px 24px hsl(var(--foreground) / 0.06);
+}
+
+[data-appearance="light"] .app--continuous-hero .floating-link:hover,
+[data-appearance="light"] .app--continuous-hero button.floating-link:hover,
+[data-appearance="light"] .app--continuous-hero a.floating-link[role="button"]:hover {
+  background: hsl(var(--accent));
+  color: hsl(38 24% 96%);
+  border-color: transparent;
 }
 
 [data-appearance="light"] .app--continuous-hero .portrait-frame {
