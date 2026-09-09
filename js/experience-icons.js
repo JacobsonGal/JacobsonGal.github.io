@@ -17,6 +17,7 @@ const COMPANY_LINK_LABELS = {
 
 const FEATURE_LINKS = {
   Contracts: 'https://pro.houzz.com/for-pros/feature-contracts',
+  'Credit Memos': 'https://pro.houzz.com/pro-help/r/how-to-create-a-credit-memo',
   Automation: 'https://pro.houzz.com/pro-help/r/how-to-use-automations-on-documents',
   'Houzz Pro Rebranding': 'https://pro.houzz.com/pro-learn/blog/inside-the-newly-renovated-houzz-pro',
 };
