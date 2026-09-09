@@ -44,10 +44,13 @@ export function featureLinkUrl(label) {
   return FEATURE_LINKS[label] || null;
 }
 
+const TAG_LINK_ICON =
+  '<span class="tag-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span>';
+
 export function highlightLinkMarkup(label, className = 'tag') {
   const url = featureLinkUrl(label);
   if (!url) return `<span class="${className}">${label}</span>`;
-  return `<a class="${className}" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  return `<a class="${className} tag--link" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="${label} — learn more (opens in a new tab)"><span class="tag-link-label">${label}</span>${TAG_LINK_ICON}</a>`;
 }
 
 export function companyIconMarkup(id, basePath = '', options = {}) {

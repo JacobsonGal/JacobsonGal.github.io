@@ -435,7 +435,7 @@ html[data-appearance="light"]:has(body.admin-page) body,
   background: hsl(var(--border));
 }
 
-[data-appearance="light"] .app--continuous-hero .tag {
+[data-appearance="light"] .app--continuous-hero .tag:not(.tag--link) {
   border-color: hsl(var(--border));
   background: hsl(var(--card));
   color: hsl(var(--foreground));

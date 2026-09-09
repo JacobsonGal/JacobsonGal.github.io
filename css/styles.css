@@ -1,4 +1,4 @@
-@import url("./tokens.css?v=admin-4");
+@import url("./tokens.css?v=feature-tags-1");
 @import url("./theme-picker.css");
 
 * { box-sizing: border-box; }
@@ -124,7 +124,7 @@ body {
   box-shadow: none;
 }
 
-.app--continuous-hero .tag {
+.app--continuous-hero .tag:not(.tag--link) {
   border-color: hsl(var(--surface-border));
 }
 
@@ -1244,12 +1244,65 @@ button { font: inherit; cursor: pointer; background: none; border: 0; color: inh
   transition: border-color 0.3s ease, color 0.3s ease;
   text-decoration: none;
 }
-a.tag:hover {
-  border-color: hsl(var(--accent));
-  color: hsl(var(--accent));
-}
-.experience-item.open .tag {
+.experience-item.open .tag:not(.tag--link) {
   border-color: hsl(var(--foreground) / 0.12);
+}
+
+/* Clickable feature tags — signal interactivity and animate on hover */
+.tag--link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  cursor: pointer;
+  color: hsl(var(--accent));
+  border-color: hsl(var(--accent) / 0.5);
+  background: hsl(var(--accent) / 0.1);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    color 0.28s ease,
+    background 0.28s ease,
+    box-shadow 0.28s ease;
+}
+.tag--link .tag-link-icon {
+  display: inline-flex;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tag--link .tag-link-icon svg {
+  display: block;
+  width: 0.72em;
+  height: 0.72em;
+}
+.tag--link:hover,
+.tag--link:focus-visible {
+  color: hsl(0 0% 100%);
+  background: hsl(var(--accent));
+  border-color: hsl(var(--accent));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px hsl(var(--accent) / 0.35);
+}
+.tag--link:hover .tag-link-icon,
+.tag--link:focus-visible .tag-link-icon {
+  transform: translate(2px, -2px);
+}
+.tag--link:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px hsl(var(--accent) / 0.3);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tag--link,
+  .tag--link .tag-link-icon {
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .tag--link:hover,
+  .tag--link:focus-visible,
+  .tag--link:active {
+    transform: none;
+  }
+  .tag--link:hover .tag-link-icon,
+  .tag--link:focus-visible .tag-link-icon {
+    transform: none;
+  }
 }
 
 .education-list {

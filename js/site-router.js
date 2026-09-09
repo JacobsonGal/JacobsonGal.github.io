@@ -37,7 +37,7 @@ async function fetchPageTemplate(path) {
 }
 
 function syncStylesheets(page) {
-  const version = 'rightclick-menu-11';
+  const version = 'feature-tags-1';
   const homeSheets = [`css/styles.css?v=${version}`, `css/animations.css?v=${version}`];
   const resumeSheets = [`css/resume.css?v=${version}`];
   const wanted = new Set(page === 'home' ? homeSheets : resumeSheets);
@@ -76,10 +76,10 @@ async function applyPageTemplate(page) {
 
 async function mountPage(page) {
   if (page === 'home') {
-    const { mountHomePage } = await import('./app.js?v=rightclick-menu-11');
+    const { mountHomePage } = await import('./app.js?v=feature-tags-1');
     await mountHomePage();
   } else {
-    const { mountResumePage } = await import('./resume-page.js?v=rightclick-menu-11');
+    const { mountResumePage } = await import('./resume-page.js?v=feature-tags-1');
     await mountResumePage();
   }
   activePage = page;
@@ -94,10 +94,10 @@ async function mountPage(page) {
 
 async function destroyPage(page) {
   if (page === 'home') {
-    const { destroyHomePage } = await import('./app.js?v=rightclick-menu-11');
+    const { destroyHomePage } = await import('./app.js?v=feature-tags-1');
     destroyHomePage();
   } else if (page === 'resume') {
-    const { destroyResumePage } = await import('./resume-page.js?v=rightclick-menu-11');
+    const { destroyResumePage } = await import('./resume-page.js?v=feature-tags-1');
     destroyResumePage();
   }
 }
