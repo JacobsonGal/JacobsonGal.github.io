@@ -1,5 +1,9 @@
 const STORAGE_KEY = 'gal-portfolio-profile-draft';
 
+function draftKey(key) {
+  return key || STORAGE_KEY;
+}
+
 export function getBasePath() {
   return document.querySelector('meta[name="base-path"]')?.content || '/';
 }
@@ -30,21 +34,21 @@ export async function fetchServerProfile() {
   throw new Error('Could not load profile.json');
 }
 
-export function loadDraft() {
+export function loadDraft(key) {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(draftKey(key));
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
   }
 }
 
-export function saveDraft(profile) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+export function saveDraft(profile, key) {
+  localStorage.setItem(draftKey(key), JSON.stringify(profile));
 }
 
-export function clearDraft() {
-  localStorage.removeItem(STORAGE_KEY);
+export function clearDraft(key) {
+  localStorage.removeItem(draftKey(key));
 }
 
 export async function loadProfile({ preferDraft = true } = {}) {

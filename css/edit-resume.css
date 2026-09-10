@@ -199,13 +199,67 @@ body.edit-resume-page {
 
 .edit-actions {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: stretch;
   gap: 0.5rem;
   margin: 0 0 1rem;
   padding-bottom: 0.75rem;
   background: hsl(var(--background));
   border-bottom: 1px solid hsl(var(--border));
+}
+
+.edit-profile-switch {
+  display: inline-flex;
+  gap: 0.3rem;
+  padding: 0.25rem;
+  margin: 0 0 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: 999px;
+  background: hsl(var(--card));
+  align-self: flex-start;
+}
+
+.edit-profile-tab {
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: hsl(var(--foreground) / 0.62);
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.edit-profile-tab.is-active {
+  background: hsl(var(--accent));
+  color: hsl(0 0% 100%);
+}
+
+.edit-profile-note {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: hsl(var(--foreground) / 0.72);
+  padding: 0.55rem 0.7rem;
+  border: 1px dashed hsl(var(--border));
+  border-radius: 0.6rem;
+  background: hsl(var(--accent) / 0.06);
+}
+
+.edit-extra-fields {
+  display: grid;
+  gap: 1rem;
+}
+
+.edit-extra-fields[hidden] {
+  display: none;
+}
+
+.edit-extra-fields textarea {
+  font-family: var(--font-mono, ui-monospace, "JetBrains Mono", monospace);
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .edit-actions .resume-btn {

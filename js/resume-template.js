@@ -9,6 +9,11 @@ function escapeHtml(text) {
     .replace(/"/g, '&quot;');
 }
 
+function githubHandle(url) {
+  const tail = String(url || '').replace(/\/+$/, '').split('/').pop();
+  return tail || 'GitHub';
+}
+
 function splitName(name) {
   const parts = String(name || '').trim().split(/\s+/);
   if (parts.length < 2) return { first: name || '', last: '' };
@@ -167,8 +172,8 @@ export function renderResumeHtml(profile) {
             <h2 class="resume-sidebar-heading">Connect</h2>
             <ul class="resume-sidebar-list">
               ${profile.urls?.portfolio ? renderSidebarItem('globe', 'Portfolio', profile.urls.portfolio) : ''}
-              ${profile.urls?.linkedin ? renderSidebarItem('linkedin', 'Gal Jacobson', profile.urls.linkedin) : ''}
-              ${profile.urls?.github ? renderSidebarItem('github', 'JacobsonGal', profile.urls.github) : ''}
+              ${profile.urls?.linkedin ? renderSidebarItem('linkedin', profile.name || 'LinkedIn', profile.urls.linkedin) : ''}
+              ${profile.urls?.github ? renderSidebarItem('github', githubHandle(profile.urls.github), profile.urls.github) : ''}
             </ul>
           </section>
 

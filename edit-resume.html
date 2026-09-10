@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-2" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-2" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-3" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-3" />
 </head>
 <body class="edit-resume-page">
   <div id="editor-gate"></div>
@@ -36,6 +36,11 @@
         </div>
         <a class="resume-btn" href="resume.html">← Resume</a>
       </div>
+      <div class="edit-profile-switch" role="tablist" aria-label="Which resume to edit">
+        <button type="button" class="edit-profile-tab is-active" data-profile="gal" role="tab" aria-selected="true">Gal Jacobson</button>
+        <button type="button" class="edit-profile-tab" data-profile="liat" role="tab" aria-selected="false">Liat Shalev</button>
+      </div>
+      <p class="edit-profile-note" id="edit-profile-note" hidden></p>
       <p class="edit-status" id="edit-status" hidden></p>
       <div class="edit-actions">
         <button type="button" class="edit-publish-toggle" id="publish-option" aria-pressed="true" title="Publish to Github" aria-label="Publish to Github">
@@ -45,6 +50,8 @@
         </button>
         <button class="resume-btn resume-btn--primary" type="submit" form="edit-form" id="save-resume">Save</button>
         <button class="resume-btn" type="button" id="reset-draft">Reset</button>
+        <button class="resume-btn" type="button" id="download-resume-pdf">Download PDF</button>
+        <button class="resume-btn" type="button" id="export-json">Export JSON</button>
       </div>
       <div class="publish-token-panel" id="publish-token-panel" hidden>
         <p class="publish-token-copy">
@@ -71,12 +78,16 @@
         <label>Portfolio URL<input name="portfolio" /></label>
         <label>LinkedIn URL<input name="linkedin" /></label>
         <label>GitHub URL<input name="github" /></label>
+        <div class="edit-extra-fields" id="edit-extra-fields" hidden>
+          <label>Work experience (one role per block, blank line between roles)<textarea name="experience" rows="10" placeholder="Title | Company | Dates | Location&#10;- First achievement&#10;- Second achievement"></textarea></label>
+          <label>Education (one per line: Degree | School | Dates | Field)<textarea name="education" rows="5" placeholder="BSc Computer Science | Tel Aviv University | 2018 — 2021 | Software Engineering"></textarea></label>
+        </div>
       </form>
     </aside>
     <section class="edit-preview">
       <iframe id="preview-frame" title="Resume preview"></iframe>
     </section>
   </div>
-  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-2"></script>
+  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-3"></script>
 </body>
 </html>

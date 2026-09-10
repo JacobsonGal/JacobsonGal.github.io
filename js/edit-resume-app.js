@@ -1,10 +1,12 @@
 import {
   loadProfile,
+  loadDraft,
   saveDraft,
   clearDraft,
   fetchServerProfile,
-} from './profile-store.js';
-import { renderResumeHtml } from './resume-template.js';
+  downloadJson,
+} from './profile-store.js?v=admin-mobile-3';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-3';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -22,6 +24,17 @@ import {
   publishTokenSetupUrl,
   validatePublishToken,
 } from './publish-token.js';
+import {
+  getProfileDef,
+  DEFAULT_PROFILE_ID,
+  ACTIVE_PROFILE_STORAGE_KEY,
+  seedProfile,
+  experienceToText,
+  textToExperience,
+  educationToText,
+  textToEducation,
+} from './resume-profiles.js?v=admin-mobile-3';
+import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -82,10 +95,39 @@ function parseSkillsFormText(text) {
   return skills;
 }
 
+function getStoredActiveId() {
+  try {
+    return localStorage.getItem(ACTIVE_PROFILE_STORAGE_KEY) || DEFAULT_PROFILE_ID;
+  } catch {
+    return DEFAULT_PROFILE_ID;
+  }
+}
+
+function setStoredActiveId(id) {
+  try {
+    localStorage.setItem(ACTIVE_PROFILE_STORAGE_KEY, id);
+  } catch {
+    // ignore storage failures
+  }
+}
+
+function jsonFilenameFor(profile) {
+  const slug = (profile?.name || 'resume')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+  return `${slug || 'resume'}-profile.json`;
+}
+
 function initEditor(user) {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
   const layout = document.getElementById('editor-root');
+  const profileTabs = [...document.querySelectorAll('.edit-profile-tab')];
+  const profileNote = document.getElementById('edit-profile-note');
+  const extraFields = document.getElementById('edit-extra-fields');
+  const pdfButton = document.getElementById('download-resume-pdf');
+  const jsonButton = document.getElementById('export-json');
 
   function bindMobilePaneTabs() {
     if (!layout) return;
@@ -112,16 +154,37 @@ function initEditor(user) {
   const tokenSave = document.getElementById('publish-token-save');
   const tokenLink = document.getElementById('publish-token-link');
 
-  // Publish on by default so edits become live commits.
-  let publishOnSave = isPublishConfigured();
+  let activeProfile = getProfileDef(getStoredActiveId());
+  // Publish on by default so edits become live commits (only for the live profile).
+  let publishOnSave = isPublishConfigured() && activeProfile.publishable;
   let profile;
   let publishTimer;
   let publishInFlight = false;
   let pendingPublishProfile = null;
   let awaitingToken = false;
 
+  function isPublishable() {
+    return activeProfile.publishable;
+  }
+
   function canPublishNow() {
-    return hasPublishCredentials(user);
+    return isPublishable() && hasPublishCredentials(user);
+  }
+
+  function saveActiveDraft(next) {
+    saveDraft(next, activeProfile.draftKey);
+  }
+
+  function clearActiveDraft() {
+    clearDraft(activeProfile.draftKey);
+  }
+
+  async function loadActiveProfile() {
+    if (activeProfile.id === 'gal') {
+      return loadProfile({ preferDraft: true });
+    }
+    const draft = loadDraft(activeProfile.draftKey);
+    return draft || seedProfile(activeProfile.id);
   }
 
   function syncPublishToggleUi() {
@@ -129,6 +192,27 @@ function initEditor(user) {
     publishToggle.title = publishOnSave
       ? 'Publish to GitHub on edit (on)'
       : 'Publish to GitHub on edit (off — local draft only)';
+  }
+
+  function applyProfileUi() {
+    profileTabs.forEach((tab) => {
+      const active = tab.dataset.profile === activeProfile.id;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+    if (extraFields) extraFields.hidden = !activeProfile.editsExtras;
+    if (publishToggle) publishToggle.hidden = !isPublishable();
+    if (!isPublishable() && tokenPanel) tokenPanel.hidden = true;
+    if (profileNote) {
+      if (activeProfile.live) {
+        profileNote.hidden = true;
+        profileNote.textContent = '';
+      } else {
+        profileNote.hidden = false;
+        profileNote.textContent =
+          'Editor-only resume — saved to this browser, never published or shown on the public site. Use Download PDF / Export JSON to keep it.';
+      }
+    }
   }
 
   function showTokenPanel(visible) {
@@ -145,8 +229,10 @@ function initEditor(user) {
     tokenLink.href = publishTokenSetupUrl();
   }
 
+  applyProfileUi();
+
   // One-time setup: without proxy / GitHub OAuth token, ask for a PAT.
-  if (!canPublishNow()) {
+  if (isPublishable() && !canPublishNow()) {
     showTokenPanel(true);
     setStatus('Add a publish token once — then every edit commits live to GitHub.', 'info');
   }
@@ -185,7 +271,7 @@ function initEditor(user) {
   });
 
   function shouldPublish() {
-    return publishOnSave;
+    return publishOnSave && isPublishable();
   }
 
   function setStatus(message, type = 'info') {
@@ -201,10 +287,12 @@ function initEditor(user) {
   }
 
   async function bootstrap() {
-    profile = await loadProfile({ preferDraft: true });
+    profile = await loadActiveProfile();
     profileToForm(profile);
     renderPreview(profile);
-    if (canPublishNow() && publishOnSave) {
+    if (!activeProfile.live) {
+      setStatus('Editing Liat Shalev — saved to this browser only.', 'info');
+    } else if (canPublishNow() && publishOnSave) {
       setStatus('Live publish is on — edits commit to GitHub automatically.', 'info');
     }
   }
@@ -222,6 +310,10 @@ function initEditor(user) {
     form.portfolio.value = p.urls?.portfolio || '';
     form.linkedin.value = p.urls?.linkedin || '';
     form.github.value = p.urls?.github || '';
+    if (activeProfile.editsExtras) {
+      if (form.experience) form.experience.value = experienceToText(p.experience);
+      if (form.education) form.education.value = educationToText(p.education);
+    }
   }
 
   function formToProfile(base) {
@@ -229,7 +321,7 @@ function initEditor(user) {
     const softSkills = form.softSkills.value.split('\n').map((line) => line.trim()).filter(Boolean);
     const skills = parseSkillsFormText(form.hardSkills.value);
 
-    return {
+    const next = {
       ...base,
       updatedAt: new Date().toISOString(),
       name: form.name.value.trim(),
@@ -251,11 +343,18 @@ function initEditor(user) {
         softSkills,
       },
     };
+
+    if (activeProfile.editsExtras) {
+      next.experience = textToExperience(form.experience ? form.experience.value : '');
+      next.education = textToEducation(form.education ? form.education.value : '');
+    }
+
+    return next;
   }
 
   async function persistProfile(nextProfile, { publish = false, statusMessage } = {}) {
     profile = nextProfile;
-    saveDraft(profile);
+    saveActiveDraft(profile);
     renderPreview(profile);
 
     if (!publish || !shouldPublish()) {
@@ -283,8 +382,8 @@ function initEditor(user) {
         // Prefer any newer edit queued while this request was in flight.
         if (!pendingPublishProfile) {
           profile = published;
-          clearDraft();
-          saveDraft(profile);
+          clearActiveDraft();
+          saveActiveDraft(profile);
           showTokenPanel(false);
           setStatus('Published to GitHub. Live on the site in about a minute.', 'success');
         }
@@ -324,12 +423,60 @@ function initEditor(user) {
     frame.srcdoc = doc;
   }
 
+  function waitForPreviewReady(p) {
+    return new Promise((resolve) => {
+      const done = () => resolve();
+      frame.addEventListener('load', done, { once: true });
+      renderPreview(p);
+      window.setTimeout(done, 900);
+    });
+  }
+
+  async function switchProfile(id) {
+    const def = getProfileDef(id);
+    if (def.id === activeProfile.id) return;
+
+    // Persist the current profile's draft before switching away.
+    saveActiveDraft(formToProfile(profile));
+
+    activeProfile = def;
+    setStoredActiveId(def.id);
+    publishOnSave = isPublishConfigured() && isPublishable();
+
+    applyProfileUi();
+    syncPublishToggleUi();
+
+    if (isPublishable() && !canPublishNow()) {
+      showTokenPanel(publishOnSave);
+    } else {
+      showTokenPanel(false);
+    }
+
+    profile = await loadActiveProfile();
+    profileToForm(profile);
+    renderPreview(profile);
+    setStatus(
+      def.live
+        ? 'Editing the live site resume.'
+        : 'Editing Liat Shalev — saved to this browser only.',
+      'info',
+    );
+  }
+
+  profileTabs.forEach((tab) => {
+    tab.addEventListener('click', () => switchProfile(tab.dataset.profile));
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     try {
       await persistProfile(formToProfile(profile), {
         publish: shouldPublish(),
-        statusMessage: shouldPublish() ? undefined : 'Draft saved in this browser only.',
+        statusMessage: shouldPublish()
+          ? undefined
+          : activeProfile.live
+            ? 'Draft saved in this browser only.'
+            : 'Saved to this browser only.',
       });
     } catch {
       // status already set
@@ -338,17 +485,52 @@ function initEditor(user) {
 
   form.addEventListener('input', () => {
     const nextProfile = formToProfile(profile);
-    saveDraft(nextProfile);
+    saveActiveDraft(nextProfile);
     renderPreview(nextProfile);
     schedulePublish();
   });
 
   document.getElementById('reset-draft').addEventListener('click', async () => {
-    clearDraft();
-    profile = await fetchServerProfile();
+    clearActiveDraft();
+    profile = activeProfile.id === 'gal'
+      ? await fetchServerProfile()
+      : seedProfile(activeProfile.id);
     profileToForm(profile);
     renderPreview(profile);
-    setStatus('Reset to the live site profile.', 'info');
+    setStatus(
+      activeProfile.live
+        ? 'Reset to the live site profile.'
+        : 'Reset to a blank Liat Shalev template.',
+      'info',
+    );
+  });
+
+  pdfButton?.addEventListener('click', async () => {
+    if (pdfButton.disabled) return;
+    const originalLabel = pdfButton.textContent;
+    pdfButton.disabled = true;
+    pdfButton.textContent = 'Generating…';
+    try {
+      const current = formToProfile(profile);
+      await waitForPreviewReady(current);
+      await new Promise((resolve) => requestAnimationFrame(() => resolve()));
+      const sheet = frame.contentDocument?.querySelector('.resume-sheet');
+      if (!sheet) throw new Error('Preview is not ready yet.');
+      await downloadResumePdf({ element: sheet, filename: getResumePdfFilename(current) });
+      setStatus('PDF ready.', 'success');
+    } catch (error) {
+      console.error(error);
+      setStatus(error.message || 'Could not generate the PDF.', 'error');
+    } finally {
+      pdfButton.disabled = false;
+      pdfButton.textContent = originalLabel;
+    }
+  });
+
+  jsonButton?.addEventListener('click', () => {
+    const current = formToProfile(profile);
+    downloadJson(current, jsonFilenameFor(current));
+    setStatus('Exported JSON.', 'success');
   });
 
   document.addEventListener('appearancechange', () => {
