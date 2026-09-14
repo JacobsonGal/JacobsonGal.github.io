@@ -11,6 +11,7 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
 
 const AI_SETTINGS = {
   keyStorage: 'resume-ai-key',
@@ -32,7 +33,9 @@ const SYSTEM_PROMPT = [
 ].join('\n');
 
 export function defaultModelFor(provider) {
-  return provider === 'openai' ? 'gpt-4o' : 'claude-3-5-sonnet-latest';
+  if (provider === 'openai') return 'gpt-4o';
+  if (provider === 'gemini') return 'gemini-2.5-flash';
+  return 'claude-3-5-sonnet-latest';
 }
 
 export function loadAiSettings() {
@@ -123,6 +126,31 @@ async function callOpenAI({ apiKey, model, system, user }) {
   return data.choices?.[0]?.message?.content || '';
 }
 
+async function callGemini({ apiKey, model, system, user }) {
+  const response = await fetch(`${GEMINI_URL}/${encodeURIComponent(model)}:generateContent`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-goog-api-key': apiKey,
+    },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: system }] },
+      contents: [{ role: 'user', parts: [{ text: user }] }],
+      generationConfig: {
+        responseMimeType: 'application/json',
+        temperature: 0.3,
+        maxOutputTokens: 8192,
+      },
+    }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data?.error?.message || `Gemini request failed (${response.status}).`);
+  }
+  const parts = data?.candidates?.[0]?.content?.parts || [];
+  return parts.map((part) => part.text || '').join('');
+}
+
 export async function tailorResumeToRole({ profile, jobDescription, apiKey, provider = 'anthropic', model }) {
   if (!apiKey) throw new Error('Add an AI API key in AI settings first.');
   if (!jobDescription || !jobDescription.trim()) throw new Error('Paste the job description first.');
@@ -130,9 +158,14 @@ export async function tailorResumeToRole({ profile, jobDescription, apiKey, prov
   const useModel = (model && model.trim()) || defaultModelFor(provider);
   const user = `TARGET JOB:\n${jobDescription.trim()}\n\nRESUME JSON:\n${JSON.stringify(profile)}\n\nReturn the tailored resume JSON only.`;
 
-  const text = provider === 'openai'
-    ? await callOpenAI({ apiKey, model: useModel, system: SYSTEM_PROMPT, user })
-    : await callAnthropic({ apiKey, model: useModel, system: SYSTEM_PROMPT, user });
+  let text;
+  if (provider === 'openai') {
+    text = await callOpenAI({ apiKey, model: useModel, system: SYSTEM_PROMPT, user });
+  } else if (provider === 'gemini') {
+    text = await callGemini({ apiKey, model: useModel, system: SYSTEM_PROMPT, user });
+  } else {
+    text = await callAnthropic({ apiKey, model: useModel, system: SYSTEM_PROMPT, user });
+  }
 
   const json = extractJson(text);
   if (!json || typeof json !== 'object' || !json.resume) {

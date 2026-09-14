@@ -4,8 +4,8 @@ import {
   saveDraft,
   clearDraft,
   fetchServerProfile,
-} from './profile-store.js?v=admin-mobile-9';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-9';
+} from './profile-store.js?v=admin-mobile-10';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-10';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -16,7 +16,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-9';
+} from './github-publish.js?v=admin-mobile-10';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -35,13 +35,14 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-9';
+} from './resume-profiles.js?v=admin-mobile-10';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
-} from './resume-ai.js?v=admin-mobile-9';
+  defaultModelFor,
+} from './resume-ai.js?v=admin-mobile-10';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -563,8 +564,15 @@ function initEditor(user) {
     if (!aiPanel) return;
     const settings = loadAiSettings();
     if (aiProvider) aiProvider.value = settings.provider || 'anthropic';
-    if (aiModel) aiModel.value = settings.model || '';
+    if (aiModel) {
+      aiModel.value = settings.model || '';
+      aiModel.placeholder = defaultModelFor(aiProvider?.value || 'anthropic');
+    }
     if (aiKey) aiKey.value = settings.key || '';
+
+    aiProvider?.addEventListener('change', () => {
+      if (aiModel) aiModel.placeholder = defaultModelFor(aiProvider.value);
+    });
 
     aiSettingsToggle?.addEventListener('click', () => {
       if (aiSettings) aiSettings.hidden = !aiSettings.hidden;
