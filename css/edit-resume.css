@@ -28,7 +28,12 @@ body.edit-resume-page {
 
 .edit-panel-head,
 .edit-status,
-.edit-actions {
+.edit-actions,
+.edit-profile-switch,
+.edit-profile-note,
+.edit-token-link,
+.edit-ai,
+.publish-token-panel {
   flex: none;
 }
 

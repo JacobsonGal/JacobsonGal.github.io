@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   downloadJson,
-} from './profile-store.js?v=admin-mobile-7';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-7';
+} from './profile-store.js?v=admin-mobile-8';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-8';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -17,7 +17,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-7';
+} from './github-publish.js?v=admin-mobile-8';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -36,13 +36,13 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-7';
+} from './resume-profiles.js?v=admin-mobile-8';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
-} from './resume-ai.js?v=admin-mobile-7';
+} from './resume-ai.js?v=admin-mobile-8';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -63,7 +63,7 @@ const editorRoot = document.getElementById('editor-root');
 
 const user = isEmbed ? await requireResumeEditorAuth(gateRoot) : null;
 if (!isEmbed) {
-  // Redirecting to admin — skip editor boot.
+  // Redirecting to admin - skip editor boot.
 } else if (!user) {
   editorRoot.hidden = true;
 } else {
@@ -211,7 +211,7 @@ function initEditor(user) {
     publishToggle.setAttribute('aria-pressed', String(publishOnSave));
     publishToggle.title = publishOnSave
       ? 'Publish to GitHub on edit (on)'
-      : 'Publish to GitHub on edit (off — local draft only)';
+      : 'Publish to GitHub on edit (off - local draft only)';
   }
 
   function renderProfileSwitch() {
@@ -285,7 +285,7 @@ function initEditor(user) {
   // One-time setup: without proxy / GitHub OAuth token, ask for a PAT.
   if (isPublishable() && !canPublishNow()) {
     showTokenPanel(true);
-    setStatus('Add a publish token once — then every edit commits live to GitHub.', 'info');
+    setStatus('Add a publish token once - then every edit commits live to GitHub.', 'info');
   }
 
   syncPublishToggleUi();
@@ -349,9 +349,9 @@ function initEditor(user) {
     profileToForm(profile);
     renderPreview(profile);
     if (!activeProfile.live) {
-      setStatus(`Editing ${activeProfile.label} — saved to this browser only.`, 'info');
+      setStatus(`Editing ${activeProfile.label} - saved to this browser only.`, 'info');
     } else if (canPublishNow() && publishOnSave) {
-      setStatus('Live publish is on — edits commit to GitHub automatically.', 'info');
+      setStatus('Live publish is on - edits commit to GitHub automatically.', 'info');
     }
   }
 
@@ -514,7 +514,7 @@ function initEditor(user) {
     setStatus(
       def.live
         ? 'Editing the live site resume.'
-        : `Editing ${def.label} — saved to this browser only.`,
+        : `Editing ${def.label} - saved to this browser only.`,
       'info',
     );
   }
