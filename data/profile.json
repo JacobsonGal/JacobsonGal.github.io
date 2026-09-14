@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-14T14:25:29.070Z",
+  "syncedAt": "2026-09-14T14:25:30.592Z",
   "source": "linkedin-action",
   "name": "Gal Jacobson",
   "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
@@ -38,9 +38,6 @@
       "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
     ],
     "skills": {
-      "AI": [
-        "ff"
-      ],
       "Back End": [
         "Node.js",
         "Python",
@@ -227,5 +224,5 @@
       "dates": "2018 — 2021"
     }
   ],
-  "updatedAt": "2026-09-14T14:25:29.070Z"
+  "updatedAt": "2026-09-14T14:25:30.592Z"
 }
