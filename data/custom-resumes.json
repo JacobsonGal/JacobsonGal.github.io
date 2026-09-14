@@ -18,9 +18,9 @@
       },
       "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
       "about": [
-        "Senior Full-Stack Engineer building and scaling production web platforms end to end - Node.js, React, GraphQL, and PostgreSQL across AWS and GCP - owning features from architecture through deployment, reliability, and performance.",
-        "Fluent in modern AI-assisted engineering - building with Cursor agents, MCP integrations, and prompt engineering to ship faster while keeping high quality.",
-        "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers - turning ambiguous requirements into pragmatic, high-quality products."
+        "Senior Full-Stack Engineer with end-to-end ownership across backend services, APIs, frontend, and infrastructure - building and operating production systems in Python, Node.js, React, and GraphQL on AWS and GCP.",
+        "Takes complex features from system and API design through to production, with a focus on reliability, performance, and scalability via testing, observability (Grafana, Redash), and CI/CD automation.",
+        "Fluent in modern AI-assisted engineering - Cursor agents, MCP integrations, and prompt engineering - using AI/LLM tooling to improve developer productivity and speed delivery while keeping quality high."
       ],
       "currentRole": {
         "id": "houzz",
@@ -123,7 +123,7 @@
           "summary": "",
           "bullets": [
             "Owned flagship Houzz Pro features end to end across backend services, GraphQL APIs, and a React frontend - Contracts, Credit Memos, and the Houzz Pro rebranding - from system design to production. Contracts alone is used by 4.8k companies on the top-tier plan.",
-            "Improved reliability, performance, and scalability of large-scale systems through observability (Grafana, Redash), testing, and CI/CD automation, and built workflow Automation across the documents suite.",
+            "Improved reliability, performance, and scalability of large-scale systems and platforms through observability (Grafana, Redash), testing, and CI/CD automation, and built workflow Automation across the documents suite.",
             "Re-architected and upgraded services for scalability and maintainability, partnering with global cross-functional teams on system and API design."
           ],
           "highlights": [
@@ -227,15 +227,15 @@
           "dates": "2021 — 2022"
         },
         {
-          "degree": "Bachelor of Science — BS | Computer Science",
-          "field": "Major in Full-Stack",
-          "school": "College of Management Academic Studies",
+          "degree": "Bachelor of Science — BS",
+          "field": "2018 — 2021",
+          "school": "Computer Science",
           "id": "colman",
           "location": "Rishon Le Zion",
-          "dates": "2018 — 2021"
+          "dates": "College of Management Academic Studies"
         }
       ],
-      "updatedAt": "2026-09-14T18:45:13.959Z"
+      "updatedAt": "2026-09-14T21:43:46.762Z"
     }
   }
 ]
