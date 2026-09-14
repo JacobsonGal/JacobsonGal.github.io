@@ -89,12 +89,53 @@ function customDef(entry) {
   };
 }
 
+// Repo-backed custom resumes: loaded from data/custom-resumes.json and saved back to GitHub.
+let repoProfiles = [];
+
+export function repoDraftKey(id) {
+  return `repo-resume-draft-${id}`;
+}
+
+function repoDef(entry) {
+  return {
+    id: entry.id,
+    label: entry.label,
+    draftKey: repoDraftKey(entry.id),
+    publishable: false,
+    editsExtras: true,
+    live: false,
+    custom: true,
+    repo: true,
+  };
+}
+
+export function setRepoProfiles(list) {
+  repoProfiles = Array.isArray(list)
+    ? list.filter((entry) => entry && entry.id && entry.profile)
+    : [];
+}
+
+export function getRepoProfiles() {
+  return repoProfiles;
+}
+
+export function getRepoProfile(id) {
+  return repoProfiles.find((entry) => entry.id === id) || null;
+}
+
 export function listProfileDefs() {
-  return [RESUME_PROFILES.gal, RESUME_PROFILES.liat, ...readCustomList().map(customDef)];
+  return [
+    RESUME_PROFILES.gal,
+    RESUME_PROFILES.liat,
+    ...repoProfiles.map(repoDef),
+    ...readCustomList().map(customDef),
+  ];
 }
 
 export function getProfileDef(id) {
   if (RESUME_PROFILES[id]) return RESUME_PROFILES[id];
+  const repoEntry = repoProfiles.find((item) => item.id === id);
+  if (repoEntry) return repoDef(repoEntry);
   const entry = readCustomList().find((item) => item.id === id);
   if (entry) return customDef(entry);
   return RESUME_PROFILES[DEFAULT_PROFILE_ID];

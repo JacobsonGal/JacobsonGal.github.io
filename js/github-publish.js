@@ -148,6 +148,67 @@ async function publishWithOwnerCode(profile, ownerCode) {
   return data.profile || prepareProfileForPublish(profile);
 }
 
+async function getRepoFileSha(path, token) {
+  const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${path}?ref=${GITHUB_REPO.branch}&t=${Date.now()}`;
+  const response = await fetch(url, {
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) {
+    throwGithubError(response.status, await readGithubError(response));
+  }
+  const data = await response.json();
+  return data.sha || null;
+}
+
+async function putRepoFile(path, contentString, token, sha, message) {
+  const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${path}`;
+  const body = {
+    message,
+    content: encodeBase64Utf8(contentString),
+    branch: GITHUB_REPO.branch,
+  };
+  if (sha) body.sha = sha;
+  return fetch(url, {
+    method: 'PUT',
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+/** Commit any JSON file to the repo using the owner's stored publish token / GitHub session. */
+export async function commitJsonToRepo({ path, content, message }) {
+  const user = await getAuthorizedUser();
+  const token = user?.token || getSessionPublishToken();
+  if (!token) {
+    throw new PublishAuthRequiredError(
+      'Add a GitHub publish token first (open the Gal Jacobson resume, then "Set / change GitHub publish token").',
+    );
+  }
+  const contentString = `${JSON.stringify(content, null, 2)}\n`;
+  let sha = await getRepoFileSha(path, token);
+  let response = await putRepoFile(path, contentString, token, sha, message);
+  if (response.status === 409) {
+    sha = await getRepoFileSha(path, token);
+    response = await putRepoFile(path, contentString, token, sha, message);
+  }
+  if (!response.ok) {
+    throwGithubError(response.status, await readGithubError(response));
+  }
+  return true;
+}
+
 export class PublishAuthRequiredError extends Error {
   constructor(message) {
     super(message || 'A GitHub publish token is required.');

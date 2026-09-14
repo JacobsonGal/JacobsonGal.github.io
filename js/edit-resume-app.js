@@ -4,8 +4,9 @@ import {
   saveDraft,
   clearDraft,
   fetchServerProfile,
-} from './profile-store.js?v=admin-mobile-10';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-10';
+  getBasePath,
+} from './profile-store.js?v=admin-mobile-11';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-11';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -15,8 +16,9 @@ import {
   isPublishConfigured,
   hasPublishCredentials,
   publishProfile,
+  commitJsonToRepo,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-10';
+} from './github-publish.js?v=admin-mobile-11';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -31,18 +33,21 @@ import {
   listProfileDefs,
   createCustomProfile,
   deleteCustomProfile,
+  setRepoProfiles,
+  getRepoProfiles,
+  getRepoProfile,
   experienceToText,
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-10';
+} from './resume-profiles.js?v=admin-mobile-11';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
   defaultModelFor,
-} from './resume-ai.js?v=admin-mobile-10';
+} from './resume-ai.js?v=admin-mobile-11';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -119,12 +124,30 @@ function setStoredActiveId(id) {
   }
 }
 
-function initEditor(user) {
+async function loadRepoProfiles() {
+  try {
+    const base = getBasePath();
+    const res = await fetch(`${base}data/custom-resumes.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) {
+      const list = await res.json();
+      setRepoProfiles(Array.isArray(list) ? list : []);
+    }
+  } catch {
+    // no repo-backed customs yet
+  }
+}
+
+async function initEditor(user) {
+  await loadRepoProfiles();
+
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
   const layout = document.getElementById('editor-root');
   const switchContainer = document.getElementById('edit-profile-switch');
+  const importInput = document.getElementById('import-json-input');
   const profileNote = document.getElementById('edit-profile-note');
+  const customActions = document.getElementById('edit-custom-actions');
+  const saveCustomBtn = document.getElementById('save-custom-github');
   const deleteCustomLink = document.getElementById('delete-custom-link');
   const extraFields = document.getElementById('edit-extra-fields');
   const pdfButton = document.getElementById('download-resume-pdf');
@@ -195,7 +218,12 @@ function initEditor(user) {
       return loadProfile({ preferDraft: true });
     }
     const draft = loadDraft(activeProfile.draftKey);
-    return draft || seedProfile(activeProfile.id) || seedProfile('liat');
+    if (draft) return draft;
+    if (activeProfile.repo) {
+      const entry = getRepoProfile(activeProfile.id);
+      if (entry?.profile) return structuredClone(entry.profile);
+    }
+    return seedProfile(activeProfile.id) || seedProfile('liat');
   }
 
   function syncPublishToggleUi() {
@@ -228,6 +256,14 @@ function initEditor(user) {
     add.title = 'Create a custom resume for a specific role';
     add.addEventListener('click', createAndSwitchCustom);
     switchContainer.append(add);
+
+    const imp = document.createElement('button');
+    imp.type = 'button';
+    imp.className = 'edit-profile-tab edit-profile-import';
+    imp.textContent = 'Import';
+    imp.title = 'Import a resume JSON as a new custom resume';
+    imp.addEventListener('click', () => importInput?.click());
+    switchContainer.append(imp);
   }
 
   function applyProfileUi() {
@@ -241,7 +277,7 @@ function initEditor(user) {
     if (publishToggle) publishToggle.hidden = !isPublishable();
     if (changeTokenLink) changeTokenLink.hidden = !isPublishable();
     if (!isPublishable() && tokenPanel) tokenPanel.hidden = true;
-    if (deleteCustomLink) deleteCustomLink.hidden = !activeProfile.custom;
+    if (customActions) customActions.hidden = !activeProfile.custom;
     if (aiPanel) aiPanel.hidden = activeProfile.live;
     if (profileNote) {
       if (activeProfile.live) {
@@ -249,8 +285,9 @@ function initEditor(user) {
         profileNote.textContent = '';
       } else {
         profileNote.hidden = false;
-        profileNote.textContent =
-          'Editor-only resume - saved to this browser, never published or shown on the public site. Use Download PDF to keep it.';
+        profileNote.textContent = activeProfile.repo
+          ? 'Custom resume - saved to your repo (data/custom-resumes.json) and available on all your devices. Not linked from your public site, but the file is publicly reachable.'
+          : 'Custom resume - saved in this browser. Use Save to GitHub to keep it across devices, or Download PDF to export.';
       }
     }
   }
@@ -293,6 +330,13 @@ function initEditor(user) {
   });
 
   deleteCustomLink?.addEventListener('click', deleteActiveCustom);
+  saveCustomBtn?.addEventListener('click', saveActiveCustomToGithub);
+
+  importInput?.addEventListener('change', (event) => {
+    const file = event.target.files?.[0];
+    if (file) importCustomFromFile(file);
+    event.target.value = '';
+  });
 
   tokenSave?.addEventListener('click', async () => {
     const raw = tokenInput?.value || '';
@@ -541,11 +585,122 @@ function initEditor(user) {
     setStatus(`Created "${name}". Edit freely, or tailor it to a role with AI below.`, 'success');
   }
 
+  async function importCustomFromFile(file) {
+    let parsed;
+    try {
+      parsed = JSON.parse(await file.text());
+    } catch {
+      setStatus('That file is not valid JSON.', 'error');
+      return;
+    }
+    if (!parsed || typeof parsed !== 'object' || (!parsed.resume && !parsed.experience && !parsed.name)) {
+      setStatus('That file does not look like a resume profile.', 'error');
+      return;
+    }
+
+    const base = seedProfile('liat') || {};
+    const merged = {
+      ...base,
+      ...parsed,
+      resume: { ...(base.resume || {}), ...(parsed.resume || {}) },
+      experience: Array.isArray(parsed.experience) ? parsed.experience : (base.experience || []),
+      education: Array.isArray(parsed.education) ? parsed.education : (base.education || []),
+      updatedAt: new Date().toISOString(),
+    };
+
+    const defaultLabel = (file.name || 'Imported resume')
+      .replace(/\.json$/i, '')
+      .replace(/[-_]+/g, ' ')
+      .trim() || 'Imported resume';
+    const label = window.prompt('Name this imported resume', defaultLabel);
+    if (label === null) return;
+
+    saveActiveDraft(formToProfile(profile));
+    const def = createCustomProfile(label.trim() || defaultLabel, merged);
+    activeProfile = def;
+    setStoredActiveId(def.id);
+    publishOnSave = false;
+
+    renderProfileSwitch();
+    applyProfileUi();
+    syncPublishToggleUi();
+    showTokenPanel(false);
+
+    profile = await loadActiveProfile();
+    profileToForm(profile);
+    renderPreview(profile);
+    setStatus(`Imported "${label.trim() || defaultLabel}". Edit or tailor it as needed.`, 'success');
+  }
+
+  async function saveActiveCustomToGithub() {
+    if (!activeProfile.custom || saveCustomBtn.disabled) return;
+    const originalLabel = saveCustomBtn.textContent;
+    saveCustomBtn.disabled = true;
+    saveCustomBtn.textContent = 'Saving…';
+    setStatus('Saving this resume to GitHub…', 'info');
+    try {
+      const current = formToProfile(profile);
+      const list = [...getRepoProfiles()];
+      const entry = { id: activeProfile.id, label: activeProfile.label, profile: current };
+      const index = list.findIndex((item) => item.id === activeProfile.id);
+      if (index === -1) list.push(entry);
+      else list[index] = entry;
+
+      await commitJsonToRepo({
+        path: 'data/custom-resumes.json',
+        content: list,
+        message: `Save custom resume: ${activeProfile.label}`,
+      });
+
+      setRepoProfiles(list);
+      // Promote a browser-only custom into a repo-backed one.
+      const wasLocalOnly = !activeProfile.repo;
+      if (wasLocalOnly) deleteCustomProfile(activeProfile.id);
+      clearDraft(activeProfile.draftKey);
+      activeProfile = getProfileDef(activeProfile.id);
+      setStoredActiveId(activeProfile.id);
+      clearActiveDraft();
+
+      renderProfileSwitch();
+      applyProfileUi();
+      profile = await loadActiveProfile();
+      profileToForm(profile);
+      renderPreview(profile);
+      setStatus('Saved to GitHub. Available on all your devices in about a minute.', 'success');
+    } catch (error) {
+      console.error(error);
+      setStatus(error.message || 'Could not save to GitHub.', 'error');
+    } finally {
+      saveCustomBtn.disabled = false;
+      saveCustomBtn.textContent = originalLabel;
+    }
+  }
+
   async function deleteActiveCustom() {
     if (!activeProfile.custom) return;
     if (!window.confirm(`Delete "${activeProfile.label}"? This cannot be undone.`)) return;
 
-    deleteCustomProfile(activeProfile.id);
+    const wasRepo = activeProfile.repo;
+    const removedId = activeProfile.id;
+
+    if (wasRepo) {
+      try {
+        const list = getRepoProfiles().filter((item) => item.id !== removedId);
+        await commitJsonToRepo({
+          path: 'data/custom-resumes.json',
+          content: list,
+          message: `Delete custom resume: ${activeProfile.label}`,
+        });
+        setRepoProfiles(list);
+      } catch (error) {
+        console.error(error);
+        setStatus(error.message || 'Could not delete from GitHub.', 'error');
+        return;
+      }
+    }
+
+    clearDraft(activeProfile.draftKey);
+    deleteCustomProfile(removedId);
     activeProfile = getProfileDef('gal');
     setStoredActiveId('gal');
     publishOnSave = isPublishConfigured() && isPublishable();
@@ -557,7 +712,7 @@ function initEditor(user) {
     profile = await loadActiveProfile();
     profileToForm(profile);
     renderPreview(profile);
-    setStatus('Deleted the custom resume.', 'info');
+    setStatus('Deleted the resume.', 'info');
   }
 
   function initAiControls() {

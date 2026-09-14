@@ -32,6 +32,7 @@ body.edit-resume-page {
 .edit-profile-switch,
 .edit-profile-note,
 .edit-token-link,
+.edit-custom-actions,
 .edit-ai,
 .publish-token-panel {
   flex: none;
@@ -270,18 +271,36 @@ body.edit-resume-page {
   display: none;
 }
 
-.edit-profile-add {
+.edit-profile-add,
+.edit-profile-import {
   border: 1px dashed hsl(var(--border));
   color: hsl(var(--foreground) / 0.6);
 }
 
-.edit-profile-add:hover {
+.edit-profile-add:hover,
+.edit-profile-import:hover {
   color: hsl(var(--accent));
   border-color: hsl(var(--accent));
 }
 
 .edit-danger-link {
   color: hsl(0 60% 52%);
+}
+
+.edit-custom-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.85rem;
+}
+
+.edit-custom-actions[hidden] {
+  display: none;
+}
+
+.edit-custom-actions .resume-btn {
+  flex: 0 0 auto;
 }
 
 .edit-ai {

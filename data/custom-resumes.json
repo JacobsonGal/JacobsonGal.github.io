@@ -1,0 +1,241 @@
+[
+  {
+    "id": "classiq",
+    "label": "Classiq - Senior SWE",
+    "profile": {
+      "syncedAt": "2026-09-14T15:24:10.764Z",
+      "source": "linkedin-action",
+      "name": "Gal Jacobson",
+      "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
+      "location": "Tel Aviv, Israel",
+      "email": "jacobsongal@gmail.com",
+      "urls": {
+        "portfolio": "https://JacobsonGal.github.io/",
+        "linkedin": "https://www.linkedin.com/in/jacobsongal",
+        "github": "https://github.com/JacobsonGal",
+        "instagram": "https://www.instagram.com/jacobsongal/",
+        "cv": "resume.html"
+      },
+      "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
+      "about": [
+        "Senior Full-Stack Engineer building and scaling production web platforms end to end - Node.js, React, GraphQL, and PostgreSQL across AWS and GCP - owning features from architecture through deployment, reliability, and performance.",
+        "Fluent in modern AI-assisted engineering - building with Cursor agents, MCP integrations, and prompt engineering to ship faster while keeping high quality.",
+        "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers - turning ambiguous requirements into pragmatic, high-quality products."
+      ],
+      "currentRole": {
+        "id": "houzz",
+        "title": "Senior Software Engineer",
+        "company": "Houzz",
+        "label": "Current position"
+      },
+      "educationSummary": [
+        "BS · Computer Science",
+        "MBA · Entrepreneurship"
+      ],
+      "resume": {
+        "headline": "Senior Full-Stack Engineer",
+        "location": "Central, Israel",
+        "phone": "052-3565689",
+        "overview": [
+          "Senior Full-Stack Engineer with end-to-end ownership across backend services, APIs, frontend, and infrastructure - building and operating production systems in Python, Node.js, React, and GraphQL on AWS and GCP.",
+          "Takes complex features from system and API design through to production, with a focus on reliability, performance, and scalability via testing, observability (Grafana, Redash), and CI/CD automation.",
+          "Fluent in modern AI-assisted engineering - Cursor agents, MCP integrations, and prompt engineering - using AI/LLM tooling to improve developer productivity and speed delivery while keeping quality high."
+        ],
+        "skills": {
+          "Back End": [
+            "Python",
+            "Node.js",
+            "Java",
+            "C++"
+          ],
+          "Front End": [
+            "React.js",
+            "JavaScript",
+            "HTML",
+            "CSS",
+            "React Native",
+            "Flutter"
+          ],
+          "AI": [
+            "Cursor (agents & skills)",
+            "MCP integrations",
+            "Prompt engineering"
+          ],
+          "Tools & Cloud": [
+            "Docker",
+            "Kubernetes",
+            "AWS",
+            "GCP",
+            "Git",
+            "CircleCI",
+            "Jenkins",
+            "Grafana",
+            "Redash",
+            "Redux",
+            "Jira",
+            "pgAdmin"
+          ],
+          "Databases": [
+            "PostgreSQL",
+            "GraphQL",
+            "MongoDB",
+            "MSSQL"
+          ],
+          "Frameworks": [
+            "Express.js",
+            "Apollo",
+            "Sequelize"
+          ],
+          "Fundamentals": [
+            "OOP",
+            "Networking",
+            "Data Structures",
+            "Algorithms"
+          ]
+        },
+        "softSkills": [
+          "Feature ownership",
+          "Cross-functional collaboration",
+          "Pragmatic problem-solving",
+          "Mentorship & teaching",
+          "Fast, self-directed learner"
+        ],
+        "languages": [
+          {
+            "name": "Hebrew",
+            "level": "Native"
+          },
+          {
+            "name": "English",
+            "level": "Professional proficiency"
+          }
+        ]
+      },
+      "experience": [
+        {
+          "id": "houzz",
+          "letter": "A",
+          "title": "Full-Stack Engineer",
+          "company": "Houzz",
+          "team": "Houzz Pro - Documents Team",
+          "location": "Tel Aviv",
+          "dates": "2021 — Present",
+          "summary": "",
+          "bullets": [
+            "Owned flagship Houzz Pro features end to end across backend services, GraphQL APIs, and a React frontend - Contracts, Credit Memos, and the Houzz Pro rebranding - from system design to production. Contracts alone is used by 4.8k companies on the top-tier plan.",
+            "Improved reliability, performance, and scalability of large-scale systems through observability (Grafana, Redash), testing, and CI/CD automation, and built workflow Automation across the documents suite.",
+            "Re-architected and upgraded services for scalability and maintainability, partnering with global cross-functional teams on system and API design."
+          ],
+          "highlights": [
+            "Contracts",
+            "Credit Memos",
+            "Automation",
+            "Houzz Pro Rebranding"
+          ],
+          "stack": [
+            "Python",
+            "Node.js",
+            "React",
+            "GraphQL",
+            "Docker",
+            "Kubernetes",
+            "CI/CD",
+            "AWS",
+            "Cursor"
+          ],
+          "webOnly": false
+        },
+        {
+          "id": "colman",
+          "letter": "B",
+          "title": "Practitioner",
+          "company": "College of Management Academic Studies",
+          "location": "Rishon Le Zion",
+          "dates": "2021 — Present",
+          "summary": "Practitioner teaching advanced full-stack and mobile development courses.",
+          "bullets": [
+            "Web Application Development.",
+            "Advanced Software Development.",
+            "Advanced Web Application Development.",
+            "Advanced Mobile Application Development."
+          ],
+          "highlights": [
+            "Teaching",
+            "Curriculum",
+            "Mentorship"
+          ],
+          "stack": [
+            "JavaScript",
+            "ASP.NET",
+            "jQuery",
+            "AJAX",
+            "HTML",
+            "CSS",
+            "Full-Stack"
+          ],
+          "webOnly": false,
+          "resumeOnly": true
+        },
+        {
+          "id": "yavo",
+          "letter": "C",
+          "title": "Full-Stack Engineer",
+          "company": "Yavo",
+          "location": "Rishon Le Zion",
+          "dates": "2020 — 2021",
+          "summary": "Built and scaled a real-time medical-assistant platform end to end, focusing on scalable architecture, real-time data flows, and reliable deployments.",
+          "bullets": [],
+          "highlights": [
+            "Medical Platform",
+            "Real-time Data",
+            "Scalable Architecture"
+          ],
+          "stack": [
+            "Express.js",
+            "React",
+            "Firebase",
+            "Redux",
+            "AWS"
+          ],
+          "webOnly": false
+        },
+        {
+          "id": "idf",
+          "letter": "D",
+          "title": "Combat Engineering Officer — Captain",
+          "company": "Israel Defense Forces",
+          "location": "Israel",
+          "dates": "2013 — 2017",
+          "summary": "",
+          "bullets": [
+            "Acting & deputy honored company commander."
+          ],
+          "highlights": [],
+          "stack": [],
+          "webOnly": false,
+          "hideOnWeb": true,
+          "armyService": true
+        }
+      ],
+      "education": [
+        {
+          "degree": "Master of Business Administration — MBA",
+          "field": "Major in Entrepreneurship",
+          "school": "College of Management Academic Studies",
+          "id": "colman",
+          "location": "Rishon Le Zion",
+          "dates": "2021 — 2022"
+        },
+        {
+          "degree": "Bachelor of Science — BS | Computer Science",
+          "field": "Major in Full-Stack",
+          "school": "College of Management Academic Studies",
+          "id": "colman",
+          "location": "Rishon Le Zion",
+          "dates": "2018 — 2021"
+        }
+      ],
+      "updatedAt": "2026-09-14T18:45:13.959Z"
+    }
+  }
+]
