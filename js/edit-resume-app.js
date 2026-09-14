@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   getBasePath,
-} from './profile-store.js?v=admin-mobile-13';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-13';
+} from './profile-store.js?v=admin-mobile-14';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-14';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -18,7 +18,7 @@ import {
   publishProfile,
   commitJsonToRepo,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-13';
+} from './github-publish.js?v=admin-mobile-14';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -40,14 +40,14 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-13';
+} from './resume-profiles.js?v=admin-mobile-14';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
   defaultModelFor,
-} from './resume-ai.js?v=admin-mobile-13';
+} from './resume-ai.js?v=admin-mobile-14';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -531,7 +531,7 @@ async function initEditor(user) {
   }
 
   function renderPreview(p) {
-    const doc = `<!DOCTYPE html><html ${previewShellAttrs()}><head><link rel="stylesheet" href="css/resume.css" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
+    const doc = `<!DOCTYPE html><html ${previewShellAttrs()}><head><link rel="stylesheet" href="css/resume.css?v=logo-center-1" /><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" /></head><body class="resume-page resume-page--preview"><main class="resume-stage">${renderResumeHtml(p)}</main></body></html>`;
     frame.srcdoc = doc;
   }
 

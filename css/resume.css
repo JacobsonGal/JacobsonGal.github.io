@@ -463,6 +463,9 @@ body.resume-page--a4 #resume-root {
 }
 
 .resume-role-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   margin: 0 0 0.35rem;
   font-size: 0.74rem;
   color: hsl(var(--muted));
@@ -485,10 +488,10 @@ body.resume-page--a4 #resume-root {
 
 .resume-company-logo {
   display: inline-block;
+  flex: none;
   width: 1.05rem;
   height: 1.05rem;
   margin: 0 0.3rem 0 0.25rem;
-  vertical-align: -0.15em;
   object-fit: contain;
   object-position: center;
   border-radius: 0;
