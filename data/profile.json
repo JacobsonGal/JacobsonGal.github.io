@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-14T12:03:15.842Z",
+  "syncedAt": "2026-09-14T14:13:37.784Z",
   "source": "linkedin-action",
   "name": "Gal Jacobson",
   "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
@@ -14,7 +14,7 @@
   },
   "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
   "about": [
-    "‏",
+    "Experienced Full-Stack Engineer building scalable, robust, and high-performance software solutions using Node.js, React, Docker, PostgreSQL, Apollo, cloud platforms (AWS, GCP), and more.",
     "Proven record of delivering large-scale features and optimizing performance across distributed systems, with hands-on experience leading development from planning to production while collaborating with global cross-functional teams and demonstrating excellent communication skills.",
     "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
   ],
@@ -29,7 +29,7 @@
     "MBA · Entrepreneurship"
   ],
   "resume": {
-    "headline": "Software Engineer",
+    "headline": "Senior Software Engineer S",
     "location": "Central, Israel",
     "phone": "052-3565689",
     "overview": [
@@ -223,5 +223,6 @@
       "location": "Rishon Le Zion",
       "dates": "2018 — 2021"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-14T14:13:37.784Z"
 }
