@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   downloadJson,
-} from './profile-store.js?v=admin-mobile-6';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-6';
+} from './profile-store.js?v=admin-mobile-7';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-7';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -17,7 +17,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-6';
+} from './github-publish.js?v=admin-mobile-7';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -29,12 +29,20 @@ import {
   DEFAULT_PROFILE_ID,
   ACTIVE_PROFILE_STORAGE_KEY,
   seedProfile,
+  listProfileDefs,
+  createCustomProfile,
+  deleteCustomProfile,
   experienceToText,
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-6';
+} from './resume-profiles.js?v=admin-mobile-7';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
+import {
+  loadAiSettings,
+  saveAiSettings,
+  tailorResumeToRole,
+} from './resume-ai.js?v=admin-mobile-7';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -123,11 +131,23 @@ function initEditor(user) {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
   const layout = document.getElementById('editor-root');
-  const profileTabs = [...document.querySelectorAll('.edit-profile-tab')];
+  const switchContainer = document.getElementById('edit-profile-switch');
   const profileNote = document.getElementById('edit-profile-note');
+  const deleteCustomLink = document.getElementById('delete-custom-link');
   const extraFields = document.getElementById('edit-extra-fields');
   const pdfButton = document.getElementById('download-resume-pdf');
   const jsonButton = document.getElementById('export-json');
+
+  // AI tailoring controls
+  const aiPanel = document.getElementById('edit-ai');
+  const aiJob = document.getElementById('ai-job');
+  const aiTailorBtn = document.getElementById('ai-tailor');
+  const aiSettingsToggle = document.getElementById('ai-settings-toggle');
+  const aiSettings = document.getElementById('ai-settings');
+  const aiProvider = document.getElementById('ai-provider');
+  const aiModel = document.getElementById('ai-model');
+  const aiKey = document.getElementById('ai-key');
+  const aiSaveSettings = document.getElementById('ai-save-settings');
 
   function bindMobilePaneTabs() {
     if (!layout) return;
@@ -156,7 +176,6 @@ function initEditor(user) {
   const changeTokenLink = document.getElementById('change-token-link');
 
   let activeProfile = getProfileDef(getStoredActiveId());
-  // Publish on by default so edits become live commits (only for the live profile).
   let publishOnSave = isPublishConfigured() && activeProfile.publishable;
   let profile;
   let publishTimer;
@@ -185,7 +204,7 @@ function initEditor(user) {
       return loadProfile({ preferDraft: true });
     }
     const draft = loadDraft(activeProfile.draftKey);
-    return draft || seedProfile(activeProfile.id);
+    return draft || seedProfile(activeProfile.id) || seedProfile('liat');
   }
 
   function syncPublishToggleUi() {
@@ -195,8 +214,34 @@ function initEditor(user) {
       : 'Publish to GitHub on edit (off — local draft only)';
   }
 
+  function renderProfileSwitch() {
+    if (!switchContainer) return;
+    switchContainer.replaceChildren();
+    listProfileDefs().forEach((def) => {
+      const tab = document.createElement('button');
+      tab.type = 'button';
+      tab.className = 'edit-profile-tab';
+      tab.dataset.profile = def.id;
+      tab.setAttribute('role', 'tab');
+      const active = def.id === activeProfile.id;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+      tab.textContent = def.label;
+      tab.addEventListener('click', () => switchProfile(def.id));
+      switchContainer.append(tab);
+    });
+    const add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'edit-profile-tab edit-profile-add';
+    add.textContent = '+ New';
+    add.title = 'Create a custom resume for a specific role';
+    add.addEventListener('click', createAndSwitchCustom);
+    switchContainer.append(add);
+  }
+
   function applyProfileUi() {
-    profileTabs.forEach((tab) => {
+    switchContainer?.querySelectorAll('.edit-profile-tab').forEach((tab) => {
+      if (tab.classList.contains('edit-profile-add')) return;
       const active = tab.dataset.profile === activeProfile.id;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
@@ -205,6 +250,8 @@ function initEditor(user) {
     if (publishToggle) publishToggle.hidden = !isPublishable();
     if (changeTokenLink) changeTokenLink.hidden = !isPublishable();
     if (!isPublishable() && tokenPanel) tokenPanel.hidden = true;
+    if (deleteCustomLink) deleteCustomLink.hidden = !activeProfile.custom;
+    if (aiPanel) aiPanel.hidden = activeProfile.live;
     if (profileNote) {
       if (activeProfile.live) {
         profileNote.hidden = true;
@@ -212,7 +259,7 @@ function initEditor(user) {
       } else {
         profileNote.hidden = false;
         profileNote.textContent =
-          'Editor-only resume — saved to this browser, never published or shown on the public site. Use Download PDF / Export JSON to keep it.';
+          'Editor-only resume - saved to this browser, never published or shown on the public site. Use Download PDF / Export JSON to keep it.';
       }
     }
   }
@@ -231,7 +278,9 @@ function initEditor(user) {
     tokenLink.href = publishTokenSetupUrl();
   }
 
+  renderProfileSwitch();
   applyProfileUi();
+  initAiControls();
 
   // One-time setup: without proxy / GitHub OAuth token, ask for a PAT.
   if (isPublishable() && !canPublishNow()) {
@@ -251,6 +300,8 @@ function initEditor(user) {
     showTokenPanel(true);
     setStatus('Paste a fine-grained token with Contents: Read and write, then Save & go live.', 'info');
   });
+
+  deleteCustomLink?.addEventListener('click', deleteActiveCustom);
 
   tokenSave?.addEventListener('click', async () => {
     const raw = tokenInput?.value || '';
@@ -298,7 +349,7 @@ function initEditor(user) {
     profileToForm(profile);
     renderPreview(profile);
     if (!activeProfile.live) {
-      setStatus('Editing Liat Shalev — saved to this browser only.', 'info');
+      setStatus(`Editing ${activeProfile.label} — saved to this browser only.`, 'info');
     } else if (canPublishNow() && publishOnSave) {
       setStatus('Live publish is on — edits commit to GitHub automatically.', 'info');
     }
@@ -386,7 +437,6 @@ function initEditor(user) {
         const toPublish = pendingPublishProfile;
         pendingPublishProfile = null;
         const published = await publishProfile(toPublish);
-        // Prefer any newer edit queued while this request was in flight.
         if (!pendingPublishProfile) {
           profile = published;
           clearActiveDraft();
@@ -443,7 +493,6 @@ function initEditor(user) {
     const def = getProfileDef(id);
     if (def.id === activeProfile.id) return;
 
-    // Persist the current profile's draft before switching away.
     saveActiveDraft(formToProfile(profile));
 
     activeProfile = def;
@@ -465,14 +514,127 @@ function initEditor(user) {
     setStatus(
       def.live
         ? 'Editing the live site resume.'
-        : 'Editing Liat Shalev — saved to this browser only.',
+        : `Editing ${def.label} — saved to this browser only.`,
       'info',
     );
   }
 
-  profileTabs.forEach((tab) => {
-    tab.addEventListener('click', () => switchProfile(tab.dataset.profile));
-  });
+  async function createAndSwitchCustom() {
+    const label = window.prompt('Name this resume (for example: "Senior Backend - Acme")', 'Custom resume');
+    if (label === null) return;
+    const name = label.trim() || 'Custom resume';
+
+    setStatus('Creating a custom resume from your CV…', 'info');
+    saveActiveDraft(formToProfile(profile));
+
+    let seed;
+    try {
+      seed = await loadProfile({ preferDraft: true });
+    } catch {
+      seed = seedProfile('liat');
+    }
+
+    const def = createCustomProfile(name, seed);
+    activeProfile = def;
+    setStoredActiveId(def.id);
+    publishOnSave = false;
+
+    renderProfileSwitch();
+    applyProfileUi();
+    syncPublishToggleUi();
+    showTokenPanel(false);
+
+    profile = await loadActiveProfile();
+    profileToForm(profile);
+    renderPreview(profile);
+    setStatus(`Created "${name}". Edit freely, or tailor it to a role with AI below.`, 'success');
+  }
+
+  async function deleteActiveCustom() {
+    if (!activeProfile.custom) return;
+    if (!window.confirm(`Delete "${activeProfile.label}"? This cannot be undone.`)) return;
+
+    deleteCustomProfile(activeProfile.id);
+    activeProfile = getProfileDef('gal');
+    setStoredActiveId('gal');
+    publishOnSave = isPublishConfigured() && isPublishable();
+
+    renderProfileSwitch();
+    applyProfileUi();
+    syncPublishToggleUi();
+
+    profile = await loadActiveProfile();
+    profileToForm(profile);
+    renderPreview(profile);
+    setStatus('Deleted the custom resume.', 'info');
+  }
+
+  function initAiControls() {
+    if (!aiPanel) return;
+    const settings = loadAiSettings();
+    if (aiProvider) aiProvider.value = settings.provider || 'anthropic';
+    if (aiModel) aiModel.value = settings.model || '';
+    if (aiKey) aiKey.value = settings.key || '';
+
+    aiSettingsToggle?.addEventListener('click', () => {
+      if (aiSettings) aiSettings.hidden = !aiSettings.hidden;
+    });
+
+    aiSaveSettings?.addEventListener('click', () => {
+      saveAiSettings({
+        provider: aiProvider?.value || 'anthropic',
+        model: aiModel?.value || '',
+        key: aiKey?.value || '',
+      });
+      if (aiSettings) aiSettings.hidden = true;
+      setStatus('AI settings saved in this browser.', 'success');
+    });
+
+    aiTailorBtn?.addEventListener('click', tailorActiveResume);
+  }
+
+  async function tailorActiveResume() {
+    if (activeProfile.live) return;
+    const settings = loadAiSettings();
+    const jobDescription = aiJob?.value || '';
+
+    if (!settings.key) {
+      if (aiSettings) aiSettings.hidden = false;
+      setStatus('Add your AI API key in AI settings, then Save.', 'error');
+      return;
+    }
+    if (!jobDescription.trim()) {
+      setStatus('Paste the job description first.', 'error');
+      return;
+    }
+
+    aiTailorBtn.disabled = true;
+    const label = aiTailorBtn.textContent;
+    aiTailorBtn.textContent = 'Tailoring…';
+    setStatus('Tailoring this resume to the role…', 'info');
+
+    try {
+      const current = formToProfile(profile);
+      const tailored = await tailorResumeToRole({
+        profile: current,
+        jobDescription,
+        apiKey: settings.key,
+        provider: settings.provider,
+        model: settings.model,
+      });
+      profile = tailored;
+      profileToForm(profile);
+      saveActiveDraft(profile);
+      renderPreview(profile);
+      setStatus('Tailored to the role. Review the changes and tweak as needed.', 'success');
+    } catch (error) {
+      console.error(error);
+      setStatus(error.message || 'AI tailoring failed.', 'error');
+    } finally {
+      aiTailorBtn.disabled = false;
+      aiTailorBtn.textContent = label;
+    }
+  }
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -501,13 +663,13 @@ function initEditor(user) {
     clearActiveDraft();
     profile = activeProfile.id === 'gal'
       ? await fetchServerProfile()
-      : seedProfile(activeProfile.id);
+      : (seedProfile(activeProfile.id) || seedProfile('liat'));
     profileToForm(profile);
     renderPreview(profile);
     setStatus(
       activeProfile.live
         ? 'Reset to the live site profile.'
-        : 'Reset to a blank Liat Shalev template.',
+        : 'Reset to a blank template.',
       'info',
     );
   });

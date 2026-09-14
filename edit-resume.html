@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-6" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-6" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-7" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-7" />
 </head>
 <body class="edit-resume-page">
   <div id="editor-gate"></div>
@@ -36,12 +36,34 @@
         </div>
         <a class="resume-btn" href="resume.html">← Resume</a>
       </div>
-      <div class="edit-profile-switch" role="tablist" aria-label="Which resume to edit">
-        <button type="button" class="edit-profile-tab is-active" data-profile="gal" role="tab" aria-selected="true">Gal Jacobson</button>
-        <button type="button" class="edit-profile-tab" data-profile="liat" role="tab" aria-selected="false">Liat Shalev</button>
-      </div>
+      <div class="edit-profile-switch" id="edit-profile-switch" role="tablist" aria-label="Which resume to edit"></div>
       <p class="edit-profile-note" id="edit-profile-note" hidden></p>
+      <button type="button" class="edit-token-link edit-danger-link" id="delete-custom-link" hidden>Delete this resume</button>
       <p class="edit-status" id="edit-status" hidden></p>
+      <details class="edit-ai" id="edit-ai" hidden>
+        <summary class="edit-ai-summary">Tailor to a role with AI</summary>
+        <div class="edit-ai-body">
+          <label class="edit-ai-field">Paste the job description / requirements
+            <textarea id="ai-job" rows="6" placeholder="Paste the role's requirements here, then Tailor with AI…"></textarea>
+          </label>
+          <div class="edit-ai-actions">
+            <button type="button" class="resume-btn resume-btn--primary" id="ai-tailor">Tailor with AI</button>
+            <button type="button" class="edit-token-link" id="ai-settings-toggle">AI settings</button>
+          </div>
+          <div class="edit-ai-settings" id="ai-settings" hidden>
+            <label class="edit-ai-field">Provider
+              <select id="ai-provider">
+                <option value="anthropic">Anthropic (Claude)</option>
+                <option value="openai">OpenAI</option>
+              </select>
+            </label>
+            <label class="edit-ai-field">Model (optional)<input id="ai-model" autocomplete="off" spellcheck="false" placeholder="claude-3-5-sonnet-latest" /></label>
+            <label class="edit-ai-field">API key (stored in this browser only)<input id="ai-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-… / your provider key" /></label>
+            <button type="button" class="resume-btn" id="ai-save-settings">Save AI settings</button>
+          </div>
+          <p class="edit-ai-note">Reorders and rewrites your existing experience to match the role. It will not invent facts, and it only edits this resume - never your live CV.</p>
+        </div>
+      </details>
       <div class="edit-actions">
         <button type="button" class="edit-publish-toggle" id="publish-option" aria-pressed="true" title="Publish to Github" aria-label="Publish to Github">
           <span class="edit-publish-github-icon" aria-hidden="true">
@@ -89,6 +111,6 @@
       <iframe id="preview-frame" title="Resume preview"></iframe>
     </section>
   </div>
-  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-6"></script>
+  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-7"></script>
 </body>
 </html>

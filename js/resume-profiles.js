@@ -52,8 +52,80 @@ export const RESUME_PROFILES = {
   },
 };
 
+const CUSTOM_LIST_KEY = 'resume-custom-profiles-v1';
+const CUSTOM_DRAFT_PREFIX = 'custom-resume-draft-';
+
+export function customDraftKey(id) {
+  return `${CUSTOM_DRAFT_PREFIX}${id}`;
+}
+
+function readCustomList() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_LIST_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeCustomList(list) {
+  try {
+    localStorage.setItem(CUSTOM_LIST_KEY, JSON.stringify(list));
+  } catch {
+    // ignore storage failures
+  }
+}
+
+function customDef(entry) {
+  return {
+    id: entry.id,
+    label: entry.label,
+    draftKey: customDraftKey(entry.id),
+    publishable: false,
+    editsExtras: true,
+    live: false,
+    custom: true,
+  };
+}
+
+export function listProfileDefs() {
+  return [RESUME_PROFILES.gal, RESUME_PROFILES.liat, ...readCustomList().map(customDef)];
+}
+
 export function getProfileDef(id) {
-  return RESUME_PROFILES[id] || RESUME_PROFILES[DEFAULT_PROFILE_ID];
+  if (RESUME_PROFILES[id]) return RESUME_PROFILES[id];
+  const entry = readCustomList().find((item) => item.id === id);
+  if (entry) return customDef(entry);
+  return RESUME_PROFILES[DEFAULT_PROFILE_ID];
+}
+
+export function createCustomProfile(label, seed) {
+  const id = `custom-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+  const entry = {
+    id,
+    label: (label || 'Custom resume').trim() || 'Custom resume',
+    createdAt: new Date().toISOString(),
+  };
+  const list = readCustomList();
+  list.push(entry);
+  writeCustomList(list);
+  const seeded = { ...(seed || structuredClone(LIAT_SEED)), updatedAt: new Date().toISOString() };
+  try {
+    localStorage.setItem(customDraftKey(id), JSON.stringify(seeded));
+  } catch {
+    // ignore storage failures
+  }
+  return customDef(entry);
+}
+
+export function deleteCustomProfile(id) {
+  writeCustomList(readCustomList().filter((item) => item.id !== id));
+  try {
+    localStorage.removeItem(customDraftKey(id));
+  } catch {
+    // ignore storage failures
+  }
 }
 
 export function seedProfile(id) {
