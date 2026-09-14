@@ -33,9 +33,9 @@
     "location": "Central, Israel",
     "phone": "052-3565689",
     "overview": [
-      "Senior Full-Stack Engineer building and scaling production web platforms end to end — Node.js, React, GraphQL, and PostgreSQL across AWS and GCP — owning features from architecture through deployment, reliability, and performance.",
-      "Fluent in modern AI-assisted engineering — building with Cursor agents, MCP integrations, and prompt engineering to ship faster without sacrificing quality, and designing services ready to integrate LLM-powered capabilities.",
-      "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers — turning ambiguous requirements into pragmatic, high-quality products."
+      "Senior Full-Stack Engineer building and scaling production web platforms end to end - Node.js, React, GraphQL, and PostgreSQL across AWS and GCP - owning features from architecture through deployment, reliability, and performance.",
+      "Fluent in modern AI-assisted engineering - building with Cursor agents, MCP integrations, and prompt engineering to ship faster without sacrificing quality, and designing services ready to integrate LLM-powered capabilities.",
+      "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers - turning ambiguous requirements into pragmatic, high-quality products."
     ],
     "skills": {
       "AI": [
@@ -118,7 +118,7 @@
       "dates": "2021 — Present",
       "summary": "",
       "bullets": [
-        "Led end-to-end development of Contracts and Credit Memos — flagship features of Houzz Pro's top-tier plan — from technical design to production; Contracts now spans 4,764 companies with 32,980 contracts created and 8,831 signed.",
+        "Led end-to-end development of Contracts and Credit Memos - flagship features of Houzz Pro's top-tier plan - taking them from design to production. Contracts is used by 4.8k Houzz Pro companies.",
         "Built workflow Automation and delivered the Houzz Pro rebranding across the documents suite, modernizing shared UI components while keeping large-scale systems stable.",
         "Re-architected and upgraded existing services for performance, maintainability, and scalability, partnering with global cross-functional teams to define technical requirements."
       ],
