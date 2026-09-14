@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-14T14:28:34.305Z",
+  "syncedAt": "2026-09-14T14:28:39.574Z",
   "source": "linkedin-action",
   "name": "Gal Jacobson",
   "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
@@ -39,7 +39,7 @@
     ],
     "skills": {
       "AI": [
-        "Cursor - Agents+Skills",
+        "CursorAgents+Skills",
         "MCP integrations",
         "prompt engineering"
       ],
@@ -229,5 +229,5 @@
       "dates": "2018 — 2021"
     }
   ],
-  "updatedAt": "2026-09-14T14:28:34.305Z"
+  "updatedAt": "2026-09-14T14:28:39.574Z"
 }
