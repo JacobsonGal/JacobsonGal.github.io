@@ -4,9 +4,8 @@ import {
   saveDraft,
   clearDraft,
   fetchServerProfile,
-  downloadJson,
-} from './profile-store.js?v=admin-mobile-8';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-8';
+} from './profile-store.js?v=admin-mobile-9';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-9';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -17,7 +16,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-8';
+} from './github-publish.js?v=admin-mobile-9';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -36,13 +35,13 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-8';
+} from './resume-profiles.js?v=admin-mobile-9';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
-} from './resume-ai.js?v=admin-mobile-8';
+} from './resume-ai.js?v=admin-mobile-9';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -119,14 +118,6 @@ function setStoredActiveId(id) {
   }
 }
 
-function jsonFilenameFor(profile) {
-  const slug = (profile?.name || 'resume')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return `${slug || 'resume'}-profile.json`;
-}
-
 function initEditor(user) {
   const form = document.getElementById('edit-form');
   const frame = document.getElementById('preview-frame');
@@ -136,7 +127,6 @@ function initEditor(user) {
   const deleteCustomLink = document.getElementById('delete-custom-link');
   const extraFields = document.getElementById('edit-extra-fields');
   const pdfButton = document.getElementById('download-resume-pdf');
-  const jsonButton = document.getElementById('export-json');
 
   // AI tailoring controls
   const aiPanel = document.getElementById('edit-ai');
@@ -259,7 +249,7 @@ function initEditor(user) {
       } else {
         profileNote.hidden = false;
         profileNote.textContent =
-          'Editor-only resume - saved to this browser, never published or shown on the public site. Use Download PDF / Export JSON to keep it.';
+          'Editor-only resume - saved to this browser, never published or shown on the public site. Use Download PDF to keep it.';
       }
     }
   }
@@ -694,12 +684,6 @@ function initEditor(user) {
       pdfButton.disabled = false;
       pdfButton.textContent = originalLabel;
     }
-  });
-
-  jsonButton?.addEventListener('click', () => {
-    const current = formToProfile(profile);
-    downloadJson(current, jsonFilenameFor(current));
-    setStatus('Exported JSON.', 'success');
   });
 
   document.addEventListener('appearancechange', () => {
