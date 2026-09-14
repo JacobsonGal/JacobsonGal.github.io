@@ -21,8 +21,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-4" />
-  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-4" />
+  <link rel="stylesheet" href="css/resume.css?v=admin-mobile-5" />
+  <link rel="stylesheet" href="css/edit-resume.css?v=admin-mobile-5" />
 </head>
 <body class="edit-resume-page">
   <div id="editor-gate"></div>
@@ -53,6 +53,7 @@
         <button class="resume-btn" type="button" id="download-resume-pdf">Download PDF</button>
         <button class="resume-btn" type="button" id="export-json">Export JSON</button>
       </div>
+      <button type="button" class="edit-token-link" id="change-token-link" hidden>Set / change GitHub publish token</button>
       <div class="publish-token-panel" id="publish-token-panel" hidden>
         <p class="publish-token-copy">
           One-time setup: paste a fine-grained GitHub token with
@@ -88,6 +89,6 @@
       <iframe id="preview-frame" title="Resume preview"></iframe>
     </section>
   </div>
-  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-4"></script>
+  <script type="module" src="js/edit-resume-app.js?v=admin-mobile-5"></script>
 </body>
 </html>

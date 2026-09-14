@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   downloadJson,
-} from './profile-store.js?v=admin-mobile-4';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-4';
+} from './profile-store.js?v=admin-mobile-5';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-5';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -17,7 +17,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js';
+} from './github-publish.js?v=admin-mobile-5';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -33,7 +33,7 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-4';
+} from './resume-profiles.js?v=admin-mobile-5';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js';
 import './theme-init.js';
 
@@ -153,6 +153,7 @@ function initEditor(user) {
   const tokenInput = document.getElementById('publish-token-input');
   const tokenSave = document.getElementById('publish-token-save');
   const tokenLink = document.getElementById('publish-token-link');
+  const changeTokenLink = document.getElementById('change-token-link');
 
   let activeProfile = getProfileDef(getStoredActiveId());
   // Publish on by default so edits become live commits (only for the live profile).
@@ -202,6 +203,7 @@ function initEditor(user) {
     });
     if (extraFields) extraFields.hidden = !activeProfile.editsExtras;
     if (publishToggle) publishToggle.hidden = !isPublishable();
+    if (changeTokenLink) changeTokenLink.hidden = !isPublishable();
     if (!isPublishable() && tokenPanel) tokenPanel.hidden = true;
     if (profileNote) {
       if (activeProfile.live) {
@@ -243,6 +245,11 @@ function initEditor(user) {
     publishOnSave = !publishOnSave;
     syncPublishToggleUi();
     if (publishOnSave) schedulePublish();
+  });
+
+  changeTokenLink?.addEventListener('click', () => {
+    showTokenPanel(true);
+    setStatus('Paste a fine-grained token with Contents: Read and write, then Save & go live.', 'info');
   });
 
   tokenSave?.addEventListener('click', async () => {

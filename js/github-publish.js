@@ -56,6 +56,15 @@ async function readGithubError(response) {
   }
 }
 
+function throwGithubError(status, message) {
+  if (status === 401 || status === 403) {
+    throw new PublishAuthRequiredError(
+      `GitHub rejected the token (${message}). Use a fine-grained token with Contents: Read and write on ${GITHUB_REPO.owner}/${GITHUB_REPO.name}, then paste it below.`,
+    );
+  }
+  throw new Error(message);
+}
+
 async function getProfileFileSha(token) {
   const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${GITHUB_PROFILE_PATH}?ref=${GITHUB_REPO.branch}`;
   const response = await fetch(url, {
@@ -67,7 +76,7 @@ async function getProfileFileSha(token) {
   });
 
   if (!response.ok) {
-    throw new Error(await readGithubError(response));
+    throwGithubError(response.status, await readGithubError(response));
   }
 
   const data = await response.json();
@@ -97,7 +106,7 @@ async function publishWithToken(profile, token) {
   });
 
   if (!response.ok) {
-    throw new Error(await readGithubError(response));
+    throwGithubError(response.status, await readGithubError(response));
   }
 
   return payload;

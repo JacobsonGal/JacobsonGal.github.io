@@ -247,6 +247,24 @@ body.edit-resume-page {
   background: hsl(var(--accent) / 0.06);
 }
 
+.edit-token-link {
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  align-self: flex-start;
+  margin: -0.25rem 0 1rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: hsl(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.edit-token-link[hidden] {
+  display: none;
+}
+
 .edit-extra-fields {
   display: grid;
   gap: 1rem;
