@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   downloadJson,
-} from './profile-store.js?v=admin-mobile-5';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-5';
+} from './profile-store.js?v=admin-mobile-6';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-6';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -17,7 +17,7 @@ import {
   hasPublishCredentials,
   publishProfile,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-5';
+} from './github-publish.js?v=admin-mobile-6';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -33,7 +33,7 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-5';
+} from './resume-profiles.js?v=admin-mobile-6';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js';
 import './theme-init.js';
 

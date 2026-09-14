@@ -66,12 +66,15 @@ function throwGithubError(status, message) {
 }
 
 async function getProfileFileSha(token) {
-  const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${GITHUB_PROFILE_PATH}?ref=${GITHUB_REPO.branch}`;
+  // Cache-bust so we never PUT with a stale sha (GitHub contents GET is cacheable ~60s).
+  const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${GITHUB_PROFILE_PATH}?ref=${GITHUB_REPO.branch}&t=${Date.now()}`;
   const response = await fetch(url, {
+    cache: 'no-store',
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${token}`,
       'X-GitHub-Api-Version': '2022-11-28',
+      'If-None-Match': '',
     },
   });
 
@@ -83,14 +86,12 @@ async function getProfileFileSha(token) {
   return data.sha;
 }
 
-async function publishWithToken(profile, token) {
-  const payload = prepareProfileForPublish(profile);
+async function putProfile(payload, token, sha) {
   const content = `${JSON.stringify(payload, null, 2)}\n`;
-  const sha = await getProfileFileSha(token);
   const url = `https://api.github.com/repos/${GITHUB_REPO.owner}/${GITHUB_REPO.name}/contents/${GITHUB_PROFILE_PATH}`;
-
-  const response = await fetch(url, {
+  return fetch(url, {
     method: 'PUT',
+    cache: 'no-store',
     headers: {
       Accept: 'application/vnd.github+json',
       Authorization: `Bearer ${token}`,
@@ -104,6 +105,19 @@ async function publishWithToken(profile, token) {
       branch: GITHUB_REPO.branch,
     }),
   });
+}
+
+async function publishWithToken(profile, token) {
+  const payload = prepareProfileForPublish(profile);
+
+  // Fetch the current sha and PUT; on a 409 sha conflict, refresh the sha and retry once.
+  let sha = await getProfileFileSha(token);
+  let response = await putProfile(payload, token, sha);
+
+  if (response.status === 409) {
+    sha = await getProfileFileSha(token);
+    response = await putProfile(payload, token, sha);
+  }
 
   if (!response.ok) {
     throwGithubError(response.status, await readGithubError(response));
