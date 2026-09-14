@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-14T14:25:59.871Z",
+  "syncedAt": "2026-09-14T14:26:01.839Z",
   "source": "linkedin-action",
   "name": "Gal Jacobson",
   "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
@@ -41,7 +41,7 @@
       "AI": [
         "Cursor/Claude (Agents",
         "Skills",
-        "MCP"
+        "MCPs)"
       ],
       "Back End": [
         "Node.js",
@@ -229,5 +229,5 @@
       "dates": "2018 — 2021"
     }
   ],
-  "updatedAt": "2026-09-14T14:25:59.871Z"
+  "updatedAt": "2026-09-14T14:26:01.839Z"
 }
