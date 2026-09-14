@@ -93,7 +93,9 @@ function customDef(entry) {
 let repoProfiles = [];
 
 export function repoDraftKey(id) {
-  return `repo-resume-draft-${id}`;
+  // v2: older drafts used a lossy experience round-trip; bump so stale drafts are
+  // ignored and repo-backed resumes reload cleanly from the committed file.
+  return `repo-resume-draft-v2-${id}`;
 }
 
 function repoDef(entry) {

@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   getBasePath,
-} from './profile-store.js?v=admin-mobile-12';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-12';
+} from './profile-store.js?v=admin-mobile-13';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-13';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -18,7 +18,7 @@ import {
   publishProfile,
   commitJsonToRepo,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-12';
+} from './github-publish.js?v=admin-mobile-13';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -40,14 +40,14 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-12';
+} from './resume-profiles.js?v=admin-mobile-13';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
   defaultModelFor,
-} from './resume-ai.js?v=admin-mobile-12';
+} from './resume-ai.js?v=admin-mobile-13';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -439,8 +439,27 @@ async function initEditor(user) {
     };
 
     if (activeProfile.editsExtras) {
-      next.experience = textToExperience(form.experience ? form.experience.value : '');
-      next.education = textToEducation(form.education ? form.education.value : '');
+      // Merge the (lightweight) textarea edits onto the original entries by index so
+      // structured fields survive - company id/logo, team, highlights, stack, and the
+      // armyService / resumeOnly flags that control which section a role renders in.
+      const baseExp = Array.isArray(base.experience) ? base.experience : [];
+      next.experience = textToExperience(form.experience ? form.experience.value : '').map((entry, index) => ({
+        ...(baseExp[index] || {}),
+        title: entry.title,
+        company: entry.company,
+        dates: entry.dates,
+        location: entry.location,
+        bullets: entry.bullets,
+      }));
+
+      const baseEdu = Array.isArray(base.education) ? base.education : [];
+      next.education = textToEducation(form.education ? form.education.value : '').map((entry, index) => ({
+        ...(baseEdu[index] || {}),
+        degree: entry.degree,
+        school: entry.school,
+        dates: entry.dates,
+        field: entry.field,
+      }));
     }
 
     return next;
@@ -815,15 +834,22 @@ async function initEditor(user) {
 
   document.getElementById('reset-draft').addEventListener('click', async () => {
     clearActiveDraft();
-    profile = activeProfile.id === 'gal'
-      ? await fetchServerProfile()
-      : (seedProfile(activeProfile.id) || seedProfile('liat'));
+    if (activeProfile.id === 'gal') {
+      profile = await fetchServerProfile();
+    } else if (activeProfile.repo) {
+      const entry = getRepoProfile(activeProfile.id);
+      profile = entry?.profile ? structuredClone(entry.profile) : (seedProfile('liat'));
+    } else {
+      profile = seedProfile(activeProfile.id) || seedProfile('liat');
+    }
     profileToForm(profile);
     renderPreview(profile);
     setStatus(
       activeProfile.live
         ? 'Reset to the live site profile.'
-        : 'Reset to a blank template.',
+        : activeProfile.repo
+          ? 'Reset to the saved version from GitHub.'
+          : 'Reset to a blank template.',
       'info',
     );
   });
