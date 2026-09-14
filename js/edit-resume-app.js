@@ -34,7 +34,7 @@ import {
   educationToText,
   textToEducation,
 } from './resume-profiles.js?v=admin-mobile-6';
-import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js';
+import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);

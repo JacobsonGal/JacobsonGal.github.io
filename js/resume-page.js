@@ -2,7 +2,7 @@ import { loadProfile } from './profile-store.js';
 import { renderResumeHtml } from './resume-template.js';
 import { mountResumeAuthToolbar } from './resume-auth-ui.js';
 import { mountOwnerSecretEntry } from './owner-secret-entry.js';
-import { bindResumePdfDownload } from './resume-pdf.js';
+import { bindResumePdfDownload } from './resume-pdf.js?v=mobile-pdf-1';
 import { mountAppearanceToggle } from './appearance.js';
 import './theme-init.js';
 

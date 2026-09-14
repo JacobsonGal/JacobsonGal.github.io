@@ -324,37 +324,31 @@ export function bindResumePdfDownload({ button, getResumeElement, refreshResume 
     button.textContent = generatingLabel;
 
     try {
+      // On phones/tablets, html2canvas + Web Share is unreliable (blank canvases,
+      // expired user-gesture on iOS). Use the browser's native print-to-PDF instead:
+      // it honours the A4 print stylesheet, keeps text/links vector, and lets the OS
+      // "Save as PDF" / "Save to Files".
+      if (mobile) {
+        await refreshResume?.();
+        await printResumeFallback();
+        return;
+      }
+
       const profile = await refreshResume?.();
       const resumeElement = getResumeElement?.();
       const filename = getResumePdfFilename(profile);
       const result = await downloadResumePdf({ element: resumeElement, filename });
 
-      if (result === 'share') {
-        return;
-      }
-
-      if (result === 'preview') {
-        window.setTimeout(() => {
-          window.alert('Your CV opened below. Tap the share icon in the PDF viewer, then choose "Save to Files".');
-        }, 300);
-        return;
-      }
-
-      if (result === 'download') {
+      if (result === 'share' || result === 'preview' || result === 'download') {
         return;
       }
     } catch (error) {
       console.error(error);
       try {
         await printResumeFallback();
-        window.setTimeout(() => {
-          window.alert(mobile
-            ? 'In the print preview, tap Share (top right), then choose Save to Files.'
-            : 'Use the print preview Share button, then Save to Files.');
-        }, 500);
       } catch (printError) {
         console.error(printError);
-        window.alert('Could not save the CV PDF. Please try again in a moment.');
+        window.alert('Could not open the print dialog. Please try again in a moment.');
       }
     } finally {
       button.disabled = false;
