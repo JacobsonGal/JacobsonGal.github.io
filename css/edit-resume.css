@@ -215,30 +215,40 @@ body.edit-resume-page {
 }
 
 .edit-profile-switch {
-  display: inline-flex;
-  gap: 0.3rem;
-  padding: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   margin: 0 0 0.75rem;
-  border: 1px solid hsl(var(--border));
-  border-radius: 999px;
-  background: hsl(var(--card));
-  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
 .edit-profile-tab {
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  line-height: 1.15;
   cursor: pointer;
-  border: 0;
-  background: transparent;
-  color: hsl(var(--foreground) / 0.62);
-  padding: 0.4rem 0.9rem;
+  white-space: nowrap;
+  max-width: 13rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--foreground) / 0.7);
+  padding: 0.42rem 0.85rem;
   border-radius: 999px;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.edit-profile-tab:hover {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--accent) / 0.6);
 }
 
 .edit-profile-tab.is-active {
   background: hsl(var(--accent));
+  border-color: hsl(var(--accent));
   color: hsl(0 0% 100%);
 }
 

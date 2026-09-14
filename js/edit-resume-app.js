@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   getBasePath,
-} from './profile-store.js?v=admin-mobile-11';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-11';
+} from './profile-store.js?v=admin-mobile-12';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-12';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -18,7 +18,7 @@ import {
   publishProfile,
   commitJsonToRepo,
   PublishAuthRequiredError,
-} from './github-publish.js?v=admin-mobile-11';
+} from './github-publish.js?v=admin-mobile-12';
 import {
   getSessionPublishToken,
   setSessionPublishToken,
@@ -40,14 +40,14 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-11';
+} from './resume-profiles.js?v=admin-mobile-12';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js?v=mobile-pdf-1';
 import {
   loadAiSettings,
   saveAiSettings,
   tailorResumeToRole,
   defaultModelFor,
-} from './resume-ai.js?v=admin-mobile-11';
+} from './resume-ai.js?v=admin-mobile-12';
 import './theme-init.js';
 
 const params = new URLSearchParams(window.location.search);
@@ -246,6 +246,7 @@ async function initEditor(user) {
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
       tab.textContent = def.label;
+      tab.title = def.label;
       tab.addEventListener('click', () => switchProfile(def.id));
       switchContainer.append(tab);
     });
