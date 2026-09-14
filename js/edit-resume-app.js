@@ -5,8 +5,8 @@ import {
   clearDraft,
   fetchServerProfile,
   downloadJson,
-} from './profile-store.js?v=admin-mobile-3';
-import { renderResumeHtml } from './resume-template.js?v=admin-mobile-3';
+} from './profile-store.js?v=admin-mobile-4';
+import { renderResumeHtml } from './resume-template.js?v=admin-mobile-4';
 import { requireResumeEditorAuth } from './resume-auth-ui.js';
 import {
   GITHUB_PROFILE_PATH,
@@ -33,7 +33,7 @@ import {
   textToExperience,
   educationToText,
   textToEducation,
-} from './resume-profiles.js?v=admin-mobile-3';
+} from './resume-profiles.js?v=admin-mobile-4';
 import { downloadResumePdf, getResumePdfFilename } from './resume-pdf.js';
 import './theme-init.js';
 

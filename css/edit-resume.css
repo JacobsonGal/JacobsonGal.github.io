@@ -263,9 +263,9 @@ body.edit-resume-page {
 }
 
 .edit-actions .resume-btn {
-  flex: 1 1 0;
-  min-width: 0;
-  padding-inline: 0.5rem;
+  flex: 0 1 auto;
+  min-width: max-content;
+  padding-inline: 0.9rem;
   text-align: center;
   white-space: nowrap;
 }
