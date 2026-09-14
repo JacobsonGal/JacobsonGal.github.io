@@ -33,15 +33,16 @@
     "location": "Central, Israel",
     "phone": "052-3565689",
     "overview": [
-      "Experienced Full-Stack Engineer building scalable, robust, and high-performance software solutions using Node.js, React, Docker, PostgreSQL, Apollo, cloud platforms (AWS, GCP), and more.",
-      "Proven record of delivering large-scale features and optimizing performance across distributed systems, with hands-on experience leading development from planning to production while collaborating with global cross-functional teams and demonstrating excellent communication skills.",
-      "Strong problem-solving skills with a passion for building user-friendly products and leveraging innovative approaches to improve organizational efficiency while quickly adapting to new technologies and environments."
+      "Senior Full-Stack Engineer with 6+ years building and scaling production web platforms end to end — Node.js, React, GraphQL, and PostgreSQL across AWS and GCP — owning features from architecture through deployment, reliability, and performance.",
+      "Fluent in modern AI-assisted engineering: I build with Cursor agents, MCP integrations, and prompt engineering to ship faster without sacrificing quality, and design services ready to integrate LLM-powered capabilities.",
+      "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers — turning ambiguous requirements into pragmatic, high-quality products."
     ],
     "skills": {
       "AI": [
-        "Cursor (Agents+Skills)",
+        "Cursor (agents & skills)",
         "MCP integrations",
-        "prompt engineering"
+        "Prompt engineering",
+        "AI-assisted development"
       ],
       "Back End": [
         "Node.js",
@@ -86,19 +87,14 @@
         "Networking",
         "Data Structures",
         "Algorithms"
-      ],
-      "Operating Systems": [
-        "MacOS",
-        "Linux",
-        "Windows"
       ]
     },
     "softSkills": [
-      "Organized & Thorough",
-      "Proactive Learner",
-      "Adaptable & Multitasker",
-      "Feature Ownership",
-      "Effective communicator"
+      "Feature ownership",
+      "Cross-functional collaboration",
+      "Mentorship & teaching",
+      "Pragmatic problem-solving",
+      "Fast, self-directed learner"
     ],
     "languages": [
       {
@@ -122,9 +118,9 @@
       "dates": "2021 — Present",
       "summary": "",
       "bullets": [
-        "Led the development of multiple robust, scalable, and technical features and software solutions, ensuring high-quality performance and reliability, resulting in substantial improvements in functionality and user adoption.",
-        "Upgraded existing software systems to improve performance, maintainability, and scalability, aligning with evolving business and technical needs.",
-        "Managed large-scale projects and collaborated closely with cross-functional teams to analyze and derive technical software design and performance requirements."
+        "Led end-to-end development of core Houzz Pro document features — Contracts, Credit Memos, and workflow Automation — from technical design through production, improving reliability and driving user adoption.",
+        "Delivered the Houzz Pro rebranding across the documents suite, modernizing shared UI components while keeping large-scale systems stable.",
+        "Re-architected and upgraded existing services for performance, maintainability, and scalability, partnering with global cross-functional teams to define technical requirements."
       ],
       "highlights": [
         "Contracts",
@@ -181,16 +177,20 @@
       "company": "Yavo",
       "location": "Rishon Le Zion",
       "dates": "2020 — 2021",
-      "summary": "Built and optimized Yavo's medical assistant platform, focusing on scalable architecture, real-time data flows, and enhancing deployment efficiency and system reliability.",
-      "bullets": [
-        "Express.js, React, Firebase, Redux, AWS."
-      ],
+      "summary": "Built and scaled Yavo's real-time medical-assistant platform, improving data flows, deployment efficiency, and system reliability.",
+      "bullets": [],
       "highlights": [
         "Medical Platform",
         "Real-time Data",
         "Scalable Architecture"
       ],
-      "stack": [],
+      "stack": [
+        "Express.js",
+        "React",
+        "Firebase",
+        "Redux",
+        "AWS"
+      ],
       "webOnly": false
     },
     {
