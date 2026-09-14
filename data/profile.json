@@ -73,6 +73,7 @@
       "Tools & Cloud": [
         "Git",
         "Docker",
+        "Kubernetes",
         "Redux",
         "Grafana",
         "Redash",
