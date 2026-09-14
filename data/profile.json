@@ -118,8 +118,8 @@
       "dates": "2021 — Present",
       "summary": "",
       "bullets": [
-        "Led end-to-end development of core Houzz Pro document features — Contracts, Credit Memos, and workflow Automation — from technical design through production, improving reliability and driving user adoption.",
-        "Delivered the Houzz Pro rebranding across the documents suite, modernizing shared UI components while keeping large-scale systems stable.",
+        "Led end-to-end development of Contracts and Credit Memos — flagship features of Houzz Pro's top-tier plan — from technical design to production; Contracts now spans 4,764 companies with 32,980 contracts created and 8,831 signed.",
+        "Built workflow Automation and delivered the Houzz Pro rebranding across the documents suite, modernizing shared UI components while keeping large-scale systems stable.",
         "Re-architected and upgraded existing services for performance, maintainability, and scalability, partnering with global cross-functional teams to define technical requirements."
       ],
       "highlights": [
@@ -135,7 +135,8 @@
         "Docker",
         "Apollo",
         "CI/CD",
-        "SQL"
+        "SQL",
+        "Cursor"
       ],
       "webOnly": false
     },
