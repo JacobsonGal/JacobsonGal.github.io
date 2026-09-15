@@ -1,5 +1,5 @@
 {
-  "syncedAt": "2026-09-14T15:24:10.764Z",
+  "syncedAt": "2026-09-15T11:16:57.808Z",
   "source": "linkedin-action",
   "name": "Gal Jacobson",
   "headline": "‏Gal Jacobson‏ - ‏Houzz‏",
@@ -14,7 +14,7 @@
   },
   "heroTagline": "Designing and building resilient, high-throughput systems — clean architecture, reliable infrastructure, interfaces people enjoy using.",
   "about": [
-    "Senior Full-Stack Engineer building and scaling production web platforms end to end - Node.js, React, GraphQL, and PostgreSQL across AWS and GCP - owning features from architecture through deployment, reliability, and performance.",
+    "‏",
     "Fluent in modern AI-assisted engineering - building with Cursor agents, MCP integrations, and prompt engineering to ship faster while keeping high quality.",
     "Proven record of leading complex features across distributed systems, collaborating with global cross-functional teams, and mentoring engineers - turning ambiguous requirements into pragmatic, high-quality products."
   ],
